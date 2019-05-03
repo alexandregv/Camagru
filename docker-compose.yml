@@ -17,10 +17,10 @@ services:
   mysql:
     image: mysql:8.0
     user: "1000:1000"
-    command: "--innodb_use_native_aio=0 --lower_case_table_names=1"
+    command: "--innodb_use_native_aio=0 --lower_case_table_names=1 --default-authentication-plugin=mysql_native_password"
     restart: 'always'
-#    ports:
-#      - "${HOST_MACHINE_MYSQL_PORT}:3306"
+    ports:
+      - "${HOST_MACHINE_MYSQL_PORT}:3306"
     volumes: 
       - "${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql:rw"
       - "${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql:rw"
