@@ -17,7 +17,7 @@ services:
   mysql:
     image: mysql:8.0
     user: "1000:1000"
-    command: "--innodb_use_native_aio=0"
+    command: "--innodb_use_native_aio=0 --lower_case_table_names=1"
     restart: 'always'
 #    ports:
 #      - "${HOST_MACHINE_MYSQL_PORT}:3306"
