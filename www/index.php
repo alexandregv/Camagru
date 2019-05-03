@@ -62,10 +62,9 @@
   <main>
     <section class="section">
       <div class="container">
-
         <div class="columns">
           <?php for ($i = 1; $i <= 3; $i++) { ?>
-            <div class="column card is-one-third">
+            <div class="column card">
               <div class="card-image">
                 <figure class="image is-4by3">
                   <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
@@ -83,7 +82,7 @@
                     <p class="subtitle is-6">@aguiot--</p>
                   </div>
                 </div>
-            
+
                 <div class="content">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Phasellus nec iaculis mauris. <a>@aguiot--</a>
@@ -98,7 +97,7 @@
       </div>
     </section>
   </main>
-  
+
   <footer class="footer is-fixed-bottom">
     <div class="content has-text-centered">
       <p>
@@ -108,8 +107,6 @@
     </div>
   </footer>
 
-
   </body>
- 
 </html>
 
