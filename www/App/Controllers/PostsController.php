@@ -11,9 +11,7 @@ class PostsController
 
 	public function show($id)
 	{
-		echo $id;
+		echo "Voici l'article $id";
 	}
 
 }
-
-?>

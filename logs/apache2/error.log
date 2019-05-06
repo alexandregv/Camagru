@@ -152,3 +152,13 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 [Sat May 04 12:15:07.366540 2019] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 [Sat May 04 15:45:05.644388 2019] [php7:error] [pid 20] [client 192.168.144.1:47004] script '/var/www/html/app/index.php' not found or unable to stat
 [Sat May 04 15:45:06.019254 2019] [php7:error] [pid 20] [client 192.168.144.1:47004] script '/var/www/html/app/index.php' not found or unable to stat, referer: http://localhost:8080/posts/48
+[Sun May 05 02:30:42.572063 2019] [php7:error] [pid 23] [client 192.168.1.30:50049] script '/var/www/html/index.php' not found or unable to stat
+[Sun May 05 02:30:42.869858 2019] [php7:error] [pid 23] [client 192.168.1.30:50049] script '/var/www/html/index.php' not found or unable to stat, referer: http://192.168.1.28:8080/post
+[Sun May 05 02:56:42.891582 2019] [mpm_prefork:notice] [pid 1] AH00169: caught SIGTERM, shutting down
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.144.3. Set the 'ServerName' directive globally to suppress this message
+[Sun May 05 15:03:36.692048 2019] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.25 (Debian) PHP/7.2.17 configured -- resuming normal operations
+[Sun May 05 15:03:36.692184 2019] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Mon May 06 09:55:49.203454 2019] [mpm_prefork:notice] [pid 1] AH00169: caught SIGTERM, shutting down
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.144.3. Set the 'ServerName' directive globally to suppress this message
+[Mon May 06 10:42:42.931883 2019] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.25 (Debian) PHP/7.2.17 configured -- resuming normal operations
+[Mon May 06 10:42:42.932012 2019] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
