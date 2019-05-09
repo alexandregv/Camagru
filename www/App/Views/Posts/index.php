@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +11,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Camagru</title>
-	<link rel="stylesheet" href="../../../public/assets/css/style.css">
+	<link rel="stylesheet" href="<?= Helpers::css('style'); ?>">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
   </head>
 
@@ -17,7 +19,7 @@
   <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="assets/img/logo.png">
+        <img src="<?= Helpers::image('logo.png'); ?>">
       </a>
 
       <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar">
