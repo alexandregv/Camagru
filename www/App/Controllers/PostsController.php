@@ -2,20 +2,16 @@
 
 namespace App\Controllers;
 
-class PostsController
+class PostsController extends Controller
 {
 	public function index()
 	{
-		echo 'Tous les posts sont ici !';
-		require 'App/Views/Posts/index.php';
-		//$params = [];
-		//$view = new \App\Views\Posts\Index();
-		//$view->render($params);
+		$this->render('Posts#index');
 	}
 
 	public function show($id)
 	{
-		echo "Voici l'article $id";
+		$this->render('Posts#show');
 	}
 
 }

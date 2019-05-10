@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
-class ErrorsController
+class ErrorsController extends Controller
 {
 	public function _404()
 	{
-		echo "T'es perdu ?";
+		$this->render('Errors#404');
 	}
 
 }

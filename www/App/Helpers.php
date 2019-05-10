@@ -4,7 +4,7 @@ namespace App;
 
 class Helpers
 {
-	const ASSETS_PATH = 'public/assets/';
+	const ASSETS_PATH = '/public/assets/';
 
 	public function asset($name, $type = null)
 	{
@@ -20,6 +20,12 @@ class Helpers
 	{
 		return self::asset($name, 'css') . '.css';
 	}
+
+	public function partial($name)
+	{
+		require "App/Views/Partials/_$name.php";
+	}
+
 }
 
 ?>
