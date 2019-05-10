@@ -8,7 +8,11 @@ class Router {
 	private $routes = [];
 	private $namedRoutes = [];
 
-	public function __construct($url){
+	private static $_instance = null;
+
+	private function __construct($url = null){
+		if (is_null($url))
+			$url = $_GET['url'];
 		$this->url = $url;
 	}
 
@@ -43,6 +47,13 @@ class Router {
 			//return $this->namedRoutes['Errors#_404']->call();
 			throw new RouterException("No route matches '$name'");
 		return $this->namedRoutes[$name]->getUrl($params);
+	}
+
+	public static function getInstance($url = null)
+	{
+		if (is_null(self::$_instance))
+			self::$_instance = new Router($url);
+		return self::$_instance;
 	}
 
 }

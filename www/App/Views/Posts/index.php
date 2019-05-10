@@ -5,6 +5,8 @@ namespace App;
 Helpers::partial('head');
 Helpers::partial('navbar');
 
+//echo $this->router->url('Posts#show', ['id' => 38]);
+//echo Helpers::route($this->router, 'Posts#show', ['id' => 38]);
 ?>
 <main>
   <section class="section">

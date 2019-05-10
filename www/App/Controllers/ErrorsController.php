@@ -4,9 +4,9 @@ namespace App\Controllers;
 
 class ErrorsController extends Controller
 {
-	public function _404()
-	{
-		$this->render('Errors#404');
-	}
+	//public function _404()
+	//{
+	//	$this->render('Errors#404');
+	//}
 
 }

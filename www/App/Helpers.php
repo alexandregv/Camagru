@@ -6,24 +6,29 @@ class Helpers
 {
 	const ASSETS_PATH = '/public/assets/';
 
-	public function asset($name, $type = null)
+	public static function asset($name, $type = null)
 	{
 		return self::ASSETS_PATH . ($type ?? '') . '/' . $name;
 	}
 
-	public function image($name)
+	public static function image($name)
 	{
 		return self::asset($name, 'img');
 	}
 
-	public function css($name)
+	public static function css($name)
 	{
 		return self::asset($name, 'css') . '.css';
 	}
 
-	public function partial($name)
+	public static function partial($name)
 	{
 		require "App/Views/Partials/_$name.php";
+	}
+
+	public static function route($route, array $params = [])
+	{
+		return Router\Router::getInstance()->url($route, $params);
 	}
 
 }
