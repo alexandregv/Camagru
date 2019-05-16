@@ -20,7 +20,7 @@ class Router {
 	{
 		$path		= $args[0];
 		$callable 	= $args[1];
-		$name		= $args[2];
+		$name		= $args[2] ?? $callable;
 
 		$route = new Route($path, $callable);
 		$this->routes[strtoupper($method)][] = $route;

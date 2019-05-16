@@ -29,21 +29,29 @@
     </div>
 
     <div class="navbar-end">
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">Mon compte</a>
-        <div class="navbar-dropdown">
-		<a href="<?= Helpers::route('Users#profile') ?>" class="navbar-item">Mon profil</a>
-          <a href="<?= Helpers::route('Users#settings') ?>" class="navbar-item">Mes paramètres</a>
-    	  <hr class="navbar-divider">
-    	  <a href="<?= Helpers::route('Users#logout') ?>" class="navbar-item">Déconnexion</a>
+			<?php if (isset($_SESSION['loggedin'])) { ?>
+      	<div class="navbar-item has-dropdown is-hoverable">
+	  			<a class="navbar-link">Mon compte</a>
+      	  <div class="navbar-dropdown">
+						<a href="<?= Helpers::route('Users#profile') ?>" class="navbar-item">Mon profil</a>
+      	    <a href="<?= Helpers::route('Users#settings') ?>" class="navbar-item">Mes paramètres</a>
+    		  <hr class="navbar-divider">
+    		  <a href="<?= Helpers::route('Users#logout') ?>" class="navbar-item">Déconnexion</a>
+      	  </div>
+      	</div>
+      	<div class="navbar-item">
+        	<div class="buttons">
+          	<a href="<?= Helpers::route('Users#login') ?>" class="button is-primary gradient"><strong>Poste ta dernière création !</strong></a>
+        	</div>
         </div>
-      </div>
+			<?php } else {?>
       <div class="navbar-item">
         <div class="buttons">
           <a href="<?= Helpers::route('Users#register') ?>" class="button is-primary gradient"><strong>Inscris toi !</strong></a>
           <a href="<?= Helpers::route('Users#login') ?>" class="button is-light">Se connecter</a>
         </div>
       </div>
+			<?php }?>
     </div>
   </div>
 </nav>

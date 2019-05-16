@@ -40,7 +40,7 @@ class Route {
 		$path = $this->path;
 		foreach($params as $k => $v)
 			$path = str_replace(":$k", $v, $path);
-		return $path;
+		return '/' . $path;
 	}
 
 	public function call(){
