@@ -9,94 +9,75 @@ Helpers::partial('navbar');
   <section class="section">
 	<div class="container">
 		<div class="columns is-centered">
-			<form action="" class="box column is-one-third">
+			<form method="POST" action="<?= Helpers::route('Users#register') ?>" class="box column is-one-third">
 				<div class="field">
-				  <label class="label">Name</label>
-				  <div class="control">
-					<input class="input" type="text" placeholder="Text input">
-				  </div>
-				</div>
-				
-				<div class="field">
-				  <label class="label">Username</label>
+				  <label class="label">Nom d'utilisateur</label>
 				  <div class="control has-icons-left has-icons-right">
-					<input class="input is-success" type="text" placeholder="Text input" value="bulma">
-					<span class="icon is-small is-left">
-					  <i class="fas fa-user"></i>
-					</span>
-					<span class="icon is-small is-right">
-					  <i class="fas fa-check"></i>
-					</span>
+						<input name="username" class="input <?php if (array_search('busy_username', $this->errors) !== false) echo 'is-danger'; ?>" type="text" placeholder="xavdu17">
+						<span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+						<?php if (array_search('busy_email', $this->errors) !== false) { ?>
+							<span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
+						<?php } ?>
 				  </div>
-				  <p class="help is-success">This username is available</p>
+					<?php if (array_search('busy_username', $this->errors) !== false) { ?>
+						<p class="help is-danger">Cet utilisateur existe deja</p>
+					<?php } ?>
 				</div>
-				
+
 				<div class="field">
 				  <label class="label">Email</label>
 				  <div class="control has-icons-left has-icons-right">
-					<input class="input is-danger" type="email" placeholder="Email input" value="hello@">
-					<span class="icon is-small is-left">
-					  <i class="fas fa-envelope"></i>
-					</span>
-					<span class="icon is-small is-right">
-					  <i class="fas fa-exclamation-triangle"></i>
-					</span>
+						<input name="email" class="input <?php if (array_search('busy_email', $this->errors) !== false) echo 'is-danger'; ?>" type="email" placeholder="xavier@free.fr">
+						<span class="icon is-small is-left">
+						  <i class="fas fa-envelope"></i>
+						</span>
+						<?php if (array_search('busy_email', $this->errors) !== false) { ?>
+							<span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
+						<?php } ?>
 				  </div>
-				  <p class="help is-danger">This email is invalid</p>
+					<?php if (array_search('busy_email', $this->errors) !== false) { ?>
+						<p class="help is-danger">Un compte est deja associe a cet email</p>
+					<?php } ?>
 				</div>
 				
 				<div class="field">
-				  <label class="label">Subject</label>
+				  <label class="label">Prenom</label>
 				  <div class="control">
-					<div class="select">
-					  <select>
-						<option>Select dropdown</option>
-						<option>With options</option>
-					  </select>
-					</div>
+						<input name="firstname" class="input" type="text" placeholder="Xavier">
 				  </div>
 				</div>
-				
+
 				<div class="field">
-				  <label class="label">Message</label>
+				  <label class="label">Nom de famille</label>
 				  <div class="control">
-					<textarea class="textarea" placeholder="Textarea"></textarea>
+						<input name="lastname" class="input" type="text" placeholder="Niel">
 				  </div>
 				</div>
-				
+
 				<div class="field">
-				  <div class="control">
-					<label class="checkbox">
-					  <input type="checkbox">
-					  I agree to the <a href="#">terms and conditions</a>
-					</label>
+				  <label class="label">Mot de passe</label>
+				  <div class="control has-icons-left has-icons-right">
+						<input type="password" name="password" class="input <?php if (array_search('invalid_password', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="cNiL-Pr00f">
+						<span class="icon is-small is-left"><i class="fas fa-key"></i></span>
 				  </div>
+					<?php if (array_search('invalid_password', $this->errors) !== false) { ?>
+						<p class="help is-danger">Mot de passe invalide</p>
+					<?php } ?>
 				</div>
-				
+
 				<div class="field">
 				  <div class="control">
-					<label class="radio">
-					  <input type="radio" name="question">
-					  Yes
-					</label>
-					<label class="radio">
-					  <input type="radio" name="question">
-					  No
-					</label>
+						<label class="checkbox"><input type="checkbox"> J'accepte les <a href="#">termes et conditions</a>.</label>
 				  </div>
 				</div>
 				
 				<div class="field is-grouped">
-				  <div class="control">
-					<button class="button is-link">Submit</button>
-				  </div>
-				  <div class="control">
-					<button class="button is-text">Cancel</button>
-				  </div>
+					<div class="control"><input type="submit" class="button is-link" value="Inscription"></div>
+					<div class="control"><a href="<?= Helpers::route('Users#login') ?>"><button type="button" class="button is-text">Deja inscrit ?</button></a></div>
 				</div>	
 			</form>
-	</div>
-	</div>
+		</div>
+		</div>
   </section>
 </main>
-<?php Helpers::partial('footer'); ?>
+<?php Helpers::partial('footer'); print_r($this->errors);?>

@@ -17,5 +17,6 @@ $router->get('/settings', 'Users#settings');
 $router->get('/', 'Pages#home');
 
 $router->post('/login', 'Users#login');
+$router->post('/register', 'Users#register');
 
 $router->run();
