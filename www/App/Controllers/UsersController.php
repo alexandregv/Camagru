@@ -22,11 +22,10 @@ class UsersController extends Controller
 			$this->render('Users#login');
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			if (!empty(trim($_POST['email']) && !empty(trim($_POST['password']))))
+			if (!empty(trim($_POST['username']) && !empty(trim($_POST['password']))))
 			{
 				$hash = hash('whirlpool', 'grumaca' . $_POST['password']);
-				//$user = \App\Database::getInstance()->query("SELECT * FROM users WHERE email = '{$_POST['email']}' AND passHash = '$hash'", [], 1);
-				$user = \App\Database::getInstance()->query("SELECT * FROM users WHERE email = '{$_POST['email']}'", [], 1);
+				$user = \App\Database::getInstance()->query("SELECT id, username, passHash FROM users WHERE username = '{$_POST['username']}'", [], 1);
 				if ($user != false)
 				{
 					if ($user['passHash'] === $hash)

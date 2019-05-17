@@ -80,4 +80,4 @@ Helpers::partial('navbar');
 		</div>
   </section>
 </main>
-<?php Helpers::partial('footer'); print_r($this->errors);?>
+<?php Helpers::partial('footer'); ?>

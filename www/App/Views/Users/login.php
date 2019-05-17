@@ -11,16 +11,16 @@ Helpers::partial('navbar');
 			<div class="columns is-centered">
 				<form method="POST" action="<?= Helpers::route('Users#login') ?>" class="box column is-one-third">
 					<div class="field">
-					  <label class="label">Email</label>
+					  <label class="label">Nom d'utilisateur</label>
 					  <div class="control has-icons-left has-icons-right">
-						<input type="email" name="email" class="input <?php if (array_search('invalid_email', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="xavier@free.fr">
+						<input type="text" name="username" class="input <?php if (array_search('invalid_username', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="xavier@free.fr">
 							<span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
-							<?php if (array_search('busy_email', $this->errors) !== false) { ?>
+							<?php if (array_search('invalid_username', $this->errors) !== false) { ?>
 								<span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
 							<?php } ?>
 						</div>
-						<?php if (array_search('invalid_email', $this->errors) !== false) { ?>
-							<p class="help is-danger">Aucun utilisateur avec cet email</p>
+						<?php if (array_search('invalid_username', $this->errors) !== false) { ?>
+							<p class="help is-danger">Utilisateur introuvable</p>
 						<?php } ?>
 					</div>
 					
@@ -29,7 +29,7 @@ Helpers::partial('navbar');
 					  <div class="control has-icons-left has-icons-right">
 							<input type="password" name="password" class="input <?php if (array_search('invalid_password', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="cNiL-Pr00f">
 							<span class="icon is-small is-left"><i class="fas fa-key"></i></span>
-							<?php if (array_search('busy_email', $this->errors) !== false) { ?>
+							<?php if (array_search('invalid_email', $this->errors) !== false) { ?>
 								<span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
 							<?php } ?>
 					  </div>
