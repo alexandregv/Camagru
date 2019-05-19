@@ -4,6 +4,7 @@ namespace App\Models;
 
 class User extends Model
 {
+	protected $_id				= 00;
 	protected $_username		= '';
 	protected $_firstname		= '';
 	protected $_lastname		= '';

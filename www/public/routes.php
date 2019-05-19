@@ -18,5 +18,6 @@ $router->get('/', 'Pages#home');
 
 $router->post('/login', 'Users#login');
 $router->post('/register', 'Users#register');
+$router->post('/profile', 'Users#profile');
 
 $router->run();

@@ -27,7 +27,7 @@ Helpers::partial('navbar');
 				<div class="field">
 				  <label class="label">Email</label>
 				  <div class="control has-icons-left has-icons-right">
-						<input name="email" class="input <?php if (array_search('busy_email', $this->errors) !== false) echo 'is-danger'; ?>" type="email" placeholder="xavier@free.fr">
+						<input name="email" class="input <?php if (array_search('invalid_email', $this->errors) !== false || array_search('busy_email', $this->errors) !== false) echo 'is-danger'; ?>" type="email" placeholder="xavier@free.fr">
 						<span class="icon is-small is-left">
 						  <i class="fas fa-envelope"></i>
 						</span>
@@ -35,6 +35,9 @@ Helpers::partial('navbar');
 							<span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
 						<?php } ?>
 				  </div>
+					<?php if (array_search('invalid_email', $this->errors) !== false) { ?>
+						<p class="help is-danger">Adresse mail invalide</p>
+					<?php } ?>
 					<?php if (array_search('busy_email', $this->errors) !== false) { ?>
 						<p class="help is-danger">Un compte est deja associe a cet email</p>
 					<?php } ?>
@@ -45,6 +48,9 @@ Helpers::partial('navbar');
 				  <div class="control">
 						<input name="firstname" class="input" type="text" placeholder="Xavier">
 				  </div>
+					<?php if (array_search('invalid_firstname', $this->errors) !== false) { ?>
+						<p class="help is-danger">Prenom invalide</p>
+					<?php } ?>
 				</div>
 
 				<div class="field">
@@ -52,6 +58,9 @@ Helpers::partial('navbar');
 				  <div class="control">
 						<input name="lastname" class="input" type="text" placeholder="Niel">
 				  </div>
+					<?php if (array_search('invalid_lastname', $this->errors) !== false) { ?>
+						<p class="help is-danger">Nom de famille invalide</p>
+					<?php } ?>
 				</div>
 
 				<div class="field">
@@ -62,6 +71,20 @@ Helpers::partial('navbar');
 				  </div>
 					<?php if (array_search('invalid_password', $this->errors) !== false) { ?>
 						<p class="help is-danger">Mot de passe invalide</p>
+					<?php } ?>
+				</div>
+
+				<div class="field">
+				  <label class="label">Confirmation de mot de passe</label>
+				  <div class="control has-icons-left has-icons-right">
+						<input type="password" name="password_confirm" class="input <?php if (array_search('invalid_password', $this->errors) !== false || array_search('passwords_mismatch', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="cNiL-Pr00f">
+						<span class="icon is-small is-left"><i class="fas fa-key"></i></span>
+				  </div>
+					<?php if (array_search('invalid_password', $this->errors) !== false) { ?>
+						<p class="help is-danger">Confirmation de mot de passe invalide</p>
+					<?php } ?>
+					<?php if (array_search('passwords_mismatch', $this->errors) !== false) { ?>
+						<p class="help is-danger">Les mots de passe ne correspondent pas</p>
 					<?php } ?>
 				</div>
 
