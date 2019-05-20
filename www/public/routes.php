@@ -2,7 +2,9 @@
 
 $router = App\Router\Router::getInstance();
 $router->get('/posts/:id', 'Posts#show');
+//$router->get('/posts/mine', 'Posts#mine');
 $router->get('/posts', 'Posts#index');
+
 $router->get('/trending', 'Posts#trending');
 $router->get('/favs', 'Posts#favs');
 

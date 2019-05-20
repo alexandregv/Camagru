@@ -9,6 +9,8 @@ class Model
 		$model = explode('\\', get_called_class());
 		$model = end($model);
 		$data = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE id = '$id' LIMIT 1", [], 1);
+		if ($data === false)
+			return false;
 		$kwargs = [];
 		foreach ($data as $k => $v)
 			$kwargs[$k] = $v;

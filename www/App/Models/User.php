@@ -13,7 +13,6 @@ class User extends Model
 	protected $_confirmToken	= '';
 	protected $_posts			= [];
 	protected $_likedPosts		= [];
-
 }
 
 ?>
