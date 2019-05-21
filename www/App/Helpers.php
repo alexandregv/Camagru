@@ -21,8 +21,15 @@ class Helpers
 		return self::asset($name, 'css') . '.css';
 	}
 
-	public static function partial($name)
+	public static function render($name, $vars = [])
 	{
+		extract($vars);
+		require "App/Views/$name.php";
+	}
+
+	public static function partial($name, $vars = [])
+	{
+		extract($vars);
 		require "App/Views/Partials/_$name.php";
 	}
 
