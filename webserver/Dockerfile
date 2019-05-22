@@ -46,3 +46,8 @@ RUN docker-php-ext-install -j$(nproc) gd
 
 # Enable apache modules
 RUN a2enmod rewrite headers
+
+# Add fr_FR locale
+RUN apt-get -y install locales
+RUN echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen 
+RUN locale-gen

@@ -6,7 +6,7 @@ class PostsController extends Controller
 {
 	public function index()
 	{
-		var_dump(\App\Models\Post::getAll());exit;
+		$this->posts = \App\Models\Post::getAll();
 		$this->render('Posts#index');
 	}
 

@@ -8,22 +8,29 @@ class Model
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$data = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE id = '$id' LIMIT 1", [], 1);
+		$data  = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE id = '$id' LIMIT 1", [], 1);
 		if ($data === false)
 			return false;
-		$kwargs = [];
-		foreach ($data as $k => $v)
-			$kwargs[$k] = $v;
+		$data = array_map('htmlspecialchars', $data);
 		$model = get_called_class();
-		return new $model($kwargs);
+		return new $model($data);
 	}
 	
 	public static function getAll()
 	{
-		$db = \App\Database::getInstance();
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		return $db->query("SELECT * FROM {$model}s", []);
+		$datas = \App\Database::getInstance()->query("SELECT * FROM {$model}s", []);
+		if ($datas === false)
+			return false;
+		$models = [];
+		$model = get_called_class();
+		foreach ($datas as $data)
+		{
+			$data = array_map('htmlspecialchars', $data);
+			$models[$data['id']] = new $model($data);
+		}
+		return $models;
 	}
 
 	public function __call($method, $params)
@@ -36,8 +43,14 @@ class Model
 				return $this->$var;
 			else if (isset($this->{"_$var"}))
 				return $this->{"_$var"};
+			else if (isset($this->{"${var}_id"}) || isset($this->{"_${var}_id"}))
+			{
+				$model = 'App\\Models\\' . $this->foreign_keys["${var}_id"];
+				$func  = 'get' . ucfirst($var) . '_id';
+				return $model::get($this->$func());
+			}
 			else
-				throw new \Exception("Unknown model property $$k.");
+				throw new \Exception("Unknown model property $$var.");
 
 		}
 		else if (strncasecmp($method, "set", 3) === 0)
@@ -47,7 +60,9 @@ class Model
 			else if (isset($this->{"_$var"}))
 				$this->{"_$var"} = $params[0];
 			else
-				throw new \Exception("Unknown model property $$k.");
+				$this->$var = $params[0];
+			//else
+			//	throw new \Exception("Unknown model property $$var.");
 
 		}
 	}

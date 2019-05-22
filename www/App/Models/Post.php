@@ -9,6 +9,8 @@ class Post extends Model
 	protected $_image				= '';
 	protected $_description	= '';
 	protected $_createdAt		= '';
+
+	protected $foreign_keys = ['creator_id' => 'User'];
 }
 
 ?>

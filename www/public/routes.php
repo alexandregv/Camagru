@@ -1,7 +1,8 @@
 <?php
 
 $router = App\Router\Router::getInstance();
-$router->get('/posts/:id', 'Posts#show');
+$router->get('/posts/:id', 'Posts#show')->with('id', '[0-9]+');
+$router->get('/posts/:user', 'Posts#user');
 //$router->get('/posts/mine', 'Posts#mine');
 $router->get('/posts', 'Posts#index');
 

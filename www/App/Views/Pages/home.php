@@ -53,7 +53,7 @@ Helpers::partial('navbar');
 		  <div class="level-item has-text-centered">
 			<div>
 			  <p class="heading">Publications</p>
-			  <p class="title">123</p>
+			  <p class="title"><?= $this->posts_count ?></p>
 			</div>
 		  </div>
 		  <div class="level-item has-text-centered">
