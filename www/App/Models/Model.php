@@ -15,7 +15,25 @@ class Model
 		$model = get_called_class();
 		return new $model($data);
 	}
-	
+
+	//public static function getBy(array $attributes, array $values)
+	public static function getBy($attribute, $value, $limit = null)
+	{
+		$model = explode('\\', get_called_class());
+		$model = end($model);
+		$datas = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE $attribute = '$value'" . (isset($limit) ? " LIMIT $limit" : null), []);
+		if ($datas === false)
+			return false;
+		$models = [];
+		$model = get_called_class();
+		foreach ($datas as $data)
+		{
+			$data = array_map('htmlspecialchars', $data);
+			$models[$data['id']] = new $model($data);
+		}
+		return $models;
+	}
+
 	public static function getAll()
 	{
 		$model = explode('\\', get_called_class());
