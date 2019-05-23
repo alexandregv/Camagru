@@ -10,10 +10,13 @@ class PostsController extends Controller
 		$this->render('Posts#index');
 	}
 
-	//public function show($id)
-	//{
-	//	$this->render('Posts#show');
-	//}
+	public function show($id)
+	{
+		$this->post = \App\Models\Post::get($id);
+		$this->likes_count = count(\App\Models\Like::getBy('post_id', $id));
+		$this->comments = \App\Models\Comment::getBy('post_id', $id);
+		$this->render('Posts#show');
+	}
 
 	public function user($user)
 	{

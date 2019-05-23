@@ -1,25 +1,26 @@
 <?php
-
 namespace App;
 
 Helpers::partial('head');
 Helpers::partial('navbar');
-
+$post = $this->post;
 ?>
 <main>
   <section class="section">
 	<article class="media">
 	  <figure class="media-content">
-		<p class="image is-square"><img style="width: 50vw; height: 80vh;" src="https://bulma.io/images/placeholders/128x128.png"></p>
+			<p class="image is-square"><img style="width: 50vw; height: 80vh;" src="<?= $post->getImage() ?>"></p>
 	  </figure>
 
 	  <div class="media-right">
 		<div style="margin-bottom: 0.75rem;">
 		  <div class="content">
 			<p>
-			  <strong>A. Guiot--Valentin</strong> <small>@aguiot--</small> <small>42m</small>
+				<strong><?= $post->getCreator()->getFirstname(), ' ', $post->getCreator()->getLastname() ?></strong>
+				<small><?= '@', $post->getCreator()->getUsername() ?></small>
+				<small><?= strftime('%Hh%M', strtotime($post->getCreatedAt())), ' - ', ucwords(strftime('%A %d %B', strtotime($post->getCreatedAt()))) ?></small>
 			  <br>
-			  Voici ma dernière photo, il s'agit d'un placeholder de 128 par 128 d'un style assez classique et épuré. Je rends les likes. 
+				<?= $post->getDescription() ?>
 			</p>
 		  </div>
 		  <nav class="level is-mobile">
@@ -27,45 +28,29 @@ Helpers::partial('navbar');
 			  <a class="level-item"><span class="icon is-small"><i class="fas fa-reply"></i></span></a>
 			  <a class="level-item"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
 			  <a class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a>
+				<div class="level-item"><span class="icon is-small"><?= $this->likes_count ?></span></div>
 			</div>
 		  </nav>
 		</div>
 
-		<article class="media">
-  		  <figure class="media-left">
-  		    <p class="image is-64x64"><img src="https://bulma.io/images/placeholders/128x128.png"></p>
-  		  </figure>
-  		  <div class="media-content">
-  		    <div class="content">
-  		      <p>
-  		    	<strong>Baptiste Martin</strong> <small>@bapmarti</small>
-  		    	<br>
-  		    	Vraiment beau, classique mais original, j'adore.	
-  		    	<br>
-  		    	<small><a>Like</a> · 3 hrs</small>
-  		      </p>
-  		    </div>
-
-  		  </div>
-		</article>
-
-		<article class="media">
-  		  <figure class="media-left">
-  		    <p class="image is-64x64"><img src="https://bulma.io/images/placeholders/128x128.png"></p>
-  		  </figure>
-  		  <div class="media-content">
-  		    <div class="content">
-  		      <p>
-  		    	<strong>Alex Moulinneuf</strong> <small>@amoulinn</small>
-  		    	<br>
-  		    	Fdp c flou.	
-  		    	<br>
-  		    	<small><a>Like</a> · 3 hrs</small>
-  		      </p>
-  		    </div>
-
-  		  </div>
-		</article>
+		<?php foreach ($this->comments as $comment) { ?>
+			<article class="media">
+  			  <figure class="media-left">
+  			    <p class="image is-64x64"><img src="https://bulma.io/images/placeholders/128x128.png"></p>
+  			  </figure>
+  			  <div class="media-content">
+  			    <div class="content">
+  			      <p>
+  			    	<strong><?= $comment->getAuthor()->getFirstname(), ' ', $comment->getAuthor()->getLastname() ?></strong> <small><?= '@', $comment->getAuthor()->getUsername() ?></small>
+  			    	<br>
+  			  		<?= $comment->getContent(); ?>
+  			    	<br>
+  			    	<small><?= strftime('%Hh%M', strtotime($comment->getCreatedAt())), ' - ', ucwords(strftime('%A %d %B', strtotime($comment->getCreatedAt()))) ?></small>
+  			      </p>
+  			    </div>
+  			  </div>
+			</article>
+		<?php } ?>
 
 		<article class="media">
 		  <figure class="media-left">
@@ -74,12 +59,12 @@ Helpers::partial('navbar');
 		  <div class="media-content">
 			<div class="field">
 			  <p class="control">
-				<textarea class="textarea" placeholder="Add a comment..."></textarea>
+				<textarea class="textarea" placeholder="Ajouter un commentaire..."></textarea>
 			  </p>
 			</div>
 			<div class="field">
 			  <p class="control">
-				<button class="button">Post comment</button>
+				<button class="button">Commenter</button>
 			  </p>
 			</div>
 		  </div>
