@@ -20,7 +20,6 @@ class PostsController extends Controller
 
 	public function user($user)
 	{
-		//$creator_id  = array_values(\App\Models\User::getBy('username', $user, 1))[0]->getId();
 		$user = \App\Models\User::getBy('username', $user, 1);
 		if ($user == false)
 		{
@@ -36,4 +35,16 @@ class PostsController extends Controller
 		}
 	}
 
+	public function favs()
+	{
+		$likes = \App\Models\Like::getBy('author_id', $_SESSION['id']);
+		foreach ($likes as $like)
+		{
+			$post = $like->getPost();
+			//$likes_count = count(\App\Models\Like::getBy('post_id', $post->getId()));
+			//$post->setLikesCount($likes_count);
+			$this->posts[] = $post;
+		}
+		$this->render('Posts#favs');
+	}
 }
