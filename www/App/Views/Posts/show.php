@@ -20,7 +20,14 @@ $post = $this->post;
 				<small><?= '@', $post->getCreator()->getUsername() ?></small>
 				<small><?= strftime('%Hh%M', strtotime($post->getCreatedAt())), ' - ', ucwords(strftime('%A %d %B', strtotime($post->getCreatedAt()))) ?></small>
 			  <br>
-				<?= $post->getDescription() ?>
+				<?php
+					$url = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i';
+					$tag = '~#([a-zA-z0-9]+)~i';
+					$formatted = $post->getDescription();
+					$formatted = preg_replace($url, '<a href="$0" target="_blank" title="$2">$2</a>', $formatted);
+					$formatted = preg_replace($tag, '<a href="/tags/$1" target="_blank" title="$1">$0</a>', $formatted); //TODO: ::route('', $1)
+					echo $formatted;
+				?>
 			</p>
 		  </div>
 		  <nav class="level is-mobile">

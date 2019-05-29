@@ -34,6 +34,25 @@ class PostsController extends Controller
 			$this->render('Posts#user');
 		}
 	}
+	
+	public function trending()
+	{
+		$datas = \App\Database::getInstance()->query("SELECT id, post_id FROM likes ORDER BY createdAt DESC LIMIT 3", []);
+		if ($datas === false)
+			return;
+
+		$likes = [];
+		foreach ($datas as $data)
+		{
+			$data = array_map('htmlspecialchars', $data);
+			$likes[$data['id']] = new \App\Models\Like($data);
+		}
+		
+		$this->posts = [];
+		foreach ($likes as $like)
+			$this->posts[] = \App\Models\Post::get($like->getPost_id());
+		$this->render('Posts#trending');
+	}
 
 	public function favs()
 	{

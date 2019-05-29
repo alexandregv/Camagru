@@ -59,13 +59,13 @@ Helpers::partial('navbar');
 		  <div class="level-item has-text-centered">
 			<div>
 			  <p class="heading">Commentaires</p>
-			  <p class="title">456K</p>
+			  <p class="title"><?= $this->comments_count ?></p>
 			</div>
 		  </div>
 		  <div class="level-item has-text-centered">
 			<div>
 			  <p class="heading">Likes</p>
-			  <p class="title">789</p>
+			  <p class="title"><?= $this->likes_count ?></p>
 			</div>
 		  </div>
 		</nav>
