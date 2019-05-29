@@ -13,14 +13,14 @@ class PostsController extends Controller
 	public function show($id)
 	{
 		$this->post = \App\Models\Post::get($id);
-		$this->likes_count = count(\App\Models\Like::getBy('post_id', $id));
-		$this->comments = \App\Models\Comment::getBy('post_id', $id);
+		$this->likes_count = count(\App\Models\Like::getBy(['post_id' => $id]));
+		$this->comments = \App\Models\Comment::getBy(['post_id' => $id]);
 		$this->render('Posts#show');
 	}
 
 	public function user($user)
 	{
-		$user = \App\Models\User::getBy('username', $user, 1);
+		$user = \App\Models\User::getBy(['username' => $user], 1);
 		if ($user == false)
 		{
 			$this->redirect('Posts#index'); //TODO: flasm message --> redir Posts#index ?
@@ -30,7 +30,7 @@ class PostsController extends Controller
 		else
 		{
 			$creator_id  = array_values($user)[0]->getId();
-			$this->posts = \App\Models\Post::getBy('creator_id', $creator_id);
+			$this->posts = \App\Models\Post::getBy(['creator_id' => $creator_id]);
 			$this->render('Posts#user');
 		}
 	}
@@ -56,7 +56,7 @@ class PostsController extends Controller
 
 	public function favs()
 	{
-		$likes = \App\Models\Like::getBy('author_id', $_SESSION['id']);
+		$likes = \App\Models\Like::getBy(['author_id' => $_SESSION['id']]);
 		foreach ($likes as $like)
 		{
 			$post = $like->getPost();

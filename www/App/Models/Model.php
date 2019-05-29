@@ -4,23 +4,11 @@ namespace App\Models;
 
 class Model
 {
-	public static function old_get($id)
-	{
-		$model = explode('\\', get_called_class());
-		$model = end($model);
-		$data  = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE id = '$id' LIMIT 1", [], 1);
-		if ($data === false)
-			return false;
-		$data = array_map('htmlspecialchars', $data);
-		$model = get_called_class();
-		return new $model($data);
-	}
-	
 	public static function get($id)
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$data  = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE id = '$id' LIMIT 1", [], 1);
+		$data  = \App\Facades\Query::select('*')->from("{$model}s")->where("id = $id")->limit(1)->fetch();
 		if ($data === false)
 			return false;
 		$data = array_map('htmlspecialchars', $data);
@@ -28,14 +16,17 @@ class Model
 		return new $model($data);
 	}
 
-
-
-	//public static function getBy(array $attributes, array $values)
-	public static function getBy($attribute, $value, $limit = null)
+	public static function getBy(array $attributes, $limit = null)
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$datas = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE $attribute = '$value'" . (isset($limit) ? " LIMIT $limit" : null), []);
+		$query = new \App\QueryBuilder();
+		$query->select('*')->from("${model}s");
+		foreach ($attributes as $attribute => $value)
+			$query->where("$attribute = $value");
+		if (!is_null($limit))
+			$query->limit($limit);
+		$datas = $query->fetchAll();
 		if ($datas === false)
 			return false;
 		$models = [];

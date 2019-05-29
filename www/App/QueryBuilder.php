@@ -60,6 +60,16 @@ class QueryBuilder
 			return $stmt;
 	}
 
+	public function fetch()
+	{
+		return $this->exec(1);
+	}
+
+	public function fetchAll()
+	{
+		return $this->exec(2);
+	}
+
 	public function __invoke()
 	{
 		return $this->_exec();
