@@ -4,6 +4,18 @@ namespace App\Models;
 
 class Model
 {
+	public static function old_get($id)
+	{
+		$model = explode('\\', get_called_class());
+		$model = end($model);
+		$data  = \App\Database::getInstance()->query("SELECT * FROM {$model}s WHERE id = '$id' LIMIT 1", [], 1);
+		if ($data === false)
+			return false;
+		$data = array_map('htmlspecialchars', $data);
+		$model = get_called_class();
+		return new $model($data);
+	}
+	
 	public static function get($id)
 	{
 		$model = explode('\\', get_called_class());
@@ -15,6 +27,8 @@ class Model
 		$model = get_called_class();
 		return new $model($data);
 	}
+
+
 
 	//public static function getBy(array $attributes, array $values)
 	public static function getBy($attribute, $value, $limit = null)
