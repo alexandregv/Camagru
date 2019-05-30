@@ -62,7 +62,7 @@ class QueryBuilder
 
 	public function exec($fetchMode = 2)
 	{
-		$db = \App\Database::getInstance();
+		$db = Database::getInstance();
 
 		$query = "$this";
 		$values = [];

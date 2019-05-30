@@ -25,7 +25,7 @@ class PostsController extends Controller
 		$user = User::getBy(['username' => $user], 1);
 		if ($user == false)
 		{
-			$this->redirect('Posts#index'); //TODO: flasm message --> redir Posts#index ?
+			$this->router->redirect('Posts#index'); //TODO: flasm message --> redir Posts#index ?
 			//$this->errors[] = 'user_not_found';
 			//$this->render('Posts#user');
 		}

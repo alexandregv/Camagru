@@ -19,11 +19,6 @@ class Controller
 		else $this->render('Errors#404');
 	}
 
-	public function redirect($full)
-	{
-		header('Location: ' . $this->router->url($full));
-	}
-
 	public function __call($action, $params = [])
 	{
 		$controller = explode('\\', get_class($this));

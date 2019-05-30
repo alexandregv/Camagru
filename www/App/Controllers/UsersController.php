@@ -70,7 +70,7 @@ class UsersController extends Controller
 							$passHash = hash('whirlpool', 'grumaca' . trim($_POST['new_password']));
 
 						$res = Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'"])->where("id = {$_SESSION['id']}")->exec(0);
-						$this->redirect('Users#profile');
+						$this->router->redirect('Users#profile');
 					}
 				}
 				else $this->errors[] = 'invalid_old_password';
@@ -100,7 +100,7 @@ class UsersController extends Controller
 						$_SESSION["loggedin"] = true;
 						$_SESSION["id"] = $user['id'];
 						$_SESSION["username"] = $user['username'];
-						$this->redirect('Pages#home');
+						$this->router->redirect('Pages#home');
 					}
 					else
 					{
@@ -125,7 +125,7 @@ class UsersController extends Controller
 	public function logout()
 	{
 		session_destroy();
-		$this->redirect('Pages#home');
+		$this->router->redirect('Pages#home');
 	}
 
 	public function register()
@@ -153,7 +153,7 @@ class UsersController extends Controller
 								$_SESSION["loggedin"] = true;
 								$_SESSION["id"] = $user['id'];
 								$_SESSION["username"] = $user['username'];
-								$this->redirect('Pages#home');
+								$this->router->redirect('Pages#home');
 							}
 							else
 							{
