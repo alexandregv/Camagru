@@ -41,7 +41,7 @@ class UsersController extends Controller
 					$skip = false;
 					if (!empty($_POST['email']) && trim($_POST['email']) != '' && trim($_POST['email']) != $this->user->getEmail())
 					{
-						$exists = \App\Database::getInstance()->query("SELECT username FROM users WHERE email = '{$_POST['email']}'", [], 1);
+						$exists = \App\Facades\Query::select('username')->from('users')->where("email = {$_POST['email']}")->fetch();
 						if ($exists !== false)
 						{
 							$skip = true;
@@ -50,7 +50,7 @@ class UsersController extends Controller
 					}
 					if (!empty($_POST['username']) && trim($_POST['username']) != '' && trim($_POST['username']) != $this->user->getUsername())
 					{
-						$exists = \App\Database::getInstance()->query("SELECT username FROM users WHERE username = '{$_POST['username']}'", [], 1);
+						$exists = \App\Facades\Query::select('username')->from('users')->where("username = {$_POST['username']}")->fetch();
 						if ($exists !== false)
 						{
 							$skip = true;
@@ -67,8 +67,7 @@ class UsersController extends Controller
 						if (!empty($_POST['new_password']) && trim($_POST['new_password']) != '')
 							$passHash = hash('whirlpool', 'grumaca' . trim($_POST['new_password']));
 
-						$res = \App\Database::getInstance()->query("UPDATE users SET username = '$username', email = '$email', firstname = '$firstname', lastname = '$lastname', passHash = '$passHash' WHERE id = '{$_SESSION['id']}'", [], 0);
-						//TODO: ^ use ORM ^ 
+						$res = \App\Facades\Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'"])->where("id = {$_SESSION['id']}")->exec(0);
 						$this->redirect('Users#profile');
 					}
 				}
@@ -91,7 +90,7 @@ class UsersController extends Controller
 			if (!empty(trim($_POST['username']) && !empty(trim($_POST['password']))))
 			{
 				$hash = hash('whirlpool', 'grumaca' . $_POST['password']);
-				$user = \App\Database::getInstance()->query("SELECT id, username, passHash FROM users WHERE username = '{$_POST['username']}'", [], 1);
+				$user = \App\Facades\Query::select('id', 'username', 'passHash')->from('users')->where("username = {$_POST['username']}")->limit(1)->fetch();
 				if ($user != false)
 				{
 					if ($user['passHash'] === $hash)
@@ -146,7 +145,7 @@ class UsersController extends Controller
 						if ($user == false)
 						{
 							$res  = $db->query("INSERT INTO users (`username`, `email`, `passHash`, `firstname`, `lastname`, `confirmToken`) VALUES ('{$_POST['username']}', '{$_POST['email']}', '$hash', '{$_POST['firstname']}', '{$_POST['lastname']}', 'confirmed')", [], 0);
-							$user = $db->query("SELECT id, username FROM users WHERE email = '{$_POST['email']}'", [], 1);
+							$user = \App\Facades\Query::select('id', 'username')->from('users')->where("email = {$_POST['email']}")->fetch();
 							if ($user != false)
 							{
 								$_SESSION["loggedin"] = true;

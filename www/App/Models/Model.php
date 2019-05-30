@@ -43,7 +43,7 @@ class Model
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$datas = \App\Database::getInstance()->query("SELECT * FROM {$model}s", []);
+		$datas = \App\Facades\Query::select('*')->from("{$model}s")->fetchAll();
 		if ($datas === false)
 			return false;
 		$models = [];

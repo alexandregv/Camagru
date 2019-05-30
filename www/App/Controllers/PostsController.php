@@ -37,7 +37,7 @@ class PostsController extends Controller
 	
 	public function trending()
 	{
-		$datas = \App\Database::getInstance()->query("SELECT id, post_id FROM likes ORDER BY createdAt DESC LIMIT 3", []);
+		$datas = \App\Facades\Query::select('id', 'post_id')->from('likes')->orderBy('createdAt', 'desc')->limit(3)->fetchAll();
 		if ($datas === false)
 			return;
 
