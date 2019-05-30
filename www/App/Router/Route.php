@@ -5,15 +5,15 @@ namespace App\Router;
 class Route {
 
 	private $_path;
-	private $_callable;
+	private $_action;
 	private $_matches = [];
 	private $_params = [];
 	private $_middlewares = [];
 
-	public function __construct($_path, $callable)
+	public function __construct($_path, $action)
 	{
 		$this->_path = trim($_path, '/');
-		$this->_callable = $callable;
+		$this->_action = $action;
 	}
 
 	public function match($url)
@@ -36,7 +36,7 @@ class Route {
 	}
 
 	public function with($param, $regex)
-	{
+	{http://192.168.1.28:8080/posts/mine
 		$this->_params[$param] = str_replace('(', '(?:', $regex);
 		return $this;
 	}
@@ -59,13 +59,13 @@ class Route {
 	{
 		$this->call_middlewares();
 
-		if(is_string($this->_callable)){
-			$params = explode('#', $this->_callable);
+		if(is_string($this->_action)){
+			$params = explode('#', $this->_action);
 			$controller = 'App\\Controllers\\' . $params[0] . 'Controller';
 			$controller = new $controller();
 			return call_user_func_array([$controller, $params[1]], $this->_matches);
 		}
-		else return call_user_func_array($this->_callable, $this->_matches);
+		else return call_user_func_array($this->_action, $this->_matches);
 	}
 
 	private function call_middlewares()

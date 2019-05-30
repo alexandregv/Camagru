@@ -20,8 +20,17 @@ class Router {
 	{
 		$path		= $args[0];
 		$action 	= $args[1];
-		$name		= $args[2] ?? $action;
-		
+		//$name		= $args[2] ?? $action;
+		if (isset($args[2]))
+			$name = $args[2];
+		else
+		{
+			if(is_string($action))
+				$name = $action;
+			else
+				$name = null;
+		}
+
 		$route = new Route($path, $action);
 		$this->routes[strtoupper($method)][] = $route;
 		if(is_string($action) && $name === null)
@@ -49,9 +58,9 @@ class Router {
 		return $this->namedRoutes[$name]->getUrl($params);
 	}
 
-	public function redirect($route)
+	public function redirect($route, $params = [])
 	{
-		header('Location: ' . $this->url($route));
+		header('Location: ' . $this->url($route, $params));
 		exit;
 	}
 

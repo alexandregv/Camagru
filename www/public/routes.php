@@ -1,12 +1,16 @@
 <?php
+use \App\Router\Router;
+use \App\Models\User;
 
-$router = App\Router\Router::getInstance();
+$router = Router::getInstance();
 
 # ----------
 # GET
-$router->get('/posts/:id', 'Posts#show')->with('Wid', '[0-9]+');
+$router->get('/posts/mine', function () use ($router) {
+	$router->redirect('Posts#user', ['user' => User::get($_SESSION['id'])->getUsername()]);
+})->middleware('auth');
+$router->get('/posts/:id', 'Posts#show')->with('id', '[0-9]+');
 $router->get('/posts/:user', 'Posts#user');
-//$router->get('/posts/mine', 'Posts#mine');
 $router->get('/posts', 'Posts#index');
 
 $router->get('/trending', 'Posts#trending');
