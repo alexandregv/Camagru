@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use \App\QueryBuilder;
+use \App\Facades\Query;
 
 class Model
 {
@@ -8,7 +10,7 @@ class Model
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$data  = \App\Facades\Query::select('*')->from("{$model}s")->where("id = $id")->limit(1)->fetch();
+		$data  = Query::select('*')->from("{$model}s")->where("id = $id")->limit(1)->fetch();
 		if ($data === false)
 			return false;
 		$data = array_map('htmlspecialchars', $data);
@@ -20,7 +22,7 @@ class Model
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$query = new \App\QueryBuilder();
+		$query = new QueryBuilder();
 		$query->select('*')->from("${model}s");
 		foreach ($attributes as $attribute => $value)
 			$query->where("$attribute = $value");
@@ -43,7 +45,7 @@ class Model
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$datas = \App\Facades\Query::select('*')->from("{$model}s")->fetchAll();
+		$datas = Query::select('*')->from("{$model}s")->fetchAll();
 		if ($datas === false)
 			return false;
 		$models = [];

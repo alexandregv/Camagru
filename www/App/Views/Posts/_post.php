@@ -1,5 +1,5 @@
 <?php
-namespace App;
+use \App\Helpers;
 ?>
 <div class="column card is-one-third">
 	<div class="card-image">

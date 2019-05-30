@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controllers;
+use \App\Facades\Query;
+use \App\Models\{Post, User, Like, Comment};
 
 class UsersController extends Controller
 {
@@ -18,7 +20,7 @@ class UsersController extends Controller
 
 	public function profile()
 	{
-		$this->user = \App\Models\User::get($_SESSION['id']);
+		$this->user = User::get($_SESSION['id']);
 
 		if ($_SERVER['REQUEST_METHOD'] == 'GET')
 		{
@@ -41,7 +43,7 @@ class UsersController extends Controller
 					$skip = false;
 					if (!empty($_POST['email']) && trim($_POST['email']) != '' && trim($_POST['email']) != $this->user->getEmail())
 					{
-						$exists = \App\Facades\Query::select('username')->from('users')->where("email = {$_POST['email']}")->fetch();
+						$exists = Query::select('username')->from('users')->where("email = {$_POST['email']}")->fetch();
 						if ($exists !== false)
 						{
 							$skip = true;
@@ -50,7 +52,7 @@ class UsersController extends Controller
 					}
 					if (!empty($_POST['username']) && trim($_POST['username']) != '' && trim($_POST['username']) != $this->user->getUsername())
 					{
-						$exists = \App\Facades\Query::select('username')->from('users')->where("username = {$_POST['username']}")->fetch();
+						$exists = Query::select('username')->from('users')->where("username = {$_POST['username']}")->fetch();
 						if ($exists !== false)
 						{
 							$skip = true;
@@ -67,7 +69,7 @@ class UsersController extends Controller
 						if (!empty($_POST['new_password']) && trim($_POST['new_password']) != '')
 							$passHash = hash('whirlpool', 'grumaca' . trim($_POST['new_password']));
 
-						$res = \App\Facades\Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'"])->where("id = {$_SESSION['id']}")->exec(0);
+						$res = Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'"])->where("id = {$_SESSION['id']}")->exec(0);
 						$this->redirect('Users#profile');
 					}
 				}
@@ -90,7 +92,7 @@ class UsersController extends Controller
 			if (!empty(trim($_POST['username']) && !empty(trim($_POST['password']))))
 			{
 				$hash = hash('whirlpool', 'grumaca' . $_POST['password']);
-				$user = \App\Facades\Query::select('id', 'username', 'passHash')->from('users')->where("username = {$_POST['username']}")->limit(1)->fetch();
+				$user = Query::select('id', 'username', 'passHash')->from('users')->where("username = {$_POST['username']}")->limit(1)->fetch();
 				if ($user != false)
 				{
 					if ($user['passHash'] === $hash)
@@ -140,12 +142,12 @@ class UsersController extends Controller
 					if (preg_match('#[0-9]+#', $pass) && preg_match('#[A-Z]+#', $pass) && preg_match('#[a-z]+#', $pass) && preg_match('/[!@#$%^&*\(\){}\[\]:;<,>.?\/\\~`]+/', $pass))
 					{
 						$hash = hash('whirlpool', 'grumaca' . $pass);
-						$db   = \App\Database::getInstance();
+						$db   = Database::getInstance();
 						$user = $db->query("SELECT username, email FROM users WHERE email = '{$_POST['email']}' OR username = '{$_POST['username']}'", [], 1);
 						if ($user == false)
 						{
 							$res  = $db->query("INSERT INTO users (`username`, `email`, `passHash`, `firstname`, `lastname`, `confirmToken`) VALUES ('{$_POST['username']}', '{$_POST['email']}', '$hash', '{$_POST['firstname']}', '{$_POST['lastname']}', 'confirmed')", [], 0);
-							$user = \App\Facades\Query::select('id', 'username')->from('users')->where("email = {$_POST['email']}")->fetch();
+							$user = Query::select('id', 'username')->from('users')->where("email = {$_POST['email']}")->fetch();
 							if ($user != false)
 							{
 								$_SESSION["loggedin"] = true;

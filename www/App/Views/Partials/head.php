@@ -1,9 +1,6 @@
 <?php
-
-namespace App;
-
+use \App\Helpers;
 ?>
-
 <!DOCTYPE html>
 <html>
 

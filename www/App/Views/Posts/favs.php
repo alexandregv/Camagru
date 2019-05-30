@@ -1,15 +1,17 @@
 <?php
-namespace App;
+use \App\Helpers;
 
 Helpers::partial('head');
 Helpers::partial('navbar');
+
+$posts = $this->posts;
 ?>
 <main>
   <section class="section">
 	<div class="container">
 	  <div class="columns is-centered">
 		<?php
-		foreach ($this->posts as $post)
+		foreach ($posts as $post)
 			Helpers::render('Posts/_post', ['post' => $post]);
 		?>
 	  </div>

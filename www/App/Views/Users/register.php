@@ -1,6 +1,5 @@
 <?php 
-
-namespace App;
+use \App\Helpers;
 
 Helpers::partial('head');
 Helpers::partial('navbar');

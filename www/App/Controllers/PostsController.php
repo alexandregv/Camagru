@@ -1,26 +1,28 @@
 <?php
 
 namespace App\Controllers;
+use \App\Facades\Query;
+use \App\Models\{Post, User, Like, Comment};
 
 class PostsController extends Controller
 {
 	public function index()
 	{
-		$this->posts = \App\Models\Post::getAll();
+		$this->posts = Post::getAll();
 		$this->render('Posts#index');
 	}
 
 	public function show($id)
 	{
-		$this->post = \App\Models\Post::get($id);
-		$this->likes_count = count(\App\Models\Like::getBy(['post_id' => $id]));
-		$this->comments = \App\Models\Comment::getBy(['post_id' => $id]);
+		$this->post = Post::get($id);
+		$this->likes_count = count(Like::getBy(['post_id' => $id]));
+		$this->comments = Comment::getBy(['post_id' => $id]);
 		$this->render('Posts#show');
 	}
 
 	public function user($user)
 	{
-		$user = \App\Models\User::getBy(['username' => $user], 1);
+		$user = User::getBy(['username' => $user], 1);
 		if ($user == false)
 		{
 			$this->redirect('Posts#index'); //TODO: flasm message --> redir Posts#index ?
@@ -30,14 +32,14 @@ class PostsController extends Controller
 		else
 		{
 			$creator_id  = array_values($user)[0]->getId();
-			$this->posts = \App\Models\Post::getBy(['creator_id' => $creator_id]);
+			$this->posts = Post::getBy(['creator_id' => $creator_id]);
 			$this->render('Posts#user');
 		}
 	}
 	
 	public function trending()
 	{
-		$datas = \App\Facades\Query::select('id', 'post_id')->from('likes')->orderBy('createdAt', 'desc')->limit(3)->fetchAll();
+		$datas = Query::select('id', 'post_id')->from('likes')->orderBy('createdAt', 'desc')->limit(3)->fetchAll();
 		if ($datas === false)
 			return;
 
@@ -45,22 +47,23 @@ class PostsController extends Controller
 		foreach ($datas as $data)
 		{
 			$data = array_map('htmlspecialchars', $data);
-			$likes[$data['id']] = new \App\Models\Like($data);
+			$likes[$data['id']] = new Like($data);
 		}
 		
 		$this->posts = [];
 		foreach ($likes as $like)
-			$this->posts[] = \App\Models\Post::get($like->getPost_id());
+			$this->posts[] = Post::get($like->getPost_id());
 		$this->render('Posts#trending');
 	}
 
 	public function favs()
 	{
-		$likes = \App\Models\Like::getBy(['author_id' => $_SESSION['id']]);
+		$likes = Like::getBy(['author_id' => $_SESSION['id']]);
+		$this->posts = [];
 		foreach ($likes as $like)
 		{
 			$post = $like->getPost();
-			//$likes_count = count(\App\Models\Like::getBy('post_id', $post->getId()));
+			//$likes_count = count(Like::getBy('post_id', $post->getId()));
 			//$post->setLikesCount($likes_count);
 			$this->posts[] = $post;
 		}
