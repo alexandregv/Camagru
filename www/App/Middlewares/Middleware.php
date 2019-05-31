@@ -13,7 +13,7 @@ class Middleware
 		$this->_route = $route;
 	}
 
-	public function call()
+	public function call(string &$body)
 	{
 
 	}

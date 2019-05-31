@@ -15,15 +15,19 @@ class Controller
 	{
 		$full = explode('#', $full);
 		if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/App/Views/$full[0]/$full[1].php"))
+		{
+			ob_start();
 			require "App/Views/$full[0]/$full[1].php";
-		else $this->render('Errors#404');
+			return ob_get_clean();
+		}
+		else return $this->render('Errors#404');
 	}
 
 	public function __call(string $action, array $params = [])
 	{
 		$controller = explode('\\', get_class($this));
 		$controller = str_replace('Controller', '', end($controller));
-		$this->render("$controller#$action", $params);
+		return $this->render("$controller#$action", $params);
 	}
 }
 

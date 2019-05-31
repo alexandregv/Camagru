@@ -12,12 +12,12 @@ class UsersController extends Controller
 
 	//public function index()
 	//{
-	//	$this->render('Users#index');
+	//	return $this->render('Users#index');
 	//}
 
 	//public function show($id)
 	//{
-	//	$this->render('Users#show');
+	//	return $this->render('Users#show');
 	//}
 
 	public function profile()
@@ -28,7 +28,7 @@ class UsersController extends Controller
 		{
 			if ($this->user == false)
 				$this->errors[] = 'invalid_user_id';
-			$this->render('Users#profile');
+			return $this->render('Users#profile');
 		}
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
@@ -73,7 +73,7 @@ class UsersController extends Controller
 
 						$res = Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'"])->where("id = {$_SESSION['id']}")->exec(0);
 						Helpers::flash('success', 'Profil modifié avec succes !');
-						$this->router->redirect('Users#profile');
+						return $this->router->redirect('Users#profile');
 					}
 				}
 				else $this->errors[] = 'invalid_old_password';
@@ -82,14 +82,14 @@ class UsersController extends Controller
 
 			if ($this->user == false)
 				$this->errors[] = 'invalid_user_id';
-			$this->render('Users#profile');
+			return $this->render('Users#profile');
 		}
 	}
 
 	public function login()
 	{
 		if ($_SERVER['REQUEST_METHOD'] == 'GET')
-			$this->render('Users#login');
+			return $this->render('Users#login');
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			if (!empty(trim($_POST['username']) && !empty(trim($_POST['password']))))
@@ -104,24 +104,24 @@ class UsersController extends Controller
 						$_SESSION["id"] = $user['id'];
 						$_SESSION["username"] = $user['username'];
 						Helpers::flash('success', 'Connexion réussie !');
-						$this->router->redirect('Pages#home');
+						return $this->router->redirect('Pages#home');
 					}
 					else
 					{
 						$this->errors[] = 'invalid_password';
-						$this->render('Users#login');
+						return $this->render('Users#login');
 					}
 				}
 				else
 				{
 					$this->errors[] = 'invalid_username';
-					$this->render('Users#login');
+					return $this->render('Users#login');
 				}
 			}
 			else 
 			{
 				$this->errors = ['nissing_email', 'nissing_password'];
-				$this->render('Users#login');
+				return $this->render('Users#login');
 			}
 		}
 	}
@@ -129,13 +129,13 @@ class UsersController extends Controller
 	public function logout()
 	{
 		session_destroy();
-		$this->router->redirect('Pages#home');
+		return $this->router->redirect('Pages#home');
 	}
 
 	public function register()
 	{
 		if ($_SERVER['REQUEST_METHOD'] == 'GET')
-			$this->render('Users#register');
+			return $this->render('Users#register');
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			if (!empty(trim($_POST['email']) && !empty(trim($_POST['username'])) && !empty(trim($_POST['password'])) && !empty(trim($_POST['password_confirm'])) && !empty(trim($_POST['firstname'])) && !empty(trim($_POST['lastname']))))
@@ -158,31 +158,31 @@ class UsersController extends Controller
 								$_SESSION["id"] = $user['id'];
 								$_SESSION["username"] = $user['username'];
 								Helpers::flash('success', 'Inscription réussie !');
-								$this->router->redirect('Pages#home');
+								return $this->router->redirect('Pages#home');
 							}
 							else
 							{
 								$this->errors[] = 'invalid_email';
-								$this->render('Users#register');
+								return $this->render('Users#register');
 							}
 						}
 						else
 						{
 							if ($user['email'] == trim($_POST['email'])) $this->errors[] = 'busy_email';
 							if ($user['username'] == trim($_POST['username'])) $this->errors[] = 'busy_username';
-							$this->render('Users#register');
+							return $this->render('Users#register');
 						}
 					}
 					else
 					{
 						$this->errors[] = 'invalid_password';
-						$this->render('Users#register');
+						return $this->render('Users#register');
 					}
 				}
 				else
 				{
 					$this->errors[] = 'passwords_mismatch';
-					$this->render('Users#register');
+					return $this->render('Users#register');
 				}
 			}
 			else
@@ -193,7 +193,7 @@ class UsersController extends Controller
 				if (empty(trim($_POST['firstname']))) 		  $this->errors[] = 'invalid_firstname';
 				if (empty(trim($_POST['lastname'])))  		  $this->errors[] = 'invalid_lastname';
 				if (empty(trim($_POST['password_confirm'])))  $this->errors[] = 'invalid_password';
-				$this->render('Users#register');
+				return $this->render('Users#register');
 			}
 
 		}

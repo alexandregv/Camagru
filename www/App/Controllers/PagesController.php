@@ -12,6 +12,6 @@ class PagesController extends Controller
 		$this->posts_count = count(Post::getAll());
 		$this->comments_count = count(Comment::getAll());
 		$this->likes_count = count(Like::getAll());
-		$this->render('Pages#home');
+		return $this->render('Pages#home');
 	}
 }

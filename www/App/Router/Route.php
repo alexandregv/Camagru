@@ -4,11 +4,12 @@ namespace App\Router;
 
 class Route {
 
-	private $_path;
-	private $_action;
-	private $_matches = [];
-	private $_params = [];
-	private $_middlewares = [];
+	private $_path				= '';
+	private $_action			= '';
+	private $_matches			= [];
+	private $_params			= [];
+	private $_beforeMiddlewares	= [];
+	private $_afterMiddlewares	= [];
 
 	public function __construct(string $path, $action)
 	{
@@ -41,9 +42,12 @@ class Route {
 		return $this;
 	}
 
-	public function middleware(string $middleware): Route
+	public function middleware(string $middleware, string $order = 'before'): Route
 	{
-		$this->_middlewares[] = $middleware;
+		if ($order == 'after')
+			$this->_afterMiddlewares[] = $middleware;
+		else
+			$this->_beforeMiddlewares[] = $middleware;
 		return $this;
 	}
 
@@ -57,24 +61,40 @@ class Route {
 
 	public function call()
 	{
-		$this->call_middlewares();
+		$body = '';
+		$this->callBeforeMiddlewares($body);
 
 		if(is_string($this->_action)){
 			$params = explode('#', $this->_action);
 			$controller = 'App\\Controllers\\' . $params[0] . 'Controller';
 			$controller = new $controller();
-			return call_user_func_array([$controller, $params[1]], $this->_matches);
+			$body = call_user_func_array([$controller, $params[1]], $this->_matches);
 		}
-		else return call_user_func_array($this->_action, $this->_matches);
+		else
+			$body = call_user_func_array($this->_action, $this->_matches);
+
+		$this->callAfterMiddlewares($body);
+		echo $body;
 	}
 
-	private function call_middlewares(): Route
+	private function callBeforeMiddlewares(string &$body): Route
 	{
-		foreach ($this->_middlewares as $name)
+		foreach ($this->_beforeMiddlewares as $name)
 		{
 			$middleware = 'App\\Middlewares\\' . ucfirst($name) . 'Middleware';
 			$middleware = new $middleware($this);
-			$middleware->call();
+			$middleware->call($body);
+		}
+		return $this;
+	}
+
+	private function callAfterMiddlewares(string &$body): Route
+	{
+		foreach ($this->_afterMiddlewares as $name)
+		{
+			$middleware = 'App\\Middlewares\\' . ucfirst($name) . 'Middleware';
+			$middleware = new $middleware($this);
+			$middleware->call($body);
 		}
 		return $this;
 	}

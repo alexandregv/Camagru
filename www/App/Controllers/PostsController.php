@@ -9,7 +9,7 @@ class PostsController extends Controller
 	public function index()
 	{
 		$this->posts = Post::getAll();
-		$this->render('Posts#index');
+		return $this->render('Posts#index');
 	}
 
 	public function show(int $id)
@@ -17,7 +17,7 @@ class PostsController extends Controller
 		$this->post = Post::get($id);
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->comments = Comment::getBy(['post_id' => $id]);
-		$this->render('Posts#show');
+		return $this->render('Posts#show');
 	}
 
 	public function user(string $user)
@@ -25,15 +25,15 @@ class PostsController extends Controller
 		$user = User::getBy(['username' => $user], 1);
 		if ($user == false)
 		{
-			$this->router->redirect('Posts#index'); //TODO: flasm message --> redir Posts#index ?
+			return $this->router->redirect('Posts#index'); //TODO: flasm message --> redir Posts#index ?
 			//$this->errors[] = 'user_not_found';
-			//$this->render('Posts#user');
+			//return $this->render('Posts#user');
 		}
 		else
 		{
 			$creator_id  = array_values($user)[0]->getId();
 			$this->posts = Post::getBy(['creator_id' => $creator_id]);
-			$this->render('Posts#user');
+			return $this->render('Posts#user');
 		}
 	}
 	
@@ -53,7 +53,7 @@ class PostsController extends Controller
 		$this->posts = [];
 		foreach ($likes as $like)
 			$this->posts[] = Post::get($like->getPost_id());
-		$this->render('Posts#trending');
+		return $this->render('Posts#trending');
 	}
 
 	public function favs()
@@ -67,6 +67,6 @@ class PostsController extends Controller
 			//$post->setLikesCount($likes_count);
 			$this->posts[] = $post;
 		}
-		$this->render('Posts#favs');
+		return $this->render('Posts#favs');
 	}
 }
