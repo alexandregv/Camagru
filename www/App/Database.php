@@ -30,7 +30,7 @@ class Database
 		}
 	}
 
-	public static function getInstance()
+	public static function getInstance(): Database
 	{
 		if (is_null(self::$_instance))
 			self::$_instance = new Database();

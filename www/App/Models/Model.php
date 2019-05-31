@@ -6,7 +6,7 @@ use \App\Facades\Query;
 
 class Model
 {
-	public static function get($id)
+	public static function get(int $id): Model
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
@@ -18,7 +18,7 @@ class Model
 		return new $model($data);
 	}
 
-	public static function getBy(array $attributes, $limit = null)
+	public static function getBy(array $attributes, int $limit = null): array
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
@@ -41,7 +41,7 @@ class Model
 		return $models;
 	}
 
-	public static function getAll()
+	public static function getAll(): array
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
@@ -58,7 +58,7 @@ class Model
 		return $models;
 	}
 
-	public function __call($method, $params)
+	public function __call(string $method, array $params)
 	{
 		$var = lcfirst(substr($method, 3));
 

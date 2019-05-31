@@ -10,13 +10,13 @@ class Route {
 	private $_params = [];
 	private $_middlewares = [];
 
-	public function __construct($_path, $action)
+	public function __construct(string $path, $action)
 	{
-		$this->_path = trim($_path, '/');
+		$this->_path = trim($path, '/');
 		$this->_action = $action;
 	}
 
-	public function match($url)
+	public function match(string $url): bool
 	{
 		$url = trim($url, '/');
 		$path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->_path);
@@ -28,26 +28,26 @@ class Route {
 		return true;
 	}
 
-	private function paramMatch($match)
+	private function paramMatch(array $match): string
 	{
 		if(isset($this->_params[$match[1]]))
 			return '(' . $this->_params[$match[1]] . ')';
 		return '([^/]+)';
 	}
 
-	public function with($param, $regex)
+	public function with(string $param, string $regex): Route
 	{http://192.168.1.28:8080/posts/mine
 		$this->_params[$param] = str_replace('(', '(?:', $regex);
 		return $this;
 	}
 
-	public function middleware($middleware)
+	public function middleware(string $middleware): Route
 	{
 		$this->_middlewares[] = $middleware;
 		return $this;
 	}
 
-	public function getUrl($params)
+	public function getUrl(array $params): string
 	{
 		$path = $this->_path;
 		foreach($params as $k => $v)
@@ -68,15 +68,15 @@ class Route {
 		else return call_user_func_array($this->_action, $this->_matches);
 	}
 
-	private function call_middlewares()
+	private function call_middlewares(): Route
 	{
 		foreach ($this->_middlewares as $name)
 		{
 			$middleware = 'App\\Middlewares\\' . ucfirst($name) . 'Middleware';
 			$middleware = new $middleware($this);
 			$middleware->call();
-			return $this; // temp, to keep ?	
 		}
+		return $this;
 	}
 
 }

@@ -12,7 +12,7 @@ class PostsController extends Controller
 		$this->render('Posts#index');
 	}
 
-	public function show($id)
+	public function show(int $id)
 	{
 		$this->post = Post::get($id);
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
@@ -20,7 +20,7 @@ class PostsController extends Controller
 		$this->render('Posts#show');
 	}
 
-	public function user($user)
+	public function user(string $user)
 	{
 		$user = User::getBy(['username' => $user], 1);
 		if ($user == false)

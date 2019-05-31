@@ -5,7 +5,7 @@ namespace App\Router;
 class Router {
 
 	private $url;
-	public $routes = [];
+	private $routes = [];
 	private $namedRoutes = [];
 
 	private static $_instance = null;
@@ -16,7 +16,7 @@ class Router {
 		$this->url = $url;
 	}
 
-	public function __call($method, $args)
+	public function __call(string $method, array $args): Route
 	{
 		$path		= $args[0];
 		$action 	= $args[1];
@@ -51,20 +51,21 @@ class Router {
 		//throw new RouterException("No route matching '$this->url'");
 	}
 
-	public function url($name, $params = []){
+	public function url(string $name, array $params = []): string
+	{
 		if(!isset($this->namedRoutes[$name]))
 			//return $this->namedRoutes['Errors#_404']->call();
 			throw new RouterException("No route matches '$name'");
 		return $this->namedRoutes[$name]->getUrl($params);
 	}
 
-	public function redirect($route, $params = [])
+	public function redirect(string $route, array $params = [])
 	{
 		header('Location: ' . $this->url($route, $params));
 		exit;
 	}
 
-	public static function getInstance($url = null)
+	public static function getInstance(string $url = null): Router
 	{
 		if (is_null(self::$_instance))
 			self::$_instance = new Router($url);

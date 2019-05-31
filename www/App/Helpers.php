@@ -8,41 +8,41 @@ class Helpers
 
 	# --- Views --- #
 
-	public static function asset($name, $type = null)
+	public static function asset(string $name, string $type = null): string
 	{
 		return self::ASSETS_PATH . ($type ?? '') . '/' . $name;
 	}
 
-	public static function image($name)
+	public static function image(string $name): string
 	{
 		return self::asset($name, 'img');
 	}
 
-	public static function css($name)
+	public static function css(string $name): string
 	{
 		return self::asset($name, 'css') . '.css';
 	}
 
-	public static function render($name, $vars = [])
+	public static function render(string $name, array $vars = [])
 	{
 		extract($vars);
 		require "App/Views/$name.php";
 	}
 
-	public static function partial($name, $vars = [])
+	public static function partial(string $name, array $vars = [])
 	{
 		extract($vars);
 		require "App/Views/Partials/_$name.php";
 	}
 
-	public static function route($route, array $params = [])
+	public static function route(string $route, array $params = []): string
 	{
 		return Router\Router::getInstance()->url($route, $params);
 	}
 
 	# --- Flash Message ---
 
-	public static function has_flash()
+	public static function has_flash(): bool
 	{
 		return isset($_SESSION['flash']);
 	}

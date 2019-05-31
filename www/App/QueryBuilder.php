@@ -13,32 +13,32 @@ class QueryBuilder
 	private $_orderBy	= '';
 	private $_limit		= null;
 
-	public function select()
+	public function select(): QueryBuilder
 	{
         $this->_select = func_get_args();
         return $this;
     }
 
-	public function update($table)
+	public function update(string $table): QueryBuilder
 	{
         $this->_update = $table;
         return $this;
     }
 
-	public function set(array $attributes)
+	public function set(array $attributes): QueryBuilder
 	{
         $this->_set = $attributes;
         return $this;
     }
 
-	public function where()
+	public function where(): QueryBuilder
 	{
 		foreach(func_get_args() as $arg)
             $this->_where[] = $arg;
         return $this;
     }
 
-	public function from($table, $alias = null)
+	public function from(string $table, string $alias = null): QueryBuilder
 	{
 		if(is_null($alias))
 			$this->_from[] = $table;
@@ -47,20 +47,20 @@ class QueryBuilder
         return $this;
 	}
 
-	public function orderBy($table, $order)
+	public function orderBy(string $table, string $order): QueryBuilder
 	{
 		$order = strtoupper($order);
 		$this->_orderBy = "$table $order";
 		return $this;
 	}
 
-	public function limit($limit)
+	public function limit(int $limit): QueryBuilder
 	{
 		$this->_limit = $limit;
 		return $this;
 	}
 
-	public function exec($fetchMode = 2)
+	public function exec(int $fetchMode = 2)
 	{
 		$db = Database::getInstance();
 
@@ -93,12 +93,12 @@ class QueryBuilder
 		return $this->exec(2);
 	}
 
-	public function __invoke($fetchMode = 2)
+	public function __invoke(int $fetchMode = 2)
 	{
 		return $this->_exec($fetchMode);
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		$where = "";
 		foreach ($this->_where as $cond)

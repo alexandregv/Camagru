@@ -11,7 +11,7 @@ class Controller
 		$this->router = \App\Router\Router::getInstance();
 	}
 
-	public function render($full)
+	public function render(string $full)
 	{
 		$full = explode('#', $full);
 		if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/App/Views/$full[0]/$full[1].php"))
@@ -19,7 +19,7 @@ class Controller
 		else $this->render('Errors#404');
 	}
 
-	public function __call($action, $params = [])
+	public function __call(string $action, array $params = [])
 	{
 		$controller = explode('\\', get_class($this));
 		$controller = str_replace('Controller', '', end($controller));
