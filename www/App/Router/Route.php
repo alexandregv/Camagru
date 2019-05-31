@@ -8,8 +8,7 @@ class Route {
 	private $_action			= '';
 	private $_matches			= [];
 	private $_params			= [];
-	private $_beforeMiddlewares	= [];
-	private $_afterMiddlewares	= [];
+	private $_middlewares		= [];
 
 	public function __construct(string $path, $action)
 	{
@@ -42,12 +41,11 @@ class Route {
 		return $this;
 	}
 
-	public function middleware(string $middleware, string $order = 'before'): Route
+	public function middleware(string $middleware, string $type = 'before'): Route
 	{
-		if ($order == 'after')
-			$this->_afterMiddlewares[] = $middleware;
-		else
-			$this->_beforeMiddlewares[] = $middleware;
+		if (!isset($this->_middlewares[$type]))
+			$this->_middlewares[$type] = [];
+		$this->_middlewares[$type][] = $middleware;
 		return $this;
 	}
 
@@ -62,7 +60,7 @@ class Route {
 	public function call()
 	{
 		$body = '';
-		$this->callBeforeMiddlewares($body);
+		$this->callMiddlewares($body, 'before');
 
 		if(is_string($this->_action)){
 			$params = explode('#', $this->_action);
@@ -73,24 +71,16 @@ class Route {
 		else
 			$body = call_user_func_array($this->_action, $this->_matches);
 
-		$this->callAfterMiddlewares($body);
+		$this->callMiddlewares($body, 'after');
 		echo $body;
 	}
 
-	private function callBeforeMiddlewares(string &$body): Route
+	private function callMiddlewares(string &$body, string $type = 'before'): Route
 	{
-		foreach ($this->_beforeMiddlewares as $name)
-		{
-			$middleware = 'App\\Middlewares\\' . ucfirst($name) . 'Middleware';
-			$middleware = new $middleware($this);
-			$middleware->call($body);
-		}
-		return $this;
-	}
+		if (!isset($this->_middlewares[$type]))
+			return $this;
 
-	private function callAfterMiddlewares(string &$body): Route
-	{
-		foreach ($this->_afterMiddlewares as $name)
+		foreach ($this->_middlewares[$type] as $name)
 		{
 			$middleware = 'App\\Middlewares\\' . ucfirst($name) . 'Middleware';
 			$middleware = new $middleware($this);
