@@ -14,8 +14,11 @@ class Post extends Model
 
 	public function getImage(): string
 	{
-		//TODO: get corresponding file in /public/assets/img/post_images/
-		return 'https://bulma.io/images/placeholders/128x128.png';
+		$file = '/public/assets/img/post_images/' . $this->getId() . '.png';
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . $file))
+			return $file;
+		else
+			return 'https://bulma.io/images/placeholders/1280x960.png';
 	}
 }
 

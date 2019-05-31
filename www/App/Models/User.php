@@ -16,8 +16,11 @@ class User extends Model
 
 	public function getProfilePicture(): string
 	{
-		//TODO: get corresponding file in /public/assets/img/profiles_pictures/
-		return 'https://bulma.io/images/placeholders/128x128.png';
+		$file = '/public/assets/img/profile_pictures/' . $this->getId() . '.png';
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . $file))
+			return $file;
+		else
+			return 'https://bulma.io/images/placeholders/128x128.png';
 	}
 }
 

@@ -4,14 +4,14 @@ use \App\Helpers;
 <div class="column card is-one-third">
 	<div class="card-image">
 		<figure class="image is-4by3">
-		<a href="<?= Helpers::route('Posts#show', ['id' => $post->getId()]) ?>"><img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image"></a>
+		<a href="<?= Helpers::route('Posts#show', ['id' => $post->getId()]) ?>"><img src="<?= $post->getImage() ?>" alt="Placeholder image"></a>
 		</figure>
 	</div>
 	<div class="card-content">
 		<div class="media">
 			<div class="media-left">
 				<figure class="image is-48x48">
-				<a href="<?= Helpers::route('Posts#user', ['user' => $post->getCreator()->getUsername()]) ?>"><img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image"></a>
+				<a href="<?= Helpers::route('Posts#user', ['user' => $post->getCreator()->getUsername()]) ?>"><img src="<?= $post->getCreator()->getProfilePicture() ?>" alt="Placeholder image"></a>
 				</figure>
 			</div>
 			<div class="media-content">
