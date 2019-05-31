@@ -36,7 +36,7 @@ use \App\Helpers;
 	  			<a class="navbar-link">Mon compte</a>
       	  <div class="navbar-dropdown">
 						<a href="<?= Helpers::route('Users#profile') ?>" class="navbar-item">Mon profil</a>
-      	    <a href="<?= Helpers::route('Users#settings') ?>" class="navbar-item">Mes paramètres</a>
+      	    <a href="<?= Helpers::route('Posts#mine') ?>" class="navbar-item">Mes publications</a>
     		  <hr class="navbar-divider">
     		  <a href="<?= Helpers::route('Users#logout') ?>" class="navbar-item">Déconnexion</a>
       	  </div>

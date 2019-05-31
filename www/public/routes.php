@@ -8,7 +8,7 @@ $router = Router::getInstance();
 # GET
 $router->get('/posts/mine', function () use ($router) {
 	$router->redirect('Posts#user', ['user' => User::get($_SESSION['id'])->getUsername()]);
-})->middleware('auth');
+}, 'Posts#mine')->middleware('auth');
 $router->get('/posts/:id', 'Posts#show')->with('id', '[0-9]+');
 $router->get('/posts/:user', 'Posts#user');
 $router->get('/posts', 'Posts#index');
@@ -20,7 +20,6 @@ $router->get('/register', 'Users#register')->middleware('NoAuth');
 $router->get('/login', 'Users#login')->middleware('NoAuth');
 $router->get('/logout', 'Users#logout');
 $router->get('/profile', 'Users#profile')->middleware('Auth');
-$router->get('/settings', 'Users#settings')->middleware('Auth');
 
 $router->get('/404', 'Errors#_404');
 
