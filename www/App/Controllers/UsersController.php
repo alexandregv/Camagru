@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controllers;
+
+use \App\Helpers;
 use \App\Facades\Query;
 use \App\Models\{Post, User, Like, Comment};
 
@@ -70,6 +72,7 @@ class UsersController extends Controller
 							$passHash = hash('whirlpool', 'grumaca' . trim($_POST['new_password']));
 
 						$res = Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'"])->where("id = {$_SESSION['id']}")->exec(0);
+						Helpers::flash('success', 'Profil modifié avec succes !');
 						$this->router->redirect('Users#profile');
 					}
 				}
@@ -100,6 +103,7 @@ class UsersController extends Controller
 						$_SESSION["loggedin"] = true;
 						$_SESSION["id"] = $user['id'];
 						$_SESSION["username"] = $user['username'];
+						Helpers::flash('success', 'Connexion réussie !');
 						$this->router->redirect('Pages#home');
 					}
 					else
@@ -153,6 +157,7 @@ class UsersController extends Controller
 								$_SESSION["loggedin"] = true;
 								$_SESSION["id"] = $user['id'];
 								$_SESSION["username"] = $user['username'];
+								Helpers::flash('success', 'Inscription réussie !');
 								$this->router->redirect('Pages#home');
 							}
 							else

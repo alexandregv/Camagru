@@ -6,6 +6,8 @@ class Helpers
 {
 	const ASSETS_PATH = '/public/assets/';
 
+	# --- Views --- #
+
 	public static function asset($name, $type = null)
 	{
 		return self::ASSETS_PATH . ($type ?? '') . '/' . $name;
@@ -36,6 +38,31 @@ class Helpers
 	public static function route($route, array $params = [])
 	{
 		return Router\Router::getInstance()->url($route, $params);
+	}
+
+	# --- Flash Message ---
+
+	public static function has_flash()
+	{
+		return isset($_SESSION['flash']);
+	}
+
+	public static function flash($type = null, $message = null)
+	{
+		
+		if ($type == null)
+			return isset($_SESSION['flash']);
+		else if ($message != null)
+			$_SESSION['flash'] = ['type' => $type, 'message' => $message];
+		else if ($type == 'type')
+			return $_SESSION['flash']['type'];
+		else if ($type == 'message')
+			return $_SESSION['flash']['message'];
+	}
+
+	public static function clear_flash()
+	{
+		$_SESSION['flash'] = null;
 	}
 
 }
