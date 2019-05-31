@@ -14,13 +14,13 @@ $router->get('/posts/:user', 'Posts#user');
 $router->get('/posts', 'Posts#index');
 
 $router->get('/trending', 'Posts#trending');
-$router->get('/favs', 'Posts#favs')->middleware('auth');
+$router->get('/favs', 'Posts#favs')->middleware('Auth');
 
-$router->get('/register', 'Users#register');
-$router->get('/login', 'Users#login');
+$router->get('/register', 'Users#register')->middleware('NoAuth');
+$router->get('/login', 'Users#login')->middleware('NoAuth');
 $router->get('/logout', 'Users#logout');
-$router->get('/profile', 'Users#profile')->middleware('auth');
-$router->get('/settings', 'Users#settings')->middleware('auth');
+$router->get('/profile', 'Users#profile')->middleware('Auth');
+$router->get('/settings', 'Users#settings')->middleware('Auth');
 
 $router->get('/404', 'Errors#_404');
 
@@ -28,9 +28,9 @@ $router->get('/', 'Pages#home');
 
 # ----------
 # POST
-$router->post('/login', 'Users#login');
-$router->post('/register', 'Users#register');
-$router->post('/profile', 'Users#profile')->middleware('auth');
+$router->post('/login', 'Users#login')->middleware('NoAuth');
+$router->post('/register', 'Users#register')->middleware('NoAuth');
+$router->post('/profile', 'Users#profile')->middleware('Auth');
 
 # ----------
 $router->run();
