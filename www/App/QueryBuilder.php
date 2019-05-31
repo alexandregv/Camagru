@@ -12,6 +12,7 @@ class QueryBuilder
 	private $_from		= [];
 	private $_orderBy	= '';
 	private $_limit		= null;
+	private $_offset	= null;
 
 	public function select(): QueryBuilder
 	{
@@ -57,6 +58,12 @@ class QueryBuilder
 	public function limit(int $limit): QueryBuilder
 	{
 		$this->_limit = $limit;
+		return $this;
+	}
+
+	public function offset(int $offset): QueryBuilder
+	{
+		$this->_offset = $offset;
 		return $this;
 	}
 
@@ -123,6 +130,8 @@ class QueryBuilder
 			$query .= ' ORDER BY ' . $this->_orderBy;
 		if (!is_null($this->_limit))
 			$query .= ' LIMIT ' . $this->_limit;
+		if (!is_null($this->_offset))
+			$query .= ' OFFSET ' . $this->_offset;
 		return $query;
     }
 

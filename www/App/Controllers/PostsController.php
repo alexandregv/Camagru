@@ -8,7 +8,17 @@ class PostsController extends Controller
 {
 	public function index()
 	{
-		$this->posts = Post::getAll();
+		$this->page = $_GET['page'] ?? 1;
+		$this->pages_count = ceil(count(Post::getAll()) / 6);
+
+		if ($this->page == 0 || $this->page > $this->pages_count)
+			$this->page = 1;
+
+		$datas = Query::select('*')->from('posts')->orderBy('createdAt', 'DESC')->limit(6)->offset($this->page * 6 - 6)->fetchAll();
+		$this->posts = [];
+		foreach ($datas as $data)
+			$this->posts[] = new Post(array_map('htmlspecialchars', $data));
+
 		return $this->render('Posts#index');
 	}
 
@@ -25,9 +35,8 @@ class PostsController extends Controller
 		$user = User::getBy(['username' => $user], 1);
 		if ($user == false)
 		{
-			return $this->router->redirect('Posts#index'); //TODO: flasm message --> redir Posts#index ?
-			//$this->errors[] = 'user_not_found';
-			//return $this->render('Posts#user');
+			\App\Helpers::flash('danger', 'Utilisateur introuvable');
+			return $this->router->redirect('Posts#index');
 		}
 		else
 		{
