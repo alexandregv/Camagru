@@ -24,7 +24,7 @@ Helpers::partial('navbar');
 							<div class="field">
 								<label class="label">Nom d'utilisateur</label>
 								<div class="control has-icons-left has-icons-right">
-									<input name="username" class="input <?php if (array_search('busy_username', $this->errors) !== false) echo 'is-danger'; ?>" type="text" value="<?= $this->user->getUsername() ?>">
+									<input name="username" class="input <?php if (array_search('busy_username', $this->errors) !== false || array_search('invalid_username', $this->errors) !== false) echo 'is-danger'; ?>" type="text" value="<?= $this->user->getUsername() ?>">
 									<span class="icon is-small is-left"><i class="fas fa-user"></i></span>
 									<?php if (array_search('busy_email', $this->errors) !== false) { ?>
 									<span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>
@@ -32,6 +32,9 @@ Helpers::partial('navbar');
 								</div>
 								<?php if (array_search('busy_username', $this->errors) !== false) { ?>
 								<p class="help is-danger">Cet utilisateur existe deja</p>
+								<?php } ?>
+								<?php if (array_search('invalid_username', $this->errors) !== false) { ?>
+								<p class="help is-danger">Utilisateur invalide</p>
 								<?php } ?>
 							</div>
 

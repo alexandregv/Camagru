@@ -45,7 +45,7 @@ Helpers::partial('navbar');
 				<div class="field">
 				  <label class="label">Prenom</label>
 				  <div class="control">
-						<input name="firstname" class="input" type="text" placeholder="Xavier">
+						<input name="firstname" class="input <?php if (array_search('invalid_firstname', $this->errors) !== false) echo 'is-danger'; ?>" type="text" placeholder="Xavier">
 				  </div>
 					<?php if (array_search('invalid_firstname', $this->errors) !== false) { ?>
 						<p class="help is-danger">Prenom invalide</p>
@@ -55,7 +55,7 @@ Helpers::partial('navbar');
 				<div class="field">
 				  <label class="label">Nom de famille</label>
 				  <div class="control">
-						<input name="lastname" class="input" type="text" placeholder="Niel">
+						<input name="lastname" class="input <?php if (array_search('invalid_lastname', $this->errors) !== false) echo 'is-danger'; ?>" type="text" placeholder="Niel">
 				  </div>
 					<?php if (array_search('invalid_lastname', $this->errors) !== false) { ?>
 						<p class="help is-danger">Nom de famille invalide</p>
@@ -76,10 +76,10 @@ Helpers::partial('navbar');
 				<div class="field">
 				  <label class="label">Confirmation de mot de passe</label>
 				  <div class="control has-icons-left has-icons-right">
-						<input type="password" name="password_confirm" class="input <?php if (array_search('invalid_password', $this->errors) !== false || array_search('passwords_mismatch', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="cNiL-Pr00f">
+						<input type="password" name="password_confirm" class="input <?php if (array_search('invalid_password_confirmation', $this->errors) !== false || array_search('passwords_mismatch', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="cNiL-Pr00f">
 						<span class="icon is-small is-left"><i class="fas fa-key"></i></span>
 				  </div>
-					<?php if (array_search('invalid_password', $this->errors) !== false) { ?>
+					<?php if (array_search('invalid_password_confirmation', $this->errors) !== false) { ?>
 						<p class="help is-danger">Confirmation de mot de passe invalide</p>
 					<?php } ?>
 					<?php if (array_search('passwords_mismatch', $this->errors) !== false) { ?>

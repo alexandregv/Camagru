@@ -32,6 +32,12 @@ class UsersController extends Controller
 		}
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
+			if (false == $this->validate([
+				'old_password' => 'required|min:5',
+				'username' => 'min:3',
+				'email' => 'mail',
+			])) return $this->render('Users#profile');
+
 			if ($this->user != false)
 			{
 				if ($this->user->getPassHash() === hash('whirlpool', 'grumaca' . trim($_POST['old_password'])))
@@ -42,7 +48,7 @@ class UsersController extends Controller
 					$lastname	 = $this->user->getLastname();
 					$passHash	 = $this->user->getPassHash();
 
-					$skip = false;
+					$skip = !empty($this->errors);
 					if (!empty($_POST['email']) && trim($_POST['email']) != '' && trim($_POST['email']) != $this->user->getEmail())
 					{
 						$exists = Query::select('username')->from('users')->where("email = {$_POST['email']}")->fetch();
@@ -138,6 +144,15 @@ class UsersController extends Controller
 			return $this->render('Users#register');
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
+			if (false == $this->validate([
+				'username' => 'required|min:3',
+				'firstname' => 'required',
+				'lastname' => 'required',
+				'email' => 'required|mail',
+				'password' => 'required|min:5',
+				'password_confirmation' => 'required|min:5',
+			])) return $this->render('Users#register');
+
 			if (!empty(trim($_POST['email']) && !empty(trim($_POST['username'])) && !empty(trim($_POST['password'])) && !empty(trim($_POST['password_confirm'])) && !empty(trim($_POST['firstname'])) && !empty(trim($_POST['lastname']))))
 			{
 				if (trim($_POST['password']) == trim($_POST['password_confirm']))
