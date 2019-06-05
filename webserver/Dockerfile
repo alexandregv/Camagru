@@ -9,19 +9,11 @@ RUN apt-get -y install apt-utils nano wget dialog
 # Install important libraries
 RUN apt-get -y install --fix-missing apt-utils build-essential git curl libcurl3 libcurl3-dev zip openssl
 
-# Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 # Install xdebug
 RUN pecl install xdebug-2.6.0
 RUN docker-php-ext-enable xdebug
 
-# Install redis
-RUN pecl install redis-4.0.1
-RUN docker-php-ext-enable redis
-
 # Other PHP7 Extensions
-
 RUN apt-get -y install libsqlite3-dev libsqlite3-0 mysql-client
 RUN docker-php-ext-install pdo_mysql 
 RUN docker-php-ext-install pdo_sqlite
@@ -47,7 +39,15 @@ RUN docker-php-ext-install -j$(nproc) gd
 # Enable apache modules
 RUN a2enmod rewrite headers
 
+# Add SSMTP
+RUN apt-get install -y ssmtp && apt-get clean
+#RUN echo "FromLineOverride=YES" >> /etc/ssmtp/ssmtp.conf
+#RUN echo "mailhub=maildev:25" >> /etc/ssmtp/ssmtp.conf
+
 # Add fr_FR locale
 RUN apt-get -y install locales
 RUN echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen 
 RUN locale-gen
+
+# Clean apt cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
