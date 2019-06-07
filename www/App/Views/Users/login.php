@@ -12,7 +12,7 @@ Helpers::partial('navbar');
 					<div class="field">
 					  <label class="label">Nom d'utilisateur</label>
 					  <div class="control has-icons-left has-icons-right">
-						<input type="text" name="username" class="input <?php if (array_search('invalid_username', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="xavier@free.fr">
+						<input type="text" name="username" class="input <?php if (array_search('invalid_username', $this->errors) !== false) echo 'is-danger'; ?>" placeholder="XavierDu75">
 							<span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
 							<?php if (array_search('invalid_username', $this->errors) !== false) { ?>
 								<span class="icon is-small is-right"><i class="fas fa-exclamation-triangle"></i></span>

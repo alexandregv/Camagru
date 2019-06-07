@@ -31,5 +31,7 @@ $router->post('/login', 'Users#login')->middleware('NoAuth');
 $router->post('/register', 'Users#register')->middleware('NoAuth');
 $router->post('/profile', 'Users#profile')->middleware('Auth');
 
+$router->post('/posts/:id/like', 'Posts#like')->with('id', '[0-9]+')->middleware('Auth');
+
 # ----------
 $router->run();

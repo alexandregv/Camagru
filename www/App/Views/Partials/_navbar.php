@@ -16,7 +16,7 @@ use \App\Helpers;
 
   <div id="navbar" class="navbar-menu">
     <div class="navbar-start">
-	<a href="<?= Helpers::route('Posts#index') ?>" class="navbar-item is-active">
+	<a href="<?= Helpers::route('Posts#index') ?>" class="navbar-item">
   	  <span class="icon has-text-grey-lighter"><i class="fas fa-book"></i></span>
   	  <span>Publications<span>
   	</a>

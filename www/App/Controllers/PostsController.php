@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use \App\Facades\Query;
 use \App\Models\{Post, User, Like, Comment};
+use \App\Database;
 
 class PostsController extends Controller
 {
@@ -77,5 +78,17 @@ class PostsController extends Controller
 			$this->posts[] = $post;
 		}
 		return $this->render('Posts#favs');
+	}
+
+	public function like(int $id)
+	{
+		$db = 
+		$post = Post::get($id);
+		if ($post == false)
+			return 'error';
+		$like = Query::select('id')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->fetch();
+		if ($like == false)
+			Database::getInstance()->query("INSERT INTO `likes` (`post_id`, `author_id`) VALUES (:post_id, :author_id)", ['post_id' => $id, 'author_id' => $_SESSION['id']], 0);
+		return $this->router->redirect('Posts#show', ['id' => $id]);
 	}
 }

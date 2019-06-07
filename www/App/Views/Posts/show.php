@@ -35,8 +35,8 @@ $post = $this->post;
 			<div class="level-left">
 			  <a class="level-item"><span class="icon is-small"><i class="fas fa-reply"></i></span></a>
 			  <a class="level-item"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
-			  <a class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a>
-				<div class="level-item"><span class="icon is-small"><?= $this->likes_count ?></span></div>
+			  <form id="likeForm" method="POST" action="<?= Helpers::route('Posts#like', ['id' => $post->getId()]) ?>"><a onclick="document.getElementById('likeForm').submit();" class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a></form>
+			  <div class="level-item"><span class="icon is-small"><?= $this->likes_count ?></span></div>
 			</div>
 		  </nav>
 		</div>
