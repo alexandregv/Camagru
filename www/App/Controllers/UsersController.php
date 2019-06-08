@@ -42,11 +42,12 @@ class UsersController extends Controller
 			{
 				if ($this->user->getPassHash() === hash('whirlpool', 'grumaca' . trim($_POST['old_password'])))
 				{
-					$username	 = $this->user->getUsername();
-					$email		 = $this->user->getEmail();
-					$firstname = $this->user->getFirstname();
-					$lastname	 = $this->user->getLastname();
-					$passHash	 = $this->user->getPassHash();
+					$username			= $this->user->getUsername();
+					$email				= $this->user->getEmail();
+					$firstname			= $this->user->getFirstname();
+					$lastname			= $this->user->getLastname();
+					$passHash			= $this->user->getPassHash();
+					$likeNotifications	= $this->user->getLikeNotifications();
 
 					$skip = !empty($this->errors);
 					if (!empty($_POST['email']) && trim($_POST['email']) != '' && trim($_POST['email']) != $this->user->getEmail())
@@ -73,11 +74,16 @@ class UsersController extends Controller
 						foreach (['username', 'email', 'firstname', 'lastname'] as $attr)
 							if (!empty($_POST[$attr]) && trim($_POST[$attr]) != '')
 								${$attr} = trim($_POST[$attr]);
+						
+						if (isset($_POST['likeNotifications']) && !empty($_POST['likeNotifications']) && trim($_POST['likeNotifications']) != '')
+							$likeNotifications = 1;
+						else
+							$likeNotifications = 0;
 
 						if (!empty($_POST['new_password']) && trim($_POST['new_password']) != '')
 							$passHash = hash('whirlpool', 'grumaca' . trim($_POST['new_password']));
 
-						$res = Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'"])->where("id = {$_SESSION['id']}")->exec(0);
+						$res = Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'", 'likeNotifications' => "'$likeNotifications'"])->where("id = {$_SESSION['id']}")->exec(0);
 						Helpers::flash('success', 'Profil modifié avec succes !');
 						return $this->router->redirect('Users#profile');
 					}

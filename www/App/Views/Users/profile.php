@@ -10,17 +10,20 @@ Helpers::partial('navbar');
 			<div class="box">
 				<h3 class="title is-3">Mon profil</h3>
 				<hr>
-				<div class="columns">
-					<div class="column is-one-fifth has-text-centered">
-						<figure class="image is-128x128 container content">
-							<img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
-							<!--<img src="<?= Helpers::image('') ?>">-->
-						</figure>
-						<a class="button is-info is-outlined">Changer ma photo</a>
-					</div>
+				<form method="POST" action="<?= Helpers::route('Users#profile') ?>">
+					<div class="columns">
+						<div class="column is-one-fifth has-text-centered">
+							<figure class="image is-128x128 container content">
+								<img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+								<!--<img src="<?= Helpers::image('') ?>">-->
+							</figure>
+							<a class="button is-info is-outlined">Changer ma photo</a>
+							<hr>
+							<input type="checkbox" id="likeNotifications" name="likeNotifications" value="1" <?php if ($this->user->getLikeNotifications() == 1) echo 'checked'; ?>>
+							<label for="likeNotifications">Notifier mes likes par mail</label>
+						</div>
 
-					<div class="column">
-						<form method="POST" action="<?= Helpers::route('Users#profile') ?>">
+						<div class="column">
 							<div class="field">
 								<label class="label">Nom d'utilisateur</label>
 								<div class="control has-icons-left has-icons-right">
@@ -102,10 +105,10 @@ Helpers::partial('navbar');
 							<div class="field is-grouped">
 								<div class="control"><input type="submit" class="button is-link" value="Modifier mon profil"></div>
 							</div>	
-						</form>
 
+						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</section>

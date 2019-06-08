@@ -82,13 +82,18 @@ class PostsController extends Controller
 
 	public function like(int $id)
 	{
-		$db = 
 		$post = Post::get($id);
 		if ($post == false)
-			return 'error';
+			return $this->router->redirect('Posts#index');
 		$like = Query::select('id')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->fetch();
 		if ($like == false)
+		{
+			$liker = User::get($_SESSION['id'])->getUsername();
 			Database::getInstance()->query("INSERT INTO `likes` (`post_id`, `author_id`) VALUES (:post_id, :author_id)", ['post_id' => $id, 'author_id' => $_SESSION['id']], 0);
+			$creator = $post->getCreator();
+			if ($creator->getLikeNotifications() == 1)
+				mail($creator->getEmail(), 'Someone liked your post!', "Hey, you have a fan! @$liker just liked one of your posts!");
+		}
 		return $this->router->redirect('Posts#show', ['id' => $id]);
 	}
 }
