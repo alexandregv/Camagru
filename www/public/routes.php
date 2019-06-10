@@ -20,6 +20,7 @@ $router->get('/register', 'Users#register')->middleware('NoAuth');
 $router->get('/login', 'Users#login')->middleware('NoAuth');
 $router->get('/logout', 'Users#logout');
 $router->get('/profile', 'Users#profile')->middleware('Auth');
+$router->get('/confirm/:token', 'Users#confirm')->middleware('NoAuth');
 
 $router->get('/404', 'Errors#_404');
 

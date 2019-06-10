@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \App\Helpers;
 use \App\Facades\Query;
 use \App\Models\{Post, User, Like, Comment};
+use \App\Database;
 
 class UsersController extends Controller
 {
@@ -107,16 +108,24 @@ class UsersController extends Controller
 			if (!empty(trim($_POST['username']) && !empty(trim($_POST['password']))))
 			{
 				$hash = hash('whirlpool', 'grumaca' . $_POST['password']);
-				$user = Query::select('id', 'username', 'passHash')->from('users')->where("username = {$_POST['username']}")->limit(1)->fetch();
+				$user = Query::select('id', 'username', 'passHash', 'confirmToken')->from('users')->where("username = {$_POST['username']}")->limit(1)->fetch();
 				if ($user != false)
 				{
 					if ($user['passHash'] === $hash)
 					{
-						$_SESSION["loggedin"] = true;
-						$_SESSION["id"] = $user['id'];
-						$_SESSION["username"] = $user['username'];
-						Helpers::flash('success', 'Connexion réussie !');
-						return $this->router->redirect('Pages#home');
+						if ($user['confirmToken'] === 'confirmed')
+						{
+							$_SESSION["loggedin"] = true;
+							$_SESSION["id"] = $user['id'];
+							$_SESSION["username"] = $user['username'];
+							Helpers::flash('success', 'Connexion réussie !');
+							return $this->router->redirect('Pages#home');
+						}
+						else
+						{
+							Helpers::flash('danger', 'Merci de confirmer votre compte avant de vous connecter.');
+							return $this->render('Users#login');
+						}
 					}
 					else
 					{
@@ -156,7 +165,7 @@ class UsersController extends Controller
 				'lastname' => 'required',
 				'email' => 'required|mail',
 				'password' => 'required|min:5',
-				'password_confirmation' => 'required|min:5',
+				'password_confirm' => 'required|min:5',
 			])) return $this->render('Users#register');
 
 			if (!empty(trim($_POST['email']) && !empty(trim($_POST['username'])) && !empty(trim($_POST['password'])) && !empty(trim($_POST['password_confirm'])) && !empty(trim($_POST['firstname'])) && !empty(trim($_POST['lastname']))))
@@ -171,14 +180,13 @@ class UsersController extends Controller
 						$user = $db->query("SELECT username, email FROM users WHERE email = '{$_POST['email']}' OR username = '{$_POST['username']}'", [], 1);
 						if ($user == false)
 						{
-							$res  = $db->query("INSERT INTO users (`username`, `email`, `passHash`, `firstname`, `lastname`, `confirmToken`) VALUES ('{$_POST['username']}', '{$_POST['email']}', '$hash', '{$_POST['firstname']}', '{$_POST['lastname']}', 'confirmed')", [], 0);
+							$token = (string) (uniqid($user['username'], true) . '_' . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
+							$res  = $db->query("INSERT INTO users (`username`, `email`, `passHash`, `firstname`, `lastname`, `confirmToken`) VALUES ('{$_POST['username']}', '{$_POST['email']}', '$hash', '{$_POST['firstname']}', '{$_POST['lastname']}', '$token')", [], 0);
 							$user = Query::select('id', 'username')->from('users')->where("email = {$_POST['email']}")->fetch();
 							if ($user != false)
-							{
-								$_SESSION["loggedin"] = true;
-								$_SESSION["id"] = $user['id'];
-								$_SESSION["username"] = $user['username'];
-								Helpers::flash('success', 'Inscription réussie !');
+							{	
+								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: http://0.0.0.0:8080/confirm/$token");
+								Helpers::flash('success', 'Inscription réussie ! Merci de confirmer votre email avec le lien recu.');
 								return $this->router->redirect('Pages#home');
 							}
 							else
@@ -218,6 +226,24 @@ class UsersController extends Controller
 			}
 
 		}
+	}
+
+	public function confirm(string $token)
+	{
+		if (!empty(trim($token)))
+		{
+			$user = User::getBy(['confirmToken' => $token], 1);
+			if ($user != false)
+			{
+				$user = array_values($user)[0];
+				Query::update('users')->set(['confirmToken' => "'confirmed'"])->where("id = {$user->getId()}")->exec(0);
+				$_SESSION['loggedin'] = true;
+				$_SESSION['id'] = $user->getId();
+				$_SESSION['username'] = $user->getUsername();
+				Helpers::flash('success', 'Vous avez bien confirme votre compte !');
+			}
+		}
+		return $this->router->redirect('Pages#home');
 	}
 
 }
