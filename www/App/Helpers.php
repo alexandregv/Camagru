@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use \App\Router\Router;
 
 class Helpers
 {
@@ -37,7 +38,7 @@ class Helpers
 
 	public static function route(string $route, array $params = []): string
 	{
-		return Router\Router::getInstance()->url($route, $params);
+		return Router::getInstance()->url($route, $params);
 	}
 
 	# --- Flash Message ---
@@ -63,6 +64,13 @@ class Helpers
 	public static function clear_flash()
 	{
 		$_SESSION['flash'] = null;
+	}
+
+	# --- Active navbar ---
+
+	public static function active(string $action)
+	{
+		return $action == Router::getInstance()->getCurrentRoute()->getAction() ? 'is-active' : '';
 	}
 
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \App\Helpers;
 use \App\Facades\Query;
 use \App\Models\{Post, User, Like, Comment};
+use \App\Router\Router;
 use \App\Database;
 
 class UsersController extends Controller

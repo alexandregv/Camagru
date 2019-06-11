@@ -16,15 +16,15 @@ use \App\Helpers;
 
   <div id="navbar" class="navbar-menu">
     <div class="navbar-start">
-	<a href="<?= Helpers::route('Posts#index') ?>" class="navbar-item">
+	<a href="<?= Helpers::route('Posts#index') ?>" class="navbar-item <?= Helpers::active('Posts#index') ?>">
   	  <span class="icon has-text-grey-lighter"><i class="fas fa-book"></i></span>
   	  <span>Publications<span>
   	</a>
-  	<a href="<?= Helpers::route('Posts#trending') ?>" class="navbar-item">
+  	<a href="<?= Helpers::route('Posts#trending') ?>" class="navbar-item <?= Helpers::active('Posts#trending') ?>">
   	  <span class="icon has-text-warning"><i class="fas fa-star"></i></span>
   	  <span>Trending<span>
   	</a>
-  	<a href="<?= Helpers::route('Posts#favs') ?>" class="navbar-item">
+  	<a href="<?= Helpers::route('Posts#favs') ?>" class="navbar-item <?= Helpers::active('Posts#favs') ?>">
   	  <span class="icon has-text-danger"><i class="fas fa-heart"></i></span>
   	  <span>Favoris<span>
   	</a>

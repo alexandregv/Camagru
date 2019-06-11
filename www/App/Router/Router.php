@@ -4,16 +4,27 @@ namespace App\Router;
 
 class Router {
 
-	private $url;
-	private $routes = [];
-	private $namedRoutes = [];
+	private $_url;
+	private $_routes = [];
+	private $_namedRoutes = [];
+	private $_currentRoute = null;
 
 	private static $_instance = null;
 
-	private function __construct($url = null){
-		if (is_null($url))
-			$url = $_GET['url'];
-		$this->url = $url;
+	private function __construct($_url = null){
+		if (is_null($_url))
+			$_url = $_GET['url'];
+		$this->url = $_url;
+	}
+
+	public function getCurrentRoute()
+	{
+		return $this->_currentRoute;
+	}
+
+	public function setCurrentRoute(Route $route)
+	{
+		$this->_currentRoute = $route;
 	}
 
 	public function __call(string $method, array $args): Route
@@ -65,10 +76,10 @@ class Router {
 		exit;
 	}
 
-	public static function getInstance(string $url = null): Router
+	public static function getInstance(string $_url = null): Router
 	{
 		if (is_null(self::$_instance))
-			self::$_instance = new Router($url);
+			self::$_instance = new Router($_url);
 		return self::$_instance;
 	}
 

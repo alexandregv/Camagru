@@ -16,6 +16,11 @@ class Route {
 		$this->_action = $action;
 	}
 
+	public function getAction()
+	{
+		return $this->_action;
+	}
+
 	public function match(string $url): bool
 	{
 		$url = trim($url, '/');
@@ -36,7 +41,7 @@ class Route {
 	}
 
 	public function with(string $param, string $regex): Route
-	{http://192.168.1.28:8080/posts/mine
+	{
 		$this->_params[$param] = str_replace('(', '(?:', $regex);
 		return $this;
 	}
@@ -60,6 +65,7 @@ class Route {
 	public function call()
 	{
 		$body = '';
+		Router::getInstance()->setCurrentRoute($this);
 		$this->callMiddlewares($body, 'before');
 
 		if(is_string($this->_action)){
