@@ -6,7 +6,7 @@ use \App\Facades\Query;
 
 class Model
 {
-	public static function get(int $id): Model
+	public static function get(int $id)
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
@@ -18,7 +18,7 @@ class Model
 		return new $model($data);
 	}
 
-	public static function getBy(array $attributes, int $limit = null): array
+	public static function getBy(array $attributes, int $limit = null)
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
@@ -41,7 +41,7 @@ class Model
 		return $models;
 	}
 
-	public static function getAll(): array
+	public static function getAll(): ?array
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
