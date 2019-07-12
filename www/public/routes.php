@@ -24,6 +24,7 @@ $router->get('/confirm/:token', 'Users#confirm')->middleware('NoAuth');
 
 $router->get('/404', 'Errors#_404');
 
+//$router->get('/admin', 'Pages#admin')->middleware('Admin');
 $router->get('/', 'Pages#home');
 
 # ----------

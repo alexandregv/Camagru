@@ -12,6 +12,7 @@ class User extends Model
 	protected $_email				= '';
 	protected $_confirmToken		= '';
 	protected $_likeNotifications	=  1;
+	protected $_admin				=  0;
 
 	public function getProfilePicture(): string
 	{
