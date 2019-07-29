@@ -96,4 +96,29 @@ class PostsController extends Controller
 		}
 		return $this->router->redirect('Posts#show', ['id' => $id]);
 	}
+	
+	public function new()
+	{
+		if ($_SERVER['REQUEST_METHOD'] == 'GET')
+			return $this->render('Posts#new');
+		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+			$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
+			$uploadfile = $uploaddir . basename($_FILES['picture']['name']);
+
+			echo '<pre>';
+			if (move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile)) {
+				echo "Le fichier est valide, et a été téléchargé avec succès. Voici plus d'informations :\n";
+			} else {
+				echo "Attaque potentielle par téléchargement de fichiers. Voici plus d'informations :\n";
+			}
+
+			echo 'Voici quelques informations de débogage :';
+			print_r($_FILES);
+
+			echo '</pre>';
+			return $this->render('Posts#index');
+			return $this->router->redirect('Posts#index');
+		}
+	}
 }

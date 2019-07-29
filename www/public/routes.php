@@ -12,6 +12,8 @@ $router->get('/posts/mine', function () use ($router) {
 $router->get('/posts/:id', 'Posts#show')->with('id', '[0-9]+');
 $router->get('/posts/:user', 'Posts#user');
 $router->get('/posts', 'Posts#index');
+$router->get('/new', 'Posts#new')->middleware('Auth');
+$router->post('/new', 'Posts#new')->middleware('Auth');
 
 $router->get('/trending', 'Posts#trending');
 $router->get('/favs', 'Posts#favs')->middleware('Auth');

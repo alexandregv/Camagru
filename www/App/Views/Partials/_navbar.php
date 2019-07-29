@@ -43,7 +43,7 @@ use \App\Helpers;
       	</div>
       	<div class="navbar-item">
         	<div class="buttons">
-          	<a href="<?= Helpers::route('Users#login') ?>" class="button is-primary gradient"><strong>Poste ta dernière création !</strong></a>
+          	<a href="<?= Helpers::route('Posts#new') ?>" class="button is-primary gradient"><strong>Poste ta dernière création !</strong></a>
         	</div>
         </div>
 			<?php } else {?>
