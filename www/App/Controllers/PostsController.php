@@ -111,18 +111,8 @@ class PostsController extends Controller
 			$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
 			$uploadfile = $uploaddir . basename($_FILES['picture']['name']);
 
-			echo '<pre>';
-			if (move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile)) {
-				echo "Le fichier est valide, et a été téléchargé avec succès. Voici plus d'informations :\n";
-			} else {
-				echo "Attaque potentielle par téléchargement de fichiers. Voici plus d'informations :\n";
-			}
-
-			echo 'Voici quelques informations de débogage :';
-			print_r($_FILES);
-
-			echo '</pre>';
-			return $this->render('Posts#index');
+			if (!move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile))
+				\App\Helpers::flash('danger', 'Attaque potentielle par téléchargement de fichiers!');
 			return $this->router->redirect('Posts#index');
 		}
 	}
