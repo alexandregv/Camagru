@@ -26,6 +26,11 @@ class PostsController extends Controller
 	public function show(int $id)
 	{
 		$this->post = Post::get($id);
+		if ($this->post == false)
+		{
+			\App\Helpers::flash('danger', 'Publication introuvable');
+			return $this->router->redirect('Posts#index');
+		}
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->comments = Comment::getBy(['post_id' => $id]);
 		return $this->render('Posts#show');
