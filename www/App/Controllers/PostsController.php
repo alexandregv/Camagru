@@ -12,8 +12,10 @@ class PostsController extends Controller
 		$this->page = $_GET['page'] ?? 1;
 		$this->pages_count = ceil(count(Post::getAll()) / 6);
 
-		if ($this->page == 0 || $this->page > $this->pages_count)
+		if ($this->page == 0)
 			$this->page = 1;
+		else if ($this->page > $this->pages_count)
+			$this->page = $this->pages_count;
 
 		$datas = Query::select('*')->from('posts')->orderBy('createdAt', 'DESC')->limit(6)->offset($this->page * 6 - 6)->fetchAll();
 		$this->posts = [];
