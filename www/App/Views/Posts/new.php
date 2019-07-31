@@ -8,6 +8,7 @@ Helpers::partial('navbar');
   <section class="section">
 	<form method="POST" action="<?= Helpers::route('Posts#new') ?>" enctype="multipart/form-data">
 	  <input type="file" id="picture" name="picture" accept="image/png, image/jpeg" onchange="readURL(this);">
+	  <input type="text" name="description">
 	  <input type="submit">
 	<form>
 	<img id="img" src="#"/>

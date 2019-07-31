@@ -14,7 +14,7 @@ class Post extends Model
 
 	public function getImage(): string
 	{
-		$file = '/public/assets/img/post_images/' . $this->getId() . '.png';
+		$file = '/public/assets/uploads/posts_images/' . $this->getId() . '.png';
 		if (file_exists($_SERVER['DOCUMENT_ROOT'] . $file))
 			return $file;
 		else
