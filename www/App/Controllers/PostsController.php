@@ -136,10 +136,7 @@ class PostsController extends Controller
 		{
 			if (1==1 || $_FILES['picture']['size'] == 0)
 			{
-				//echo $_POST['img'];
 				$b64 = explode(',', $_POST['img'])[1];
-				//echo $b64;
-				//exit(0);
 					
 				$res  = Database::getInstance()->query("INSERT INTO posts (`creator_id`, `description`) VALUES ('{$_SESSION['id']}', :desc)", ['desc' => $_POST['description']], 0);
 				$post = Query::select('id')->from('posts')->orderBy('id', 'DESC')->limit(1)->fetch();
@@ -149,8 +146,13 @@ class PostsController extends Controller
 					$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
 					$uploadfile = $uploaddir . $post['id'] . '.png';
 					$img = imagecreatefromstring(base64_decode($b64));
+
+					$border = imagecreatefrompng($_SERVER['DOCUMENT_ROOT'] . '/public/assets/img/borders/border3.png');
+					imagecopyresampled($img, $border, 0, 0, 0, 0, imagesx($img), imagesy($img), imagesx($border), imagesy($border));
+					//imagecopy($img, $border, 0, 0, 0, 0, 800, 800);
+					//imagecopymerge($img, $border, 0, 0, 0, 0, 800, 800, 50);
+
 					$ret = imagepng($img, $uploadfile);
-					//move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile);
 				}
 				else
 				{

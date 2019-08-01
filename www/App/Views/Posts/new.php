@@ -25,7 +25,7 @@ Helpers::partial('navbar');
             </div>
 	        <br>
 	        <label for="description">Description</label>
-	        <textarea class="textarea" rows="7" name="description" placeholder="Ajoutez une breve description..."></textarea>
+	        <textarea class="textarea" rows="12" name="description" placeholder="Ajoutez une breve description..."></textarea>
 	        <br>
    	        <input type="submit" class="button is-primary">
    	      <form>
