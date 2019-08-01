@@ -3,6 +3,7 @@ use \App\Helpers;
 
 Helpers::partial('head');
 Helpers::partial('navbar');
+
 $page = $this->page;
 $pages_count = $this->pages_count;
 ?>
@@ -22,7 +23,7 @@ $pages_count = $this->pages_count;
 		?>
 	  </div>
 	
-	  <?php Helpers::partial('pagination', ['page' => $page, 'pages_count' => $pages_count]); ?>
+	  <?php Helpers::partial('pagination', ['url' => '/posts', 'page' => $page, 'pages_count' => $pages_count]); ?>
 	</div>
   </section>
 </main>

@@ -40,6 +40,7 @@ class PostsController extends Controller
 
 	public function user(string $user)
 	{
+		$this->username = $user;
 		$user = User::getBy(['username' => $user], 1);
 		if ($user == false)
 		{
@@ -50,6 +51,15 @@ class PostsController extends Controller
 		{
 			$creator_id  = array_values($user)[0]->getId();
 			$this->posts = Post::getBy(['creator_id' => $creator_id]);
+
+			$this->page = $_GET['page'] ?? 1;
+			$this->pages_count = ceil(count($this->posts) / 6);
+
+			if ($this->page == 0)
+				$this->page = 1;
+			else if ($this->page > $this->pages_count)
+				$this->page = $this->pages_count;
+
 			return $this->render('Posts#user');
 		}
 	}
@@ -84,6 +94,14 @@ class PostsController extends Controller
 			//$post->setLikesCount($likes_count);
 			$this->posts[] = $post;
 		}
+
+		$this->page = $_GET['page'] ?? 1;
+		$this->pages_count = ceil(count($this->posts) / 6);
+		if ($this->page == 0)
+			$this->page = 1;
+		else if ($this->page > $this->pages_count)
+			$this->page = $this->pages_count;
+
 		return $this->render('Posts#favs');
 	}
 
