@@ -128,26 +128,33 @@ class PostsController extends Controller
 			return $this->render('Posts#new');
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			if (!is_uploaded_file($_FILES['picture']['tmp_name']))
-				Helpers::flash('danger', 'Attaque potentielle par téléchargement de fichiers!');
+			if (empty($_FILES))
+			{
+
+			}
 			else
 			{
-				$res  = Database::getInstance()->query("INSERT INTO posts (`creator_id`, `description`) VALUES ('{$_SESSION['id']}', :desc)", ['desc' => $_POST['description']], 0);
-				$post = Query::select('id')->from('posts')->orderBy('id', 'DESC')->limit(1)->fetch();
-				if ($res != false || $post != false)
-				{	
-					Helpers::flash('success', 'Post cree');
-					$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
-					$uploadfile = $uploaddir . $post['id'] . '.png';
-					move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile);
-				}
+				if (!is_uploaded_file($_FILES['picture']['tmp_name']))
+					Helpers::flash('danger', 'Attaque potentielle par téléchargement de fichiers!');
 				else
 				{
-					Helpers::flash('danger', 'capout :c');
-					return $this->render('Posts#new');
+					$res  = Database::getInstance()->query("INSERT INTO posts (`creator_id`, `description`) VALUES ('{$_SESSION['id']}', :desc)", ['desc' => $_POST['description']], 0);
+					$post = Query::select('id')->from('posts')->orderBy('id', 'DESC')->limit(1)->fetch();
+					if ($res != false || $post != false)
+					{	
+						Helpers::flash('success', 'Post cree');
+						$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
+						$uploadfile = $uploaddir . $post['id'] . '.png';
+						move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile);
+					}
+					else
+					{
+						Helpers::flash('danger', 'capout :c');
+						return $this->render('Posts#new');
+					}
 				}
+				return $this->router->redirect('Posts#index');
 			}
-			return $this->router->redirect('Posts#index');
 		}
 	}
 }
