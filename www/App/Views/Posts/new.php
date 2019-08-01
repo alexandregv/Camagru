@@ -16,7 +16,7 @@ Helpers::partial('navbar');
 	        <label for="picture">Image</label>
             <div class="file">
               <label class="file-label">
-                <input class="file-input" type="file" id="picture" name="picture" accept="image/png, image/jpeg" onchange="readURL(this);">
+                <input class="file-input" type="file" id="picture" accept="image/png, image/jpeg" onchange="readURL(this);">
                 <span class="file-cta">
                   <span class="file-icon"><i class="fas fa-upload"></i></span>
                   <span class="file-label">Choose a file</span>
@@ -42,65 +42,63 @@ Helpers::partial('navbar');
 		  <!-- Camera output -->
 		  <img src="//:0" alt="" id="camera--output">
 
+		  <!-- Image base64 -->
+		  <input id="img" name="img" type="text" hidden="hidden">
+
 		  <!-- Camera trigger -->
     	  <button id="camera--trigger" class="button is-info" type="button">Take a picture</button>
 		</div>
-		
-        <div class="column">
-   	      <img id="img" src=""/>
       </div>
     </div>
   </section>
 </main>
 
-<script>
-// Set constraints for the video stream
-var constraints = { video: { facingMode: "user" }, audio: false };
-
-// Define constants
-const cameraView  = document.querySelector("#camera--view"),
-    cameraOutput  = document.querySelector("#camera--output"),
-    cameraSensor  = document.querySelector("#camera--sensor"),
-    cameraTrigger = document.querySelector("#camera--trigger")
-
-// Access the device camera and stream to cameraView
-function cameraStart() {
-    navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then(function(stream) {
-        track = stream.getTracks()[0];
-        cameraView.srcObject = stream;
-    })
-    .catch(function(error) {
-        console.error("Oops. Something is broken.", error);
-    });
-}
-
-// Take a picture when cameraTrigger is tapped
-cameraTrigger.onclick = function() {
-    cameraSensor.width = cameraView.videoWidth;
-    cameraSensor.height = cameraView.videoHeight;
-    cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
-    cameraOutput.src = cameraSensor.toDataURL("image/png");
-    cameraOutput.classList.add("taken");
-};
-
-// Start the video stream when the window loads
-window.addEventListener("load", cameraStart, false);
+<script type="text/javascript">
+	// Webcam
+	var constraints = { video: { facingMode: "user" }, audio: false };
+	
+	const cameraView  = document.querySelector("#camera--view"),
+	    cameraOutput  = document.querySelector("#camera--output"),
+	    cameraSensor  = document.querySelector("#camera--sensor"),
+	    cameraTrigger = document.querySelector("#camera--trigger")
+	
+	function cameraStart() {
+	    navigator.mediaDevices
+	        .getUserMedia(constraints)
+	        .then(function(stream) {
+	        track = stream.getTracks()[0];
+	        cameraView.srcObject = stream;
+	    })
+	    .catch(function(error) {
+	        console.error("Oops. Something is broken.", error);
+	    });
+	}
+	
+	cameraTrigger.onclick = function() {
+	    cameraSensor.width = cameraView.videoWidth;
+	    cameraSensor.height = cameraView.videoHeight;
+	    cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+	    cameraOutput.src = cameraSensor.toDataURL("image/png");
+		cameraOutput.classList.add("taken");
+		document.querySelector('#img').setAttribute('value', cameraSensor.toDataURL("image/png"));
+	};
+	
+	window.addEventListener("load", cameraStart, false);
 </script>
 
 <script type="text/javascript">
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    document.querySelector('#img').setAttribute('src', e.target.result);
-					console.log("eeee");
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
+	// File upload
+	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+	
+	        reader.onload = function (e) {
+	            document.querySelector('#camera--output').setAttribute('src', e.target.result);
+			    document.querySelector('#img').setAttribute('value', e.target.result);
+	        }
+	
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+</script>
 <?php Helpers::partial('footer'); ?>

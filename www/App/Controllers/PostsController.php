@@ -128,9 +128,30 @@ class PostsController extends Controller
 			return $this->render('Posts#new');
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			if (empty($_FILES))
+			if (1==1 || $_FILES['picture']['size'] == 0)
 			{
-
+				//echo $_POST['img'];
+				$b64 = explode(',', $_POST['img'])[1];
+				//echo $b64;
+				//exit(0);
+					
+				$res  = Database::getInstance()->query("INSERT INTO posts (`creator_id`, `description`) VALUES ('{$_SESSION['id']}', :desc)", ['desc' => $_POST['description']], 0);
+				$post = Query::select('id')->from('posts')->orderBy('id', 'DESC')->limit(1)->fetch();
+				if ($res != false || $post != false)
+				{	
+					Helpers::flash('success', 'Post cree');
+					$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
+					$uploadfile = $uploaddir . $post['id'] . '.png';
+					$img = imagecreatefromstring(base64_decode($b64));
+					$ret = imagepng($img, $uploadfile);
+					//move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile);
+				}
+				else
+				{
+					Helpers::flash('danger', 'capout :c');
+					return $this->render('Posts#new');
+				}
+				return $this->router->redirect('Posts#index');
 			}
 			else
 			{

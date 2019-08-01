@@ -11174,12 +11174,6 @@ main {
   object-fit: cover;
 }
 
-/* line 35, ../sass/style.sass */
-#camera--view, #camera--sensor, #camera--output {
-  transform: scaleX(-1);
-  filter: FlipH;
-}
-
 /* line 39, ../sass/style.sass */
 .taken {
   height: 100px !important;
