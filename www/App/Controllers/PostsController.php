@@ -50,15 +50,22 @@ class PostsController extends Controller
 		else
 		{
 			$creator_id  = array_values($user)[0]->getId();
-			$this->posts = Post::getBy(['creator_id' => $creator_id]);
+			//$this->posts = Post::getBy(['creator_id' => $creator_id]);
+			$count = Query::select('COUNT(*)')->from('posts')->where("creator_id = $creator_id")->fetch()['COUNT(*)']; //TODO: :nauseated_face:
 
 			$this->page = $_GET['page'] ?? 1;
-			$this->pages_count = ceil(count($this->posts) / 6);
+			$this->pages_count = ceil($count / 6);
+			//$this->pages_count = ceil(count($this->posts) / 6);
 
 			if ($this->page == 0)
 				$this->page = 1;
 			else if ($this->page > $this->pages_count)
 				$this->page = $this->pages_count;
+
+			$datas = Query::select('*')->from('posts')->orderBy('createdAt', 'DESC')->limit(6)->offset($this->page * 6 - 6)->fetchAll();
+			$this->posts = [];
+			foreach ($datas as $data)
+				$this->posts[] = new Post(array_map('htmlspecialchars', $data));
 
 			return $this->render('Posts#user');
 		}
@@ -86,21 +93,20 @@ class PostsController extends Controller
 	public function favs()
 	{
 		$likes = Like::getBy(['author_id' => $_SESSION['id']]);
-		$this->posts = [];
-		foreach ($likes as $like)
-		{
-			$post = $like->getPost();
-			//$likes_count = count(Like::getBy('post_id', $post->getId()));
-			//$post->setLikesCount($likes_count);
-			$this->posts[] = $post;
-		}
 
 		$this->page = $_GET['page'] ?? 1;
-		$this->pages_count = ceil(count($this->posts) / 6);
+		$this->pages_count = ceil(count($likes) / 6);
 		if ($this->page == 0)
 			$this->page = 1;
 		else if ($this->page > $this->pages_count)
 			$this->page = $this->pages_count;
+
+		$this->posts = [];
+		foreach ($likes as $like)
+			$this->posts[] = $like->getPost();
+
+		for($i = 0; $i < ($this->page - 1) * 6; $i++)
+			array_shift($this->posts);
 
 		return $this->render('Posts#favs');
 	}
