@@ -52,3 +52,8 @@ services:
     image: djfarrelly/maildev
     ports:
       - "1080:80"
+  compass:
+    image: antonienko/compass-watch
+    command: watch --poll /var/www/html/public/assets
+    volumes:
+      - ${ASSETS_DIR-./www/public/assets}:/var/www/html/public/assets
