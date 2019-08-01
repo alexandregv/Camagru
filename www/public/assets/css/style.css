@@ -11174,10 +11174,15 @@ main {
   object-fit: cover;
 }
 
-/* line 39, ../sass/style.sass */
+/* line 35, ../sass/style.sass */
+#camera--view {
+  max-height: 800px !important;
+}
+
+/* line 42, ../sass/style.sass */
 .taken {
-  height: 100px !important;
-  width: 100px !important;
+  height: 200px !important;
+  width: 202px !important;
   transition: all 0.5s ease-in;
   border: solid 3px white;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
