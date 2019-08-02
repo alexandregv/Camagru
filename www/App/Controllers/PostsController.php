@@ -62,7 +62,7 @@ class PostsController extends Controller
 			else if ($this->page > $this->pages_count)
 				$this->page = $this->pages_count;
 
-			$datas = Query::select('*')->from('posts')->orderBy('createdAt', 'DESC')->limit(6)->offset($this->page * 6 - 6)->fetchAll();
+			$datas = Query::select('*')->from('posts')->where("creator_id = $creator_id")->orderBy('createdAt', 'DESC')->limit(6)->offset($this->page * 6 - 6)->fetchAll();
 			$this->posts = [];
 			foreach ($datas as $data)
 				$this->posts[] = new Post(array_map('htmlspecialchars', $data));
@@ -159,7 +159,7 @@ class PostsController extends Controller
 					Helpers::flash('danger', 'capout :c');
 					return $this->render('Posts#new');
 				}
-				return $this->router->redirect('Posts#index');
+				return $this->router->redirect('Posts#show', ['id' => $post['id']]);
 			}
 			else
 			{
