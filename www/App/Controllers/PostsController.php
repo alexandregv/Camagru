@@ -125,7 +125,11 @@ class PostsController extends Controller
 			if ($creator->getLikeNotifications() == 1)
 				mail($creator->getEmail(), 'Someone liked your post!', "Hey, you have a fan! @$liker just liked one of your posts!");
 		}
-		return $this->router->redirect('Posts#show', ['id' => $id]);
+		else
+		{
+			;//TODO: remove like
+		}
+		//return $this->router->redirect('Posts#show', ['id' => $id]);
 	}
 	
 	public function new()
