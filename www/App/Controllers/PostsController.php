@@ -149,6 +149,15 @@ class PostsController extends Controller
 					Helpers::flash('danger', 'Vous devez choisir une image et un cadre !');
 					return $this->router->redirect('Posts#new');
 				}
+
+				$tmp = '/tmp/' . uniqid() . '.png';
+				file_put_contents($tmp, base64_decode($_POST['img']));
+				if (!in_array(mime_content_type($tmp), ['imae/png', 'image/jpg', 'image/jpeg']))
+				{
+					unlink($tmp);
+					Helpers::flash('danger', 'Ca joue les hackers ?');
+					return $this->router->redirect('Posts#new');
+				}
 				
 				$b64 = explode(',', $_POST['img'])[1];
 					
