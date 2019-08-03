@@ -35,7 +35,11 @@ $post = $this->post;
 			<div class="level-left">
 			  <a class="level-item"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
 			  <?php /*<form id="likeForm" method="POST" action="<?= Helpers::route('Posts#like', ['id' => $post->getId()]) ?>"><a onclick="document.getElementById('likeForm').submit();" class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a></form> */ ?>
-			  <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
+				<?php if (isset($_SESSION['id'])): ?>
+				  <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
+				<?php else: ?>
+				  <a href="/login" class="level-item"><span class="icon is-small"><i id="likeicon" class="far fa-heart"></i></span></a>
+				<?php endif; ?>
 			  <div class="level-item"><span id="likecount" class="icon is-small"><?= $this->likes_count ?></span></div>
 			</div>
 		  </nav>
@@ -78,7 +82,7 @@ $post = $this->post;
 		  </div>
 		</article>
 
-		<?php if ($post->getCreator_id() == $_SESSION['id']): ?>
+		<?php if (isset($_SESSION['id']) && $post->getCreator_id() == $_SESSION['id']): ?>
 		  <br>
           <form method="POST" action="<?= Helpers::route('Posts#delete', ['id' => $post->getId()]) ?>" enctype="multipart/form-data">
 		    <button class="button is-danger is-fullwidth">Supprimer la publication</button>
@@ -90,6 +94,7 @@ $post = $this->post;
   </section>
 </main>
 
+<?php if (isset($_SESSION['id'])): ?>
 <script>
   function like(id) {
 	icon  = document.querySelector('#likeicon');
@@ -106,5 +111,6 @@ $post = $this->post;
     fetch('/posts/' + id + '/like', { method: 'POST' });
 }
 </script>
+<?php endif; ?>
 
 <?php Helpers::partial('footer'); ?>
