@@ -1,12 +1,12 @@
 <?php
 
-require_once('database.php');
+require_once 'database.php';
 
-$DB_OPTIONS = [
-  PDO::ATTR_EMULATE_PREPARES   => false, // turn off emulation mode for "real" prepared statements
-  PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //turn on errors in the form of exceptions
-  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
-];
+//$DB_OPTIONS = [
+//  PDO::ATTR_EMULATE_PREPARES   => false, // turn off emulation mode for "real" prepared statements
+//  PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, //turn on errors in the form of exceptions
+//  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, //make the default fetch be an associative array
+//];
 
 try {
     $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD, $DB_OPTIONS);
