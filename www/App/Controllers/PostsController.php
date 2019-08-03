@@ -131,11 +131,21 @@ class PostsController extends Controller
 	public function new()
 	{
 		if ($_SERVER['REQUEST_METHOD'] == 'GET')
+		{
+			$dir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/img/borders';
+			$this->borders = array_values(array_diff(scandir($dir), array('..', '.')));
 			return $this->render('Posts#new');
+		}
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			if (1==1 || $_FILES['picture']['size'] == 0)
 			{
+				if (!isset($_POST['img']) || empty(trim($_POST['img'])) || !isset($_POST['border']) || empty(trim($_POST['border'])))
+				{
+					Helpers::flash('danger', 'Vous devez choisir une image et un cadre !');
+					return $this->router->redirect('Posts#new');
+				}
+				
 				$b64 = explode(',', $_POST['img'])[1];
 					
 				$res  = Database::getInstance()->query("INSERT INTO posts (`creator_id`, `description`) VALUES ('{$_SESSION['id']}', :desc)", ['desc' => $_POST['description']], 0);
@@ -147,7 +157,7 @@ class PostsController extends Controller
 					$uploadfile = $uploaddir . $post['id'] . '.png';
 					$img = imagecreatefromstring(base64_decode($b64));
 
-					$border = imagecreatefrompng($_SERVER['DOCUMENT_ROOT'] . '/public/assets/img/borders/border3.png');
+					$border = imagecreatefrompng($_SERVER['DOCUMENT_ROOT'] . '/public/assets/img/borders/' . $_POST['border']);
 					imagecopyresampled($img, $border, 0, 0, 0, 0, imagesx($img), imagesy($img), imagesx($border), imagesy($border));
 					//imagecopy($img, $border, 0, 0, 0, 0, 800, 800);
 					//imagecopymerge($img, $border, 0, 0, 0, 0, 800, 800, 50);

@@ -6,9 +6,9 @@ Helpers::partial('navbar');
 ?>
 <main>
   <section class="section">
-	<div class="box">
+	<!-- <div class="box">
       <h3 class="title is-3">Nouvelle publication</h3>
-	  <hr>
+	  <hr> -->
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-8">
           <div class="tile">
@@ -17,32 +17,46 @@ Helpers::partial('navbar');
       		    <div class="column">
       		      <div id="camera" class="column">
       		        <canvas id="camera--sensor" hidden></canvas>
-      		        <video id="camera--view" autoplay playsinline></video>
+                    <div class="frame">
+      		          <video id="camera--view" autoplay playsinline></video>
+      		          <img id="camera--border" src="http://png-pixel.com/400x400-00000000.png">
+      		        </div>
       		      </div>
          	      <form method="POST" action="<?= Helpers::route('Posts#new') ?>" enctype="multipart/form-data">
       	            <label for="picture">Image</label>
-                      <div class="file">
-                        <label class="file-label">
-                          <input class="file-input" type="file" id="picture" accept="image/png, image/jpeg" onchange="readURL(this);">
-                          <span class="file-cta">
-                            <span class="file-icon"><i class="fas fa-upload"></i></span>
-                            <span class="file-label">Choisir un fichier</span>
-                          </span>
+                    <div class="file">
+                      <label class="file-label">
+                        <input class="file-input" type="file" id="picture" accept="image/png, image/jpeg" onchange="readURL(this);">
+                        <span class="file-cta">
+                          <span class="file-icon"><i class="fas fa-upload"></i></span>
+                          <span class="file-label">Choisir un fichier</span>
+                        </span>
       		          </label>
       		          <span style="margin: 5px 5px;"> OU </span>
           	          <button id="camera--trigger" class="button is-light" type="button">Prendre une photo</button>
       		      	  <input id="img" name="img" type="text" hidden="hidden">
+      		      	  <input id="border" name="border" type="text" hidden="hidden">
       		        </div>
+
+      	            <br>
+						
+                    <div class="tile is-parent">
+                      <article class="tile is-child box">
+						<?php foreach($this->borders as $border): ?>
+						<img src="/public/assets/img/borders/<?= $border ?>" class="border-layer" onclick="selectBorder(this, '<?= $border ?>')">
+						<?php endforeach; ?>
+                      </article>
+                    </div>
 
       	            <br>
       	            <label for="description">Description</label>
       	            <textarea class="textarea" rows="3" name="description" placeholder="Ajoutez une breve description..."></textarea>
       	            <br>
-         	        <input type="submit" class="button is-primary is-rounded is-outlined is-fullwidth" value="Publier">
+         	        <input type="submit" class="button is-primary is-rounded is-outlined is-fullwidth" id="submit" value="Publier" disabled>
          	      <form>
-              </div>
+                </div>
         	  </div>
-          </article>
+            </article>
         </div>
       </div>
       <div class="tile is-parent">
@@ -51,7 +65,7 @@ Helpers::partial('navbar');
         </article>
       </div>
       </div>
-    </div>
+    <!-- </div> -->
   </section>
 </main>
 
@@ -86,9 +100,20 @@ Helpers::partial('navbar');
 	};
 	
 	window.addEventListener("load", cameraStart, false);
-</script>
 
-<script type="text/javascript">
+// ----------
+
+	function selectBorder(elem, border) {
+		document.querySelector('#border').setAttribute('value', border);
+		document.querySelector('#camera--border').setAttribute('src', '/public/assets/img/borders/' + border);
+		let elems = document.querySelectorAll('.border-layer');
+		elems.forEach(function(el) { el.classList.remove("border-active"); });
+		elem.classList.add('border-active');
+		document.querySelector('#submit').disabled = false;
+	}
+
+// ----------
+
 	// File upload
 	function readURL(input) {
 	    if (input.files && input.files[0]) {
