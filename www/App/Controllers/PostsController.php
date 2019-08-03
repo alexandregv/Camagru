@@ -34,7 +34,9 @@ class PostsController extends Controller
 			return $this->router->redirect('Posts#index');
 		}
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
+		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->comments = Comment::getBy(['post_id' => $id]);
+		$this->liked = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->limit(1)->fetch(1) != false);
 		return $this->render('Posts#show');
 	}
 
@@ -126,9 +128,7 @@ class PostsController extends Controller
 				mail($creator->getEmail(), 'Someone liked your post!', "Hey, you have a fan! @$liker just liked one of your posts!");
 		}
 		else
-		{
-			;//TODO: remove like
-		}
+			Database::getInstance()->query("DELETE FROM likes WHERE id = :id", ['id' => $like['id']], 0);
 		//return $this->router->redirect('Posts#show', ['id' => $id]);
 	}
 	

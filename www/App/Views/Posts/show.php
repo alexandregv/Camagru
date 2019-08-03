@@ -33,11 +33,10 @@ $post = $this->post;
 		  </div>
 		  <nav class="level is-mobile">
 			<div class="level-left">
-			  <a class="level-item"><span class="icon is-small"><i class="fas fa-reply"></i></span></a>
 			  <a class="level-item"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
 			  <?php /*<form id="likeForm" method="POST" action="<?= Helpers::route('Posts#like', ['id' => $post->getId()]) ?>"><a onclick="document.getElementById('likeForm').submit();" class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a></form> */ ?>
-			  <a onclick="document.getElementById('likeForm').submit();" class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a>
-			  <div class="level-item"><span class="icon is-small"><?= $this->likes_count ?></span></div>
+			  <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
+			  <div class="level-item"><span id="likecount" class="icon is-small"><?= $this->likes_count ?></span></div>
 			</div>
 		  </nav>
 		</div>
@@ -90,4 +89,22 @@ $post = $this->post;
 	</article>	
   </section>
 </main>
+
+<script>
+  function like(id) {
+	icon  = document.querySelector('#likeicon');
+    count = document.querySelector('#likecount');
+    if (icon.classList.contains('far')) {
+      count.innerText = parseInt(count.innerText) + 1;
+  	  icon.classList.remove('far');
+  	  icon.classList.add('fas');
+    } else {
+  	  count.innerText = parseInt(count.innerText) - 1;
+  	  icon.classList.remove('fas');
+  	  icon.classList.add('far');
+    }
+    fetch('/posts/' + id + '/like', { method: 'POST' });
+}
+</script>
+
 <?php Helpers::partial('footer'); ?>
