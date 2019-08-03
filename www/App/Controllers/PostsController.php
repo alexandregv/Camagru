@@ -129,7 +129,20 @@ class PostsController extends Controller
 		}
 		else
 			Database::getInstance()->query("DELETE FROM likes WHERE id = :id", ['id' => $like['id']], 0);
-		//return $this->router->redirect('Posts#show', ['id' => $id]);
+		return $this->router->redirect('Posts#show', ['id' => $id]);
+	}
+	
+	public function comment(int $id)
+	{
+		$post = Post::get($id);
+		if ($post == false)
+			return $this->router->redirect('Posts#index');
+		$liker = User::get($_SESSION['id'])->getUsername();
+		Database::getInstance()->query("INSERT INTO `comments` (`post_id`, `author_id`, `content`) VALUES (:post_id, :author_id, :content)", ['post_id' => $id, 'author_id' => $_SESSION['id'], 'content' => $_POST['comment']], 0);
+		$creator = $post->getCreator();
+		if ($creator->getLikeNotifications() == 1)
+			mail($creator->getEmail(), "Vous avez un nouveau commentaire.", "Hey, @$liker vient de commenter une de vos publications !");
+		return $this->router->redirect('Posts#show', ['id' => $id]);
 	}
 	
 	public function new()
@@ -216,6 +229,7 @@ class PostsController extends Controller
 				$username = User::get($post->getCreator_id())->getUsername();
 				Database::getInstance()->query("DELETE FROM posts WHERE id = :id", ['id' => $id], 0);
 				Database::getInstance()->query("DELETE FROM likes WHERE post_id = :post_id", ['post_id' => $id], 0);
+				Database::getInstance()->query("DELETE FROM comments WHERE post_id = :post_id", ['post_id' => $id], 0);
 				Helpers::flash('success', 'La publication a bien été supprimée.');
 				return $this->router->redirect('Posts#user', ['user' => $username]);
 			}
