@@ -125,7 +125,7 @@ class PostsController extends Controller
 			Database::getInstance()->query("INSERT INTO `likes` (`post_id`, `author_id`) VALUES (:post_id, :author_id)", ['post_id' => $id, 'author_id' => $_SESSION['id']], 0);
 			$creator = $post->getCreator();
 			if ($creator->getLikeNotifications() == 1)
-				mail($creator->getEmail(), 'Someone liked your post!', "Hey, you have a fan! @$liker just liked one of your posts!");
+				mail($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! @$liker vient d'aimer une de vos publications !");
 		}
 		else
 			Database::getInstance()->query("DELETE FROM likes WHERE id = :id", ['id' => $like['id']], 0);
@@ -150,17 +150,7 @@ class PostsController extends Controller
 					return $this->router->redirect('Posts#new');
 				}
 
-				$tmp = '/tmp/' . uniqid() . '.png';
-				file_put_contents($tmp, base64_decode($_POST['img']));
-				if (!in_array(mime_content_type($tmp), ['imae/png', 'image/jpg', 'image/jpeg']))
-				{
-					unlink($tmp);
-					Helpers::flash('danger', 'Ca joue les hackers ?');
-					return $this->router->redirect('Posts#new');
-				}
-				
 				$b64 = explode(',', $_POST['img'])[1];
-					
 				$res  = Database::getInstance()->query("INSERT INTO posts (`creator_id`, `description`) VALUES ('{$_SESSION['id']}', :desc)", ['desc' => $_POST['description']], 0);
 				$post = Query::select('id')->from('posts')->orderBy('id', 'DESC')->limit(1)->fetch();
 				if ($res != false || $post != false)
@@ -168,7 +158,13 @@ class PostsController extends Controller
 					Helpers::flash('success', 'Post créé');
 					$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
 					$uploadfile = $uploaddir . $post['id'] . '.png';
-					$img = imagecreatefromstring(base64_decode($b64));
+					$img = @imagecreatefromstring(base64_decode($b64));
+
+					if ($img == false)
+					{
+						Helpers::flash('danger', 'Ca joue les hackers ?');
+						return $this->router->redirect('Posts#new');
+					}
 
 					$border = imagecreatefrompng($_SERVER['DOCUMENT_ROOT'] . '/public/assets/img/borders/' . $_POST['border']);
 					imagecopyresampled($img, $border, 0, 0, 0, 0, imagesx($img), imagesy($img), imagesx($border), imagesy($border));
@@ -218,7 +214,8 @@ class PostsController extends Controller
 			if ($post->getCreator_id() == $_SESSION['id'])
 			{
 				$username = User::get($post->getCreator_id())->getUsername();
-				Database::getInstance()->query("DELETE FROM posts WHERE id = :id", ['id' => $id/*, 'author_id' => $_SESSION['id']*/], 0);
+				Database::getInstance()->query("DELETE FROM posts WHERE id = :id", ['id' => $id], 0);
+				Database::getInstance()->query("DELETE FROM likes WHERE post_id = :post_id", ['post_id' => $id], 0);
 				Helpers::flash('success', 'La publication a bien été supprimée.');
 				return $this->router->redirect('Posts#user', ['user' => $username]);
 			}
