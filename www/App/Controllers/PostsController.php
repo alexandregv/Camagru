@@ -152,7 +152,7 @@ class PostsController extends Controller
 				$post = Query::select('id')->from('posts')->orderBy('id', 'DESC')->limit(1)->fetch();
 				if ($res != false || $post != false)
 				{	
-					Helpers::flash('success', 'Post cree');
+					Helpers::flash('success', 'Post créé');
 					$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
 					$uploadfile = $uploaddir . $post['id'] . '.png';
 					$img = imagecreatefromstring(base64_decode($b64));
@@ -181,7 +181,7 @@ class PostsController extends Controller
 					$post = Query::select('id')->from('posts')->orderBy('id', 'DESC')->limit(1)->fetch();
 					if ($res != false || $post != false)
 					{	
-						Helpers::flash('success', 'Post cree');
+						Helpers::flash('success', 'Post créé');
 						$uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/uploads/posts_images/';
 						$uploadfile = $uploaddir . $post['id'] . '.png';
 						move_uploaded_file($_FILES['picture']['tmp_name'], $uploadfile);
@@ -194,6 +194,31 @@ class PostsController extends Controller
 				}
 				return $this->router->redirect('Posts#index');
 			}
+		}
+	}
+	
+	public function delete(int $id)
+	{
+		$post = Post::get($id);
+		if ($post != false)
+		{
+			if ($post->getCreator_id() == $_SESSION['id'])
+			{
+				$username = User::get($post->getCreator_id())->getUsername();
+				Database::getInstance()->query("DELETE FROM posts WHERE id = :id", ['id' => $id/*, 'author_id' => $_SESSION['id']*/], 0);
+				Helpers::flash('success', 'La publication a bien été supprimée.');
+				return $this->router->redirect('Posts#user', ['user' => $username]);
+			}
+			else
+			{
+				Helpers::flash('danger', 'Vous ne pouvez pas supprimer cette publication !');
+				return $this->router->redirect('Posts#show', ['id' => $post->getId()]);
+			}
+		}
+		else
+		{
+			Helpers::flash('danger', 'Une erreur est survenue, publication introuvable.');
+			return $this->router->redirect('Posts#index');
 		}
 	}
 }

@@ -77,6 +77,14 @@ $post = $this->post;
 			</div>
 		  </div>
 		</article>
+
+		<?php if ($post->getCreator_id() == $_SESSION['id']): ?>
+		  <br>
+          <form method="POST" action="<?= Helpers::route('Posts#delete', ['id' => $post->getId()]) ?>" enctype="multipart/form-data">
+		    <button class="button is-danger is-fullwidth">Supprimer la publication</button>
+		  </form>
+		<?php endif; ?>
+
 	  </div>
 	</article>	
   </section>
