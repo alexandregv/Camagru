@@ -37,15 +37,10 @@ Helpers::partial('navbar');
 						<?php } ?>
 					</div>
 					
-					<div class="field">
-					  <div class="control">
-							<label class="checkbox"><input type="checkbox" name="remember"> Se souvenir de moi</label>
-					  </div>
-					</div>
-					
 					<div class="field is-grouped">
 					  <div class="control"><input type="submit" class="button is-link" value="Connexion"></div>
 					  <div class="control"><a href="<?= Helpers::route('Users#register') ?>"><button type="button" class="button is-text">Pas encore inscrit ?</button></a></div>
+					  <div class="control"><a href="<?= Helpers::route('Users#sendReset') ?>"><button type="button" class="button is-text">Reset</button></a></div>
 					</div>	
 				</form>
 			</div>

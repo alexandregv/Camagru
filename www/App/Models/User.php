@@ -11,6 +11,7 @@ class User extends Model
 	protected $_passHash			= '';
 	protected $_email				= '';
 	protected $_confirmToken		= '';
+	protected $_resetToken			= '';
 	protected $_likeNotifications	=  1;
 	protected $_admin				=  0;
 

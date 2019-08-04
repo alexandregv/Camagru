@@ -186,7 +186,7 @@ class UsersController extends Controller
 							$user = Query::select('id', 'username')->from('users')->where("email = {$_POST['email']}")->fetch();
 							if ($user != false)
 							{	
-								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: http://0.0.0.0:8080/confirm/$token");
+								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: http://localhost:8080/confirm/$token");
 								Helpers::flash('success', 'Inscription réussie ! Merci de confirmer votre email avec le lien recu.');
 								return $this->router->redirect('Pages#home');
 							}
@@ -244,6 +244,43 @@ class UsersController extends Controller
 				Helpers::flash('success', 'Vous avez bien confirme votre compte !');
 			}
 		}
+		return $this->router->redirect('Pages#home');
+	}
+	
+	public function sendReset()
+	{
+		if ($_SERVER['REQUEST_METHOD'] == 'GET')
+			return $this->render('Users#sendReset');
+		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+			if (isset($_POST['email']) && !empty(trim($_POST['email'])))
+			{
+				$token = (string) (uniqid() . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
+				Query::update('users')->set(['resetToken' => "'$token'"])->where("email = {$_POST['email']}")->exec(0);
+				mail($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: http://localhost:8080/reset/$token");
+				Helpers::flash('success', 'Un mail de reinitialisation vous sera envoye si un mail correspond.');
+			}
+		}
+		return $this->router->redirect('Pages#home');
+	}
+
+	public function reset(string $token)
+	{
+		if (isset($token) && !empty(trim($token) && $token != 'NULL'))
+		{
+			$user = User::getBy(['resetToken' => $token], 1);
+			if ($user != false)
+			{
+				$user = array_values($user)[0];
+				Query::update('users')->set(['resetToken' => "'NULL'"])->where("id = {$user->getId()}")->exec(0);
+				$_SESSION['loggedin'] = true;
+				$_SESSION['id'] = $user->getId();
+				$_SESSION['username'] = $user->getUsername();
+				Helpers::flash('success', 'Vous pouvez maintenant changer votre mot de passe.');
+				return $this->router->redirect('Users#profile');
+			}
+		}
+		Helpers::flash('danger', 'Token incorrect. Merci de cliquer sur le lien recu par mail.');
 		return $this->router->redirect('Pages#home');
 	}
 

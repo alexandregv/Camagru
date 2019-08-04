@@ -22,6 +22,8 @@ $router->get('/login', 'Users#login')->middleware('NoAuth');
 $router->get('/logout', 'Users#logout');
 $router->get('/profile', 'Users#profile')->middleware('Auth');
 $router->get('/confirm/:token', 'Users#confirm')->middleware('NoAuth');
+$router->get('/reset/:token', 'Users#reset');
+$router->get('/reset', 'Users#sendReset');
 
 $router->get('/404', 'Errors#_404');
 
@@ -33,6 +35,8 @@ $router->get('/', 'Pages#home');
 $router->post('/login', 'Users#login')->middleware('NoAuth');
 $router->post('/register', 'Users#register')->middleware('NoAuth');
 $router->post('/profile', 'Users#profile')->middleware('Auth');
+$router->post('/reset/:token', 'Users#reset');
+$router->post('/reset', 'Users#sendReset');
 
 $router->post('/new', 'Posts#new')->middleware('Auth');
 $router->post('/posts/:id/like', 'Posts#like')->with('id', '[0-9]+')->middleware('Auth');
