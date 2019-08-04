@@ -14,8 +14,7 @@ Helpers::partial('navbar');
 					<div class="columns">
 						<div class="column is-one-fifth has-text-centered">
 							<figure class="image is-128x128 container content">
-								<img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
-								<!--<img src="<?= Helpers::image('') ?>">-->
+								<img class="is-rounded" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($this->user->getEmail()))); ?>?default=https%3A%2F%2Fbulma.io%2Fimages%2Fplaceholders%2F128x128.png">
 							</figure>
 							<a class="button is-info is-outlined">Changer ma photo</a>
 							<hr>

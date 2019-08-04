@@ -37,6 +37,14 @@ class PostsController extends Controller
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->comments = Comment::getBy(['post_id' => $id]);
 		$this->liked = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->limit(1)->fetch(1) != false);
+
+		$this->loggedin_mail = '';
+		if (isset($_SESSION['id']))
+		{
+			$loggedin_user = User::get($_SESSION['id']);
+			if ($loggedin_user != false)
+				$this->loggedin_mail = $loggedin_user->getEmail();
+		}
 		return $this->render('Posts#show');
 	}
 

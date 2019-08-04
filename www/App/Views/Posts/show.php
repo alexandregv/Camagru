@@ -48,7 +48,7 @@ $post = $this->post;
 		<?php foreach ($this->comments as $comment) { ?>
 			<article class="media">
   			  <figure class="media-left">
-  			    <p class="image is-64x64"><img src="https://bulma.io/images/placeholders/128x128.png"></p>
+  			    <p class="image is-64x64"><img class="is-rounded" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($comment->getAuthor()->getEmail()))); ?>?default=https%3A%2F%2Fbulma.io%2Fimages%2Fplaceholders%2F128x128.png"></p>
   			  </figure>
   			  <div class="media-content">
   			    <div class="content">
@@ -73,7 +73,7 @@ $post = $this->post;
 
 		<article class="media">
 		  <figure class="media-left">
-			<p class="image is-64x64"><img src="https://bulma.io/images/placeholders/128x128.png"></p>
+			<p class="image is-64x64"><img src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($this->loggedin_mail))); ?>?default=https%3A%2F%2Fbulma.io%2Fimages%2Fplaceholders%2F128x128.png"></p>
 		  </figure>
 		  <div class="media-content">
             <form method="POST" action="<?= Helpers::route('Posts#comment', ['id' => $post->getId()]) ?>" enctype="multipart/form-data">
