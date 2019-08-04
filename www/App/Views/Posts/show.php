@@ -45,49 +45,27 @@ $post = $this->post;
 		  </nav>
 		</div>
 
-		<?php foreach ($this->comments as $comment) { ?>
-			<article class="media">
-  			  <figure class="media-left">
-  			    <p class="image is-64x64"><img class="is-rounded" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($comment->getAuthor()->getEmail()))); ?>?default=https%3A%2F%2Fbulma.io%2Fimages%2Fplaceholders%2F128x128.png"></p>
-  			  </figure>
-  			  <div class="media-content">
-  			    <div class="content">
-  			      <p>
-  			    	<strong><?= $comment->getAuthor()->getFirstname(), ' ', $comment->getAuthor()->getLastname() ?></strong> <small><?= '@', $comment->getAuthor()->getUsername() ?></small>
-  			    	<br>
-					<?php
-						$url = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i';
-						$tag = '~#([a-zA-z0-9]+)~i';
-						$formatted = $comment->getContent() ;
-						$formatted = preg_replace($url, '<a href="$0" target="_blank" title="$2">$2</a>', $formatted);
-						$formatted = preg_replace($tag, '<a href="/tags/$1" target="_blank" title="$1">$0</a>', $formatted); //TODO: ::route('', $1)
-						echo $formatted;
-					?>
-  			    	<br>
-  			    	<small><?= strftime('%Hh%M', strtotime($comment->getCreatedAt())), ' - ', ucwords(strftime('%A %d %B', strtotime($comment->getCreatedAt()))) ?></small>
-  			      </p>
-  			    </div>
-  			  </div>
-			</article>
-		<?php } ?>
+        <div id="comments">
+		  <?php foreach ($this->comments as $comment) { ?>
+		  	<?= Helpers::render('Posts/_comment', ['comment' => $comment]) ?>
+		  <?php } ?>
+        </div>
 
 		<article class="media">
 		  <figure class="media-left">
 			<p class="image is-64x64"><img src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($this->loggedin_mail))); ?>?default=https%3A%2F%2Fbulma.io%2Fimages%2Fplaceholders%2F128x128.png"></p>
 		  </figure>
 		  <div class="media-content">
-            <form method="POST" action="<?= Helpers::route('Posts#comment', ['id' => $post->getId()]) ?>" enctype="multipart/form-data">
 			  <div class="field">
 			    <p class="control">
-			  	  <textarea name="comment" class="textarea" placeholder="Ajouter un commentaire..."></textarea>
+			  	  <textarea id="comment-content" name="comment" class="textarea" placeholder="Ajouter un commentaire..."></textarea>
 			    </p>
 			  </div>
 			  <div class="field">
 			    <p class="control">
-			  	  <button class="button">Commenter</button>
+			  	  <button onclick="comment(<?= $post->getId() ?>)" class="button">Commenter</button>
 			    </p>
 			  </div>
-			</form>
 		  </div>
 		</article>
 
@@ -118,7 +96,29 @@ $post = $this->post;
   	  icon.classList.add('far');
     }
     fetch('/posts/' + id + '/like', { method: 'POST' });
-}
+  }
+
+  function comment(id) {
+	textarea = document.querySelector('#comment-content');
+
+	const formData = new FormData();
+    formData.append('comment', textarea.value);
+	textarea.value = "";
+
+	fetch('/posts/' + id + '/comment', {
+	  method: 'POST',
+	  body: formData
+	})
+	.then(function(response) {
+	  return response.text();
+	})
+	.then(function(text) {
+		var d = document.createElement("div");
+		d.innerHTML = text;
+		document.querySelector('#comments').appendChild(d);
+    });
+  }
+
 </script>
 <?php endif; ?>
 

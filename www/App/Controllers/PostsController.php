@@ -150,7 +150,11 @@ class PostsController extends Controller
 		$creator = $post->getCreator();
 		if ($creator->getLikeNotifications() == 1)
 			mail($creator->getEmail(), "Vous avez un nouveau commentaire.", "Hey, @$liker vient de commenter une de vos publications !");
-		return $this->router->redirect('Posts#show', ['id' => $id]);
+
+		//$comment = Comment::get(26);
+		$comment = Query::select('id')->from('comments')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->orderBy('createdAt', 'desc')->limit(1)->fetch();
+		$comment = Comment::get($comment['id']);
+		return $this->render('Posts#_comment', ['comment' => $comment]);
 	}
 	
 	public function new()

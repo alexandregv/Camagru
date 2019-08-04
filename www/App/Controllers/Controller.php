@@ -12,18 +12,19 @@ class Controller
 		$this->router = \App\Router\Router::getInstance();
 	}
 
-	public function render(string $full)
+	public function render(string $full, array $vars = [])
 	{
 		$full = explode('#', $full);
 		if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/App/Views/$full[0]/$full[1].php"))
 		{
+			extract($vars);
 			ob_start();
 			require "App/Views/$full[0]/$full[1].php";
 			return ob_get_clean();
 		}
 		else return $this->render('Errors#404');
 	}
-
+	
 	public function validate(array $attributes)
 	{
 		foreach ($attributes as $attribute => $all_params)
