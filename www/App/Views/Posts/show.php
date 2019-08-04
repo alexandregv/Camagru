@@ -33,7 +33,7 @@ $post = $this->post;
 		  </div>
 		  <nav class="level is-mobile">
 			<div class="level-left">
-			  <a class="level-item"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
+			  <a class="level-item" href="https://twitter.com/intent/tweet?text=<?= $post->getDescription() ?>%20%23Camagru"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
 			  <?php /*<form id="likeForm" method="POST" action="<?= Helpers::route('Posts#like', ['id' => $post->getId()]) ?>"><a onclick="document.getElementById('likeForm').submit();" class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a></form> */ ?>
 				<?php if (isset($_SESSION['id'])): ?>
 				  <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
@@ -41,6 +41,7 @@ $post = $this->post;
 				  <a href="/login" class="level-item"><span class="icon is-small"><i id="likeicon" class="far fa-heart"></i></span></a>
 				<?php endif; ?>
 			  <div class="level-item"><span id="likecount" class="icon is-small"><?= $this->likes_count ?></span></div>
+			  <?php /* <a class="twitter-hashtag-button" href="https://twitter.com/intent/tweet?text=<?= $post->getDescription() ?>%20%23Camagru">Tweet #Camagru</a> */ ?>
 			</div>
 		  </nav>
 		</div>
@@ -119,6 +120,22 @@ $post = $this->post;
     });
   }
 
+  window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+
+    return t;
+  }(document, "script", "twitter-wjs"));
 </script>
 <?php endif; ?>
 
