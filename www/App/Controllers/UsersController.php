@@ -186,7 +186,10 @@ class UsersController extends Controller
 							$user = Query::select('id', 'username')->from('users')->where("email = {$_POST['email']}")->fetch();
 							if ($user != false)
 							{	
-								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: http://localhost:8080/confirm/$token");
+								$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
+								$headers .= "Reply-To: no-repy@camagru.fr\n";
+								$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
+								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: <a href=\"http://localhost:8080/confirm/$token\">cliquez ici</a>", $headers);
 								Helpers::flash('success', 'Inscription réussie ! Merci de confirmer votre email avec le lien recu.');
 								return $this->router->redirect('Pages#home');
 							}
@@ -257,7 +260,10 @@ class UsersController extends Controller
 			{
 				$token = (string) (uniqid() . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
 				Query::update('users')->set(['resetToken' => "'$token'"])->where("email = {$_POST['email']}")->exec(0);
-				mail($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: http://localhost:8080/reset/$token");
+				$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
+				$headers .= "Reply-To: no-repy@camagru.fr\n";
+				$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
+				mail($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: <a href=\"http://localhost:8080/reset/$token\">cliquez ici</a>", $headers);
 				Helpers::flash('success', 'Un mail de reinitialisation vous sera envoye si un mail correspond.');
 			}
 		}
