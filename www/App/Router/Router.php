@@ -65,14 +65,20 @@ class Router {
 	public function url(string $name, array $params = []): string
 	{
 		if(!isset($this->namedRoutes[$name]))
-			//return $this->namedRoutes['Errors#_404']->call();
-			throw new RouterException("No route matches '$name'");
+			return $name;	
 		return $this->namedRoutes[$name]->getUrl($params);
 	}
 
 	public function redirect(string $route, array $params = [])
 	{
-		header('Location: ' . $this->url($route, $params));
+		if ($this->getCurrentRoute()->getAction() == 'Users#login' && isset($_SESSION['redirect']) && !empty($_SESSION['redirect']))
+		{
+			$redirect = $_SESSION['redirect'];
+			$_SESSION['redirect'] = '';
+			header("Location: $redirect");
+		}
+		else
+			header('Location: ' . $this->url($route, $params));
 		exit;
 	}
 
