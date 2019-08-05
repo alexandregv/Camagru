@@ -119,6 +119,7 @@ class UsersController extends Controller
 							$_SESSION["loggedin"] = true;
 							$_SESSION["id"] = $user['id'];
 							$_SESSION["username"] = $user['username'];
+							$_SESSION['csrf'] = bin2hex(openssl_random_pseudo_bytes(24));
 							Helpers::flash('success', 'Connexion réussie !');
 							return $this->router->redirect('Pages#home');
 						}

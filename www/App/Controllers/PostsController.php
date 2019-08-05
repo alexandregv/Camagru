@@ -177,6 +177,11 @@ class PostsController extends Controller
 		}
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
+			//if (!isset($_SESSION['csrf']) || !isset($_POST['csrf']) || $_POST['csrf'] != $_SESSION['csrf'])
+			//{
+			//	echo 'hacker va';exit;
+			//}
+
 			if (1==1 || $_FILES['picture']['size'] == 0)
 			{
 				if (!isset($_POST['img']) || empty(trim($_POST['img'])) || !isset($_POST['border']) || empty(trim($_POST['border'])))
@@ -243,10 +248,17 @@ class PostsController extends Controller
 	
 	public function delete(int $id)
 	{
+
+		//if (!isset($_SESSION['csrf']) || !isset($_POST['csrf']) || $_POST['csrf'] != $_SESSION['csrf'])
+		//{
+		//	Helpers::flash('danger', 'Ça joue les hackers ?');
+		//	return $this->router->redirect('Pages#home');
+		//}
+
 		$post = Post::get($id);
 		if ($post != false)
 		{
-			if ($post->getCreator_id() == $_SESSION['id'])
+			if (isset($_SESSION['id']) && $post->getCreator_id() == $_SESSION['id'])
 			{
 				$username = User::get($post->getCreator_id())->getUsername();
 				Database::getInstance()->query("DELETE FROM posts WHERE id = :id", ['id' => $id], 0);
