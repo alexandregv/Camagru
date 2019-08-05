@@ -43,30 +43,30 @@ class Router {
 		}
 
 		$route = new Route($path, $action);
-		$this->routes[strtoupper($method)][] = $route;
+		$this->_routes[strtoupper($method)][] = $route;
 		if(is_string($action) && $name === null)
 			$name = $action;
 		if($name)
-			$this->namedRoutes[$name] = $route;
+			$this->_namedRoutes[$name] = $route;
 		return $route;
 	}	
 
 	public function run(){
-		if(!isset($this->routes[$_SERVER['REQUEST_METHOD']]))
+		if(!isset($this->_routes[$_SERVER['REQUEST_METHOD']]))
 			throw new RouterException('REQUEST_METHOD does not exist');
-		foreach($this->routes[$_SERVER['REQUEST_METHOD']] as $route)
+		foreach($this->_routes[$_SERVER['REQUEST_METHOD']] as $route)
 			if($route->match($this->url))
 				return $route->call($this);
 		
-		return $this->namedRoutes['Errors#_404']->call($this);
+		return $this->_namedRoutes['Errors#_404']->call($this);
 		//throw new RouterException("No route matching '$this->url'");
 	}
 
 	public function url(string $name, array $params = []): string
 	{
-		if(!isset($this->namedRoutes[$name]))
+		if(!isset($this->_namedRoutes[$name]))
 			return $name;	
-		return $this->namedRoutes[$name]->getUrl($params);
+		return $this->_namedRoutes[$name]->getUrl($params);
 	}
 
 	public function redirect(string $route, array $params = [])
@@ -80,6 +80,16 @@ class Router {
 		else
 			header('Location: ' . $this->url($route, $params));
 		exit;
+	}
+
+	public function getRoutes(): array
+	{
+		return $this->_routes;
+	}
+
+	public function getNamedRoutes(): array
+	{
+		return $this->_namedRoutes;
 	}
 
 	public static function getInstance(string $_url = null): Router
