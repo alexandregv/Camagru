@@ -106,8 +106,29 @@ class UsersController extends Controller
 			return $this->render('Users#login');
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			if (!empty(trim($_POST['username']) && !empty(trim($_POST['password']))))
+			if (!empty(trim($_POST['username'])) && !empty(trim($_POST['password'])))
 			{
+				$url = 'https://www.google.com/recaptcha/api/siteverify';
+				$data = array('secret' => '6LcVZrEUAAAAAIDPlBD9cKh_G0lr8cUuYzlEhLHM',
+							'response' => $_POST['g-recaptcha-response'],
+							'remoteip' => $_SERVER['REMOTE_ADDR'],
+						);
+				
+				$options = array(
+				    'http' => array(
+				        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+				        'method'  => 'POST',
+				        'content' => http_build_query($data)
+				    )
+				);
+				$context  = stream_context_create($options);
+				$result = file_get_contents($url, false, $context);
+				if ($result == false || json_decode($result)->{'success'} != 'true')
+				{
+					Helpers::flash('danger', 'Captcha incorrect.');
+					return $this->render('Users#login');
+				}
+				
 				$hash = hash('whirlpool', 'grumaca' . $_POST['password']);
 				$user = Query::select('id', 'username', 'passHash', 'confirmToken')->from('users')->where("username = {$_POST['username']}")->limit(1)->fetch();
 				if ($user != false)
@@ -143,7 +164,7 @@ class UsersController extends Controller
 			}
 			else 
 			{
-				$this->errors = ['nissing_email', 'nissing_password'];
+				$this->errors = ['missing_email', 'missing_password'];
 				return $this->render('Users#login');
 			}
 		}

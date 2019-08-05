@@ -41,7 +41,6 @@ $post = $this->post;
 				  <a href="/login" class="level-item"><span class="icon is-small"><i id="likeicon" class="far fa-heart"></i></span></a>
 				<?php endif; ?>
 			  <div class="level-item"><span id="likecount" class="icon is-small"><?= $this->likes_count ?></span></div>
-			  <?php /* <a class="twitter-hashtag-button" href="https://twitter.com/intent/tweet?text=<?= $post->getDescription() ?>%20%23Camagru">Tweet #Camagru</a> */ ?>
 			</div>
 		  </nav>
 		</div>

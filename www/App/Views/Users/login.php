@@ -37,6 +37,8 @@ Helpers::partial('navbar');
 						<?php } ?>
 					</div>
 					
+					<div class="field g-recaptcha" data-sitekey="6LcVZrEUAAAAAPIReUDTKq4BHgprGvIaPvNvQ8aZ"></div>
+
 					<div class="field is-grouped">
 					  <div class="control"><input type="submit" class="button is-link" value="Connexion"></div>
 					  <div class="control"><a href="<?= Helpers::route('Users#register') ?>"><button type="button" class="button is-text">Pas encore inscrit ?</button></a></div>
@@ -47,4 +49,7 @@ Helpers::partial('navbar');
 		</div>
   </section>
 </main>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <?php Helpers::partial('footer'); ?>
