@@ -95,7 +95,14 @@ $post = $this->post;
   	  icon.classList.remove('fas');
   	  icon.classList.add('far');
     }
-    fetch('/posts/' + id + '/like', { method: 'POST' });
+
+	const formData = new FormData();
+    formData.append('csrf', '<?= $_SESSION['csrf'] ?>');
+
+    fetch('/posts/' + id + '/like', {
+		method: 'POST',
+		body: formData
+	});
   }
 
   function comment(id) {

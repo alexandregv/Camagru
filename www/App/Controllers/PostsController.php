@@ -163,7 +163,6 @@ class PostsController extends Controller
 			mail($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://localhost:8080". Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient de commenter une de vos <a href=\"http://localhost:8080". Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !", $headers);
 		}
 
-		//$comment = Comment::get(26);
 		$comment = Query::select('id')->from('comments')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->orderBy('createdAt', 'desc')->limit(1)->fetch();
 		$comment = Comment::get($comment['id']);
 		return $this->render('Posts#_comment', ['comment' => $comment]);
