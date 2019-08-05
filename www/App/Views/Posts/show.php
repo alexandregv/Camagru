@@ -103,6 +103,7 @@ $post = $this->post;
 
 	const formData = new FormData();
     formData.append('comment', textarea.value);
+    formData.append('csrf', '<?= $_SESSION['csrf'] ?>');
 	textarea.value = "";
 
 	fetch('/posts/' + id + '/comment', {

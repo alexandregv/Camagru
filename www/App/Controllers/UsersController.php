@@ -266,6 +266,7 @@ class UsersController extends Controller
 				$_SESSION['loggedin'] = true;
 				$_SESSION['id'] = $user->getId();
 				$_SESSION['username'] = $user->getUsername();
+				$_SESSION['csrf'] = bin2hex(openssl_random_pseudo_bytes(24));
 				Helpers::flash('success', 'Vous avez bien confirme votre compte !');
 			}
 		}
