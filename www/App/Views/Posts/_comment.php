@@ -19,7 +19,7 @@ use \App\Helpers;
 			echo $formatted;
 		?>
     	<br>
-    	<small><?= strftime('%Hh%M', strtotime($comment->getCreatedAt())), ' - ', ucwords(strftime('%A %d %B', strtotime($comment->getCreatedAt()))) ?></small>
+    	<small><?= Helpers::date($comment->getCreatedAt()) ?></small>
       </p>
     </div>
   </div>

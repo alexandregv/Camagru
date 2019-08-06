@@ -31,7 +31,7 @@ use \App\Helpers;
 					echo $formatted;
 				?>
 			</p>
-			<time datetime="$post->getCreatedAt()"><?= strftime('%Hh%M', strtotime($post->getCreatedAt())), ' - ', ucwords(strftime('%A %d %B', strtotime($post->getCreatedAt()))) ?></time>
-		</div><!-- ^ TODO: Helper format date ? ^ -->
+			<time datetime="<?= $post->getCreatedAt() ?>"><?= Helpers::date($post->getCreatedAt()) ?></time>
+		</div>
 	</div>
 </div>

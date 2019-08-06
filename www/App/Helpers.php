@@ -41,6 +41,11 @@ class Helpers
 		return Router::getInstance()->url($route, $params);
 	}
 
+	public static function date($date): string
+	{
+		return strftime('%Hh%M', strtotime($date)) . ' - ' . ucwords(strftime('%A %d %B', strtotime($date)));
+	}
+
 	# --- Flash Message ---
 
 	public static function has_flash(): bool
