@@ -71,6 +71,8 @@ class PostsController extends Controller
 
 			if ($this->page == 0)
 				$this->page = 1;
+			if ($this->pages_count == 0)
+				$this->pages_count = 1;
 			else if ($this->page > $this->pages_count)
 				$this->page = $this->pages_count;
 
@@ -110,6 +112,8 @@ class PostsController extends Controller
 		$this->pages_count = ceil(count($likes) / 6);
 		if ($this->page == 0)
 			$this->page = 1;
+		if ($this->pages_count == 0)
+			$this->pages_count = 1;
 		else if ($this->page > $this->pages_count)
 			$this->page = $this->pages_count;
 
