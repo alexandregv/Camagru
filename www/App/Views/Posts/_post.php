@@ -21,16 +21,7 @@ use \App\Helpers;
 		</div>
 
 		<div class="content">
-			<p>
-				<?php
-					$url = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i';
-					$tag = '~#([a-zA-z0-9]+)~i';
-					$formatted = $post->getDescription();
-					$formatted = preg_replace($url, '<a href="$0" target="_blank" title="$2">$2</a>', $formatted);
-					$formatted = preg_replace($tag, '<a href="' . Helpers::route('Posts#show', ['id' => '$1']) . '" target="_blank" title="$1">$0</a>', $formatted);
-					echo $formatted;
-				?>
-			</p>
+			<p><?= Helpers::parse($post->getDescription()) ?></p>
 			<time datetime="<?= $post->getCreatedAt() ?>"><?= Helpers::date($post->getCreatedAt()) ?></time>
 		</div>
 	</div>

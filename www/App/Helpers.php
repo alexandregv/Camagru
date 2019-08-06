@@ -46,6 +46,18 @@ class Helpers
 		return strftime('%Hh%M', strtotime($date)) . ' - ' . ucwords(strftime('%A %d %B', strtotime($date)));
 	}
 
+	public static function parse($text)
+	{
+		$url = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i';
+		$tagp = '~#([a-zA-z0-9]+)~i';
+		$tagu = '~@([a-zA-z0-9-_]+)~i';
+		$formatted = $text ;
+		$formatted = preg_replace($url, '<a href="$0" target="_blank" title="$2">$2</a>', $formatted);
+		$formatted = preg_replace($tagu, '<a href="' . Helpers::route('Posts#show', ['id' => '$1']) . '" title="$1">$0</a>', $formatted);
+		$formatted = preg_replace($tagp, '<a href="' . Helpers::route('Posts#user', ['user' => '$1']) . '" title="$1">$0</a>', $formatted);
+		return $formatted;
+	}
+
 	# --- Flash Message ---
 
 	public static function has_flash(): bool
