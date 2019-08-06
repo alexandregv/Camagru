@@ -79,6 +79,9 @@ class QueryBuilder
 			$values[$exp[0]] = implode(' ', array_slice($exp, 2));
 		}
 
+		if (!empty($this->_set))
+			$values = array_merge($this->_set, $values);
+
 		$stmt = $db->pdo->prepare($query);
 		$stmt->execute($values);
 
@@ -121,7 +124,17 @@ class QueryBuilder
 		if ($this->_update != '')
 			$query .= 'UPDATE ' . $this->_update;
 		if (!empty($this->_set))
-			$query .= ' SET ' . str_replace('=', ' = ', urldecode(http_build_query($this->_set, null, ', ')));
+		{
+			//$query .= ' SET ' . str_replace('=', ' = ', urldecode(http_build_query($this->_set, null, ', ')));
+			$str = '';
+			$shift = $this->array_shift_assoc_kv($this->_set);
+			$str .= key($shift) . ' = :' . key($shift);
+			foreach ($this->_set as $attr => $val)
+				$str .= ", $attr = :$attr";
+			$query .= ' SET ' . $str;
+			$this->_set[key($shift)] = $shift[key($shift)];
+			//var_dump($query);exit;
+		}
 		if (!empty($this->_from))
 			$query .= ' FROM ' . implode(', ', $this->_from);
 		if ($where != '')
@@ -133,7 +146,15 @@ class QueryBuilder
 		if (!is_null($this->_offset))
 			$query .= ' OFFSET ' . $this->_offset;
 		return $query;
-    }
+	}
+
+	private function array_shift_assoc_kv( &$arr ){
+		$val = reset( $arr );
+		$key = key( $arr );
+		$ret = array( $key => $val );
+		unset( $arr[ $key ] );
+		return $ret; 
+	}
 
 }
 

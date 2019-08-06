@@ -85,7 +85,7 @@ class UsersController extends Controller
 						if (!empty($_POST['new_password']) && trim($_POST['new_password']) != '')
 							$passHash = hash('whirlpool', 'grumaca' . trim($_POST['new_password']));
 
-						$res = Query::update('users')->set(['username' => "'$username'", 'email' => "'$email'", 'firstname' => "'$firstname'", 'lastname' => "'$lastname'", 'passHash' => "'$passHash'", 'likeNotifications' => "'$likeNotifications'"])->where("id = {$_SESSION['id']}")->exec(0);
+						$res = Query::update('users')->set(['username' => $username, 'email' => $email, 'firstname' => $firstname, 'lastname' => $lastname, 'passHash' => $passHash, 'likeNotifications' => $likeNotifications])->where("id = {$_SESSION['id']}")->exec(0);
 						Helpers::flash('success', 'Profil modifié avec succes !');
 						return $this->router->redirect('Users#profile');
 					}
@@ -200,11 +200,11 @@ class UsersController extends Controller
 					{
 						$hash = hash('whirlpool', 'grumaca' . $pass);
 						$db   = Database::getInstance();
-						$user = $db->query("SELECT username, email FROM users WHERE email = '{$_POST['email']}' OR username = '{$_POST['username']}'", [], 1);
+						$user = User::getBy(['username', $_POST['username']]);
 						if ($user == false)
 						{
-							$token = (string) (uniqid($user['username'], true) . '_' . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
-							$res  = $db->query("INSERT INTO users (`username`, `email`, `passHash`, `firstname`, `lastname`, `confirmToken`) VALUES ('{$_POST['username']}', '{$_POST['email']}', '$hash', '{$_POST['firstname']}', '{$_POST['lastname']}', '$token')", [], 0);
+							$token = (string) (uniqid() . '_' . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
+							$res  = $db->query("INSERT INTO users (`username`, `email`, `passHash`, `firstname`, `lastname`, `confirmToken`) VALUES (:username, :email, :hash, :firstname, :lastname, :token)", ['username' => $_POST['username'], 'email' => $_POST['email'], 'hash' => $hash, 'firstname' => $_POST['firstname'], 'lastname' => $_POST['lastname'], 'token' => $token], 0);
 							$user = Query::select('id', 'username')->from('users')->where("email = {$_POST['email']}")->fetch();
 							if ($user != false)
 							{	
@@ -262,7 +262,7 @@ class UsersController extends Controller
 			if ($user != false)
 			{
 				$user = array_values($user)[0];
-				Query::update('users')->set(['confirmToken' => "'confirmed'"])->where("id = {$user->getId()}")->exec(0);
+				Query::update('users')->set(['confirmToken' => 'confirmed'])->where("id = {$user->getId()}")->exec(0);
 				$_SESSION['loggedin'] = true;
 				$_SESSION['id'] = $user->getId();
 				$_SESSION['username'] = $user->getUsername();
@@ -282,7 +282,7 @@ class UsersController extends Controller
 			if (isset($_POST['email']) && !empty(trim($_POST['email'])))
 			{
 				$token = (string) (uniqid() . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
-				Query::update('users')->set(['resetToken' => "'$token'"])->where("email = {$_POST['email']}")->exec(0);
+				Query::update('users')->set(['resetToken' => $token])->where("email = {$_POST['email']}")->exec(0);
 				$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
 				$headers .= "Reply-To: no-repy@camagru.fr\n";
 				$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
@@ -301,7 +301,7 @@ class UsersController extends Controller
 			if ($user != false)
 			{
 				$user = array_values($user)[0];
-				Query::update('users')->set(['resetToken' => "'NULL'"])->where("id = {$user->getId()}")->exec(0);
+				Query::update('users')->set(['resetToken' => 'NULL'])->where("id = {$user->getId()}")->exec(0);
 				$_SESSION['loggedin'] = true;
 				$_SESSION['id'] = $user->getId();
 				$_SESSION['username'] = $user->getUsername();
