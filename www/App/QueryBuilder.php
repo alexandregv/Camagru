@@ -81,7 +81,6 @@ class QueryBuilder
 
 		$stmt = $db->pdo->prepare($query);
 		$stmt->execute($values);
-		
 
 		if ($fetchMode == 1)
 			return $stmt->fetch();
@@ -139,14 +138,6 @@ class QueryBuilder
 		if (!is_null($this->_offset))
 			$query .= ' OFFSET ' . $this->_offset;
 		return $query;
-	}
-
-	private function array_shift_assoc_kv( &$arr ){
-		$val = reset( $arr );
-		$key = key( $arr );
-		$ret = array( $key => $val );
-		unset( $arr[ $key ] );
-		return $ret; 
 	}
 
 }
