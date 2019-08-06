@@ -38,7 +38,8 @@ class PostsController extends Controller
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->comments = Comment::getBy(['post_id' => $id]);
-		$this->liked = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->limit(1)->fetch(1) != false);
+		//$this->liked = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->limit(1)->fetch(1) != false);
+		$this->liked = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where(['post_id' => $id])->where(['author_id' => $_SESSION['id']])->limit(1)->fetch(1) != false);
 
 		$this->loggedin_mail = '';
 		if (isset($_SESSION['id']))
@@ -167,7 +168,7 @@ class PostsController extends Controller
 			mail($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://localhost:8080". Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient de commenter une de vos <a href=\"http://localhost:8080". Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !", $headers);
 		}
 
-		$comment = Query::select('id')->from('comments')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->orderBy('createdAt', 'desc')->limit(1)->fetch();
+		$comment = Query::select('id')->from('comments')->where(['post_id' => $id])->where(['author_id' => $_SESSION['id']])->orderBy('createdAt', 'desc')->limit(1)->fetch();
 		$comment = Comment::get($comment['id']);
 		return $this->render('Posts#_comment', ['comment' => $comment]);
 	}

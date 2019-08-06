@@ -10,7 +10,7 @@ class Model
 	{
 		$model = explode('\\', get_called_class());
 		$model = end($model);
-		$data  = Query::select('*')->from("{$model}s")->where("id = $id")->limit(1)->fetch();
+		$data  = Query::select('*')->from("{$model}s")->where(['id' => $id])->limit(1)->fetch();
 		if ($data === false)
 			return false;
 		$data = array_map('htmlspecialchars', $data);
@@ -25,7 +25,7 @@ class Model
 		$query = new QueryBuilder();
 		$query->select('*')->from("${model}s");
 		foreach ($attributes as $attribute => $value)
-			$query->where("$attribute = $value");
+			$query->where([$attribute => $value]);
 		if (!is_null($limit))
 			$query->limit($limit);
 		$datas = $query->fetchAll();

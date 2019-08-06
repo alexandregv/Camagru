@@ -32,10 +32,10 @@ class QueryBuilder
         return $this;
     }
 
-	public function where(): QueryBuilder
+	public function where(array $attrs): QueryBuilder
 	{
-		foreach(func_get_args() as $arg)
-            $this->_where[] = $arg;
+		foreach($attrs as $attr => $val)
+            $this->_where[$attr] = $val;
         return $this;
     }
 
@@ -73,17 +73,18 @@ class QueryBuilder
 
 		$query = "$this";
 		$values = [];
-		foreach ($this->_where as $cond)
-		{
-			$exp = explode(' ', $cond);
-			$values[$exp[0]] = implode(' ', array_slice($exp, 2));
-		}
 
 		if (!empty($this->_set))
 			$values = array_merge($this->_set, $values);
 
+		$values = array_merge($this->_where, $values);
+
+		//var_dump($query);
+		//var_dump($values);
+		
 		$stmt = $db->pdo->prepare($query);
 		$stmt->execute($values);
+		
 
 		if ($fetchMode == 1)
 			return $stmt->fetch();
@@ -111,11 +112,8 @@ class QueryBuilder
 	public function __toString(): string
 	{
 		$where = "";
-		foreach ($this->_where as $cond)
-		{
-			$exp = explode(' ', $cond);
-			$where .= " AND $exp[0] $exp[1] :$exp[0]";
-		}
+		foreach ($this->_where as $attr => $val)
+			$where .= " AND $attr = :$attr";
 		$where = substr($where, 4);
 		
 		$query  = '';
@@ -125,7 +123,6 @@ class QueryBuilder
 			$query .= 'UPDATE ' . $this->_update;
 		if (!empty($this->_set))
 		{
-			//$query .= ' SET ' . str_replace('=', ' = ', urldecode(http_build_query($this->_set, null, ', ')));
 			$str = '';
 			$shift = $this->array_shift_assoc_kv($this->_set);
 			$str .= key($shift) . ' = :' . key($shift);
@@ -133,7 +130,6 @@ class QueryBuilder
 				$str .= ", $attr = :$attr";
 			$query .= ' SET ' . $str;
 			$this->_set[key($shift)] = $shift[key($shift)];
-			//var_dump($query);exit;
 		}
 		if (!empty($this->_from))
 			$query .= ' FROM ' . implode(', ', $this->_from);
