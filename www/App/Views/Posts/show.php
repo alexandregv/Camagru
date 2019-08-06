@@ -26,7 +26,7 @@ $post = $this->post;
 					$tag = '~#([a-zA-z0-9]+)~i';
 					$formatted = $post->getDescription();
 					$formatted = preg_replace($url, '<a href="$0" target="_blank" title="$2">$2</a>', $formatted);
-					$formatted = preg_replace($tag, '<a href="/tags/$1" target="_blank" title="$1">$0</a>', $formatted); //TODO: ::route('', $1)
+					$formatted = preg_replace($tag, '<a href="' . Helpers::route('Posts#show', ['id' => '$1']) . '" target="_blank" title="$1">$0</a>', $formatted);
 					echo $formatted;
 				?>
 			</p>
@@ -53,7 +53,7 @@ $post = $this->post;
 
 		<article class="media">
 		  <figure class="media-left">
-		  <p class="image is-64x64"><img src="<?= $comment->getAuthor()->getProfilePicture() ?>"></p>
+		  <p class="image is-64x64"><img src="<?= $post->getCreator()->getProfilePicture() ?>"></p>
 		  </figure>
 		  <div class="media-content">
 			  <div class="field">

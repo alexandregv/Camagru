@@ -38,7 +38,6 @@ class PostsController extends Controller
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->likes_count = count(Like::getBy(['post_id' => $id]));
 		$this->comments = Comment::getBy(['post_id' => $id]);
-		//$this->liked = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->limit(1)->fetch(1) != false);
 		$this->liked = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where(['post_id' => $id])->where(['author_id' => $_SESSION['id']])->limit(1)->fetch(1) != false);
 
 		$this->loggedin_mail = '';
@@ -63,12 +62,10 @@ class PostsController extends Controller
 		else
 		{
 			$creator_id  = array_values($user)[0]->getId();
-			//$this->posts = Post::getBy(['creator_id' => $creator_id]);
-			$count = Query::select('COUNT(*)')->from('posts')->where("creator_id = $creator_id")->fetch()['COUNT(*)']; //TODO: :nauseated_face:
+			$count = Query::select('COUNT(*)')->from('posts')->where(['creator_id' => $creator_id])->fetch()['COUNT(*)']; //TODO: :nauseated_face:
 
 			$this->page = $_GET['page'] ?? 1;
 			$this->pages_count = ceil($count / 6);
-			//$this->pages_count = ceil(count($this->posts) / 6);
 
 			if ($this->page == 0)
 				$this->page = 1;
@@ -77,7 +74,7 @@ class PostsController extends Controller
 			else if ($this->page > $this->pages_count)
 				$this->page = $this->pages_count;
 
-			$datas = Query::select('*')->from('posts')->where("creator_id = $creator_id")->orderBy('createdAt', 'DESC')->limit(6)->offset($this->page * 6 - 6)->fetchAll();
+			$datas = Query::select('*')->from('posts')->where(['creator_id' => $creator_id])->orderBy('createdAt', 'DESC')->limit(6)->offset($this->page * 6 - 6)->fetchAll();
 			$this->posts = [];
 			foreach ($datas as $data)
 				$this->posts[] = new Post(array_map('htmlspecialchars', $data));
@@ -183,11 +180,6 @@ class PostsController extends Controller
 		}
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-			//if (!isset($_SESSION['csrf']) || !isset($_POST['csrf']) || $_POST['csrf'] != $_SESSION['csrf'])
-			//{
-			//	echo 'hacker va';exit;
-			//}
-
 			if (1==1 || $_FILES['picture']['size'] == 0)
 			{
 				if (!isset($_POST['img']) || empty(trim($_POST['img'])) || !isset($_POST['border']) || empty(trim($_POST['border'])))
@@ -254,13 +246,6 @@ class PostsController extends Controller
 	
 	public function delete(int $id)
 	{
-
-		//if (!isset($_SESSION['csrf']) || !isset($_POST['csrf']) || $_POST['csrf'] != $_SESSION['csrf'])
-		//{
-		//	Helpers::flash('danger', 'Ça joue les hackers ?');
-		//	return $this->router->redirect('Pages#home');
-		//}
-
 		$post = Post::get($id);
 		if ($post != false)
 		{

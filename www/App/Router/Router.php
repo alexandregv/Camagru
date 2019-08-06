@@ -31,7 +31,7 @@ class Router {
 	{
 		$path		= $args[0];
 		$action 	= $args[1];
-		//$name		= $args[2] ?? $action;
+
 		if (isset($args[2]))
 			$name = $args[2];
 		else

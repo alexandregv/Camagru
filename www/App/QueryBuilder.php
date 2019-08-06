@@ -79,9 +79,6 @@ class QueryBuilder
 
 		$values = array_merge($this->_where, $values);
 
-		//var_dump($query);
-		//var_dump($values);
-		
 		$stmt = $db->pdo->prepare($query);
 		$stmt->execute($values);
 		

@@ -3,10 +3,6 @@ use \App\Helpers;
 
 Helpers::partial('head');
 Helpers::partial('navbar');
-
-//$res = \App\Facades\Query::select('*')->from('users')->where('id >= 1')->where("username = aguiot--")->exec();
-//var_dump($res);
-//exit;
 ?>
 <main>
   <section class="section">

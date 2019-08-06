@@ -35,7 +35,6 @@ class Controller
 			if (in_array('required', $all_params) && (is_null($attr_value) || (!is_null($attr_value) && empty(trim($attr_value)))))
 			{
 				$this->errors[] = 'invalid_' . $attribute;
-				//return false; //TODO: keep to avoid 'undefined' errors ?
 			}
 
 			foreach ($all_params as $params)
