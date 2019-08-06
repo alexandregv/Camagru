@@ -17,11 +17,7 @@ class User extends Model
 
 	public function getProfilePicture(): string
 	{
-		$file = '/public/assets/img/profile_pictures/' . $this->getId() . '.png';
-		if (file_exists($_SERVER['DOCUMENT_ROOT'] . $file))
-			return $file;
-		else
-			return 'https://bulma.io/images/placeholders/128x128.png';
+		return 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->getEmail()))) . '?default=https%3A%2F%2Fbulma.io%2Fimages%2Fplaceholders%2F128x128.png';
 	}
 }
 

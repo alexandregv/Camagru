@@ -11,7 +11,7 @@ use \App\Helpers;
 		<div class="media">
 			<div class="media-left">
 				<figure class="image is-48x48">
-					<a href="<?= Helpers::route('Posts#user', ['user' => $post->getCreator()->getUsername()]) ?>"><img class="is-rounded" src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($post->getCreator()->getEmail()))); ?>?default=https%3A%2F%2Fbulma.io%2Fimages%2Fplaceholders%2F128x128.png"></a>
+				<a href="<?= Helpers::route('Posts#user', ['user' => $post->getCreator()->getUsername()]) ?>"><img class="is-rounded" src="<?= $post->getCreator()->getProfilePicture() ?>"></a>
 				</figure>
 			</div>
 			<div class="media-content">
