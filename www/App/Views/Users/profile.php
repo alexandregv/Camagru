@@ -90,6 +90,7 @@ Helpers::partial('navbar');
 								<?php } ?>
 							</div>
 
+<?php /*
 							<div class="field">
 								<label class="label">Ancien mot de passe</label>
 								<div class="control has-icons-left has-icons-right">
@@ -100,6 +101,7 @@ Helpers::partial('navbar');
 								<p class="help is-danger">Ancien mot de passe invalide</p>
 								<?php } ?>
 							</div>
+ */ ?>
 
 							<div class="field is-grouped">
 								<div class="control"><input type="submit" class="button is-link" value="Modifier mon profil"></div>

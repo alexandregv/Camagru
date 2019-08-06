@@ -35,62 +35,68 @@ class UsersController extends Controller
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			if (false == $this->validate([
-				'old_password' => 'required|min:5',
+				//'old_password' => 'required|min:5',
+				//'new_password' => 'min:5',
 				'username' => 'min:3',
 				'email' => 'mail',
 			])) return $this->render('Users#profile');
 
 			if ($this->user != false)
 			{
-				if ($this->user->getPassHash() === hash('whirlpool', 'grumaca' . trim($_POST['old_password'])))
+				$username			= $this->user->getUsername();
+				$email				= $this->user->getEmail();
+				$firstname			= $this->user->getFirstname();
+				$lastname			= $this->user->getLastname();
+				$passHash			= $this->user->getPassHash();
+				$likeNotifications	= $this->user->getLikeNotifications();
+
+				$skip = !empty($this->errors);
+				if (!empty($_POST['email']) && trim($_POST['email']) != '' && trim($_POST['email']) != $this->user->getEmail())
 				{
-					$username			= $this->user->getUsername();
-					$email				= $this->user->getEmail();
-					$firstname			= $this->user->getFirstname();
-					$lastname			= $this->user->getLastname();
-					$passHash			= $this->user->getPassHash();
-					$likeNotifications	= $this->user->getLikeNotifications();
-
-					$skip = !empty($this->errors);
-					if (!empty($_POST['email']) && trim($_POST['email']) != '' && trim($_POST['email']) != $this->user->getEmail())
+					$exists = Query::select('username')->from('users')->where("email = {$_POST['email']}")->fetch();
+					if ($exists !== false)
 					{
-						$exists = Query::select('username')->from('users')->where("email = {$_POST['email']}")->fetch();
-						if ($exists !== false)
-						{
-							$skip = true;
-							$this->errors[] = 'busy_email';
-						}
-					}
-					if (!empty($_POST['username']) && trim($_POST['username']) != '' && trim($_POST['username']) != $this->user->getUsername())
-					{
-						$exists = Query::select('username')->from('users')->where("username = {$_POST['username']}")->fetch();
-						if ($exists !== false)
-						{
-							$skip = true;
-							$this->errors[] = 'busy_username';
-						}
-					}
-
-					if ($skip == false)
-					{
-						foreach (['username', 'email', 'firstname', 'lastname'] as $attr)
-							if (!empty($_POST[$attr]) && trim($_POST[$attr]) != '')
-								${$attr} = trim($_POST[$attr]);
-						
-						if (isset($_POST['likeNotifications']) && !empty($_POST['likeNotifications']) && trim($_POST['likeNotifications']) != '')
-							$likeNotifications = 1;
-						else
-							$likeNotifications = 0;
-
-						if (!empty($_POST['new_password']) && trim($_POST['new_password']) != '')
-							$passHash = hash('whirlpool', 'grumaca' . trim($_POST['new_password']));
-
-						$res = Query::update('users')->set(['username' => $username, 'email' => $email, 'firstname' => $firstname, 'lastname' => $lastname, 'passHash' => $passHash, 'likeNotifications' => $likeNotifications])->where("id = {$_SESSION['id']}")->exec(0);
-						Helpers::flash('success', 'Profil modifié avec succes !');
-						return $this->router->redirect('Users#profile');
+						$skip = true;
+						$this->errors[] = 'busy_email';
 					}
 				}
-				else $this->errors[] = 'invalid_old_password';
+				if (!empty($_POST['username']) && trim($_POST['username']) != '' && htmlspecialchars(trim($_POST['username'])) != $this->user->getUsername())
+				{
+					$exists = Query::select('username')->from('users')->where("username = {$_POST['username']}")->fetch();
+					if ($exists !== false)
+					{
+						$skip = true;
+						$this->errors[] = 'busy_username';
+					}
+				}
+
+				if ($skip == false)
+				{
+					foreach (['username', 'email', 'firstname', 'lastname'] as $attr)
+						if (!empty($_POST[$attr]) && trim($_POST[$attr]) != '')
+							${$attr} = trim($_POST[$attr]);
+
+					if (isset($_POST['likeNotifications']) && !empty($_POST['likeNotifications']) && trim($_POST['likeNotifications']) != '')
+						$likeNotifications = 1;
+					else
+						$likeNotifications = 0;
+
+					if (!empty($_POST['new_password']) && trim($_POST['new_password']) != '')
+					{
+						$pass = trim($_POST['new_password']);
+						if (preg_match('#[0-9]+#', $pass) && preg_match('#[A-Z]+#', $pass) && preg_match('#[a-z]+#', $pass) && preg_match('/[!@#$%^&*\(\){}\[\]:;<,>.?\/\\~`]+/', $pass))
+							$passHash = hash('whirlpool', 'grumaca' . $pass);
+						else
+						{
+							$this->errors[] = 'invalid_new_password';
+							return $this->render('Users#profile');
+						}
+					}
+
+					$res = Query::update('users')->set(['username' => $username, 'email' => $email, 'firstname' => $firstname, 'lastname' => $lastname, 'passHash' => $passHash, 'likeNotifications' => $likeNotifications])->where("id = {$_SESSION['id']}")->exec(0);
+					Helpers::flash('success', 'Profil modifié avec succes !');
+					return $this->router->redirect('Users#profile');
+				}
 			}
 			else $this->errors[] = 'invalid_user_id';
 
