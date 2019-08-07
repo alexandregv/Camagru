@@ -62,16 +62,27 @@ class Route {
 		return '/' . $path;
 	}
 
-	public function call()
+	public function call(Router $router)
 	{
 		$body = '';
-		Router::getInstance()->setCurrentRoute($this);
+		$router->setCurrentRoute($this);
 		$this->callMiddlewares($body, 'before');
 
 		if(is_string($this->_action)){
 			$params = explode('#', $this->_action);
 			$controller = 'App\\Controllers\\' . $params[0] . 'Controller';
-			$controller = new $controller();
+			if (preg_match('/.*\.json/', $router->url))
+				$controller = new $controller('json');
+			else
+				$controller = new $controller();
+			
+			//if (preg_match('/.*\.json/', $router->url))
+			//	$body = call_user_func_array([$controller, $params[1] . '_json'], $this->_matches);
+			//else
+			//	$body = call_user_func_array([$controller, $params[1]], $this->_matches);
+
+			//if (preg_match('/.*\.json/', $router->url))
+			//	$controller->format = 'json';
 			$body = call_user_func_array([$controller, $params[1]], $this->_matches);
 		}
 		else

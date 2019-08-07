@@ -52,10 +52,12 @@ class Router {
 	}	
 
 	public function run(){
+		$url = substr($this->url, 0, preg_match('/.*\.json/', $this->url) ? -5 : PHP_INT_MAX);
+
 		if(!isset($this->_routes[$_SERVER['REQUEST_METHOD']]))
 			throw new RouterException('REQUEST_METHOD does not exist');
 		foreach($this->_routes[$_SERVER['REQUEST_METHOD']] as $route)
-			if($route->match($this->url))
+			if($route->match($url))
 				return $route->call($this);
 
 		return $this->_namedRoutes['Errors#_404']->call($this);

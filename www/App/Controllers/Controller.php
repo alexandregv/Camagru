@@ -5,21 +5,27 @@ namespace App\Controllers;
 class Controller
 {
 	public $router;
+	public $format = 'html';
 	public $errors = [];
 
-	public function __construct()
+	public function __construct($format = 'html')
 	{
 		$this->router = \App\Router\Router::getInstance();
+		$this->format = $format;
 	}
 
 	public function render(string $full, array $vars = [])
 	{
 		$full = explode('#', $full);
-		if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/App/Views/$full[0]/$full[1].php"))
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/App/Views/$full[0]/$full[1]." . $this->format . ".php"))
 		{
+			if ($this->format == 'json')
+				header('Content-type: application/json; charset=utf-8');
+			else if ($this->format == 'html')
+				header('Content-type: text/html; charset=utf-8');
 			extract($vars);
 			ob_start();
-			require "App/Views/$full[0]/$full[1].php";
+			require "App/Views/$full[0]/$full[1]." . $this->format . ".php";
 			return ob_get_clean();
 		}
 		else return $this->render('Errors#404');

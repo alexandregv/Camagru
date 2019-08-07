@@ -27,13 +27,13 @@ class Helpers
 	public static function render(string $name, array $vars = [])
 	{
 		extract($vars);
-		require "App/Views/$name.php";
+		require "App/Views/$name.html.php";
 	}
 
 	public static function partial(string $name, array $vars = [])
 	{
 		extract($vars);
-		require "App/Views/Partials/_$name.php";
+		require "App/Views/Partials/_$name.html.php";
 	}
 
 	public static function route(string $route, array $params = []): string

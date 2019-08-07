@@ -26,7 +26,7 @@ class PostsController extends Controller
 
 		return $this->render('Posts#index');
 	}
-
+	
 	public function show(int $id)
 	{
 		$this->post = Post::get($id);
