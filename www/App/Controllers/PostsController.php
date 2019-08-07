@@ -146,7 +146,7 @@ class PostsController extends Controller
 		}
 		else
 			Database::getInstance()->query("DELETE FROM likes WHERE id = :id", ['id' => $like['id']], 0);
-		return $this->router->redirect('Posts#show', ['id' => $id]);
+		return $_SESSION['csrf'];
 	}
 	
 	public function comment(int $id)

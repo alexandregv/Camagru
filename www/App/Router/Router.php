@@ -57,7 +57,7 @@ class Router {
 		foreach($this->_routes[$_SERVER['REQUEST_METHOD']] as $route)
 			if($route->match($this->url))
 				return $route->call($this);
-		
+
 		return $this->_namedRoutes['Errors#_404']->call($this);
 		//throw new RouterException("No route matching '$this->url'");
 	}

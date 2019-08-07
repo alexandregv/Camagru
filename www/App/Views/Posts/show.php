@@ -34,13 +34,12 @@ $post = $this->post;
 		  <nav class="level is-mobile">
 			<div class="level-left">
 			  <a class="level-item" href="https://twitter.com/intent/tweet?text=<?= $post->getDescription() ?>%20%23Camagru"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
-			  <?php /*<form id="likeForm" method="POST" action="<?= Helpers::route('Posts#like', ['id' => $post->getId()]) ?>"><a onclick="document.getElementById('likeForm').submit();" class="level-item"><span class="icon is-small"><i class="fas fa-heart"></i></span></a></form> */ ?>
 				<?php if (isset($_SESSION['id'])): ?>
-				  <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
+				  <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon-<?= $post->getId() ?>" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
 				<?php else: ?>
-				  <a href="/login" class="level-item"><span class="icon is-small"><i id="likeicon" class="far fa-heart"></i></span></a>
+				  <a href="/login" class="level-item"><span class="icon is-small"><i id="likeicon-<?= $post->getId() ?>" class="far fa-heart"></i></span></a>
 				<?php endif; ?>
-			  <div class="level-item"><span id="likecount" class="icon is-small"><?= $this->likes_count ?></span></div>
+			  <div class="level-item"><span id="likecount-<?= $post->getId() ?>" class="icon is-small"><?= $this->likes_count ?></span></div>
 			</div>
 		  </nav>
 		</div>
@@ -83,28 +82,6 @@ $post = $this->post;
 
 <?php if (isset($_SESSION['id'])): ?>
 <script>
-  function like(id) {
-	icon  = document.querySelector('#likeicon');
-    count = document.querySelector('#likecount');
-    if (icon.classList.contains('far')) {
-      count.innerText = parseInt(count.innerText) + 1;
-  	  icon.classList.remove('far');
-  	  icon.classList.add('fas');
-    } else {
-  	  count.innerText = parseInt(count.innerText) - 1;
-  	  icon.classList.remove('fas');
-  	  icon.classList.add('far');
-    }
-
-	const formData = new FormData();
-    formData.append('csrf', '<?= $_SESSION['csrf'] ?>');
-
-    fetch('/posts/' + id + '/like', {
-		method: 'POST',
-		body: formData
-	});
-  }
-
   function comment(id) {
 	textarea = document.querySelector('#comment-content');
 

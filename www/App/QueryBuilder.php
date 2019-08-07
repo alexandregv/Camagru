@@ -140,6 +140,14 @@ class QueryBuilder
 		return $query;
 	}
 
+	private function array_shift_assoc_kv( &$arr ){
+		$val = reset( $arr );
+		$key = key( $arr );
+		$ret = array( $key => $val );
+		unset( $arr[ $key ] );
+		return $ret;
+	}
+
 }
 
 ?>
