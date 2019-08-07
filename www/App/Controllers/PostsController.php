@@ -130,7 +130,7 @@ class PostsController extends Controller
 		$post = Post::get($id);
 		if ($post == false)
 			return $this->router->redirect('Posts#index');
-		$like = Query::select('id')->from('likes')->where("post_id = $id")->where("author_id = {$_SESSION['id']}")->fetch();
+		$like = Query::select('id')->from('likes')->where(['post_id' => $id])->where(['author_id' => $_SESSION['id']])->fetch();
 		if ($like == false)
 		{
 			$liker = User::get($_SESSION['id'])->getUsername();
