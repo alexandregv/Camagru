@@ -28,6 +28,9 @@
 		  <li><a class="pagination-link <?= ic($page, 2) ?>" href="<?= $url ?>?page=2">2</a></li>
 	      <li><a class="pagination-link" href="<?= $url ?>?page=3">3</a></li>
         <?php else: ?>
+          <?php if ($page == $pages_count): ?>
+          	<li><a class="pagination-link" href="<?= $url ?>?page=<?= $page-2 ?>"><?= $page-2 ?></a></li>
+          <?php endif; ?>
           <li><a class="pagination-link" href="<?= $url ?>?page=<?= $page-1 ?>"><?= $page-1 ?></a></li>
           <li><a class="pagination-link is-current"><?= $page ?></a></li>	
           <?php if ($page < $pages_count): ?>
