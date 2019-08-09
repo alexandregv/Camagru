@@ -135,7 +135,7 @@ class UsersController extends Controller
 					return $this->render('Users#login');
 				}
 				
-				$hash = hash('whirlpool', 'grumaca' . $_POST['password']);
+				$hash = hash('sha512', 'grumaca' . $_POST['password']);
 				$user = Query::select('id', 'username', 'passHash', 'confirmToken')->from('users')->where(['username' => $_POST['username']])->limit(1)->fetch();
 				if ($user != false)
 				{
@@ -204,7 +204,8 @@ class UsersController extends Controller
 					$pass = trim($_POST['password']);
 					if (preg_match('#[0-9]+#', $pass) && preg_match('#[A-Z]+#', $pass) && preg_match('#[a-z]+#', $pass) && preg_match('/[!@#$%^&*\(\){}\[\]:;<,>.?\/\\~`]+/', $pass))
 					{
-						$hash = hash('whirlpool', 'grumaca' . $pass);
+						//$hash = hash('sha512', 'grumaca' . $pass);
+						$hash = $pass;
 						$db   = Database::getInstance();
 						$user = User::getBy(['username', $_POST['username']]);
 						if ($user == false)
