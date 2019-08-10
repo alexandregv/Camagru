@@ -114,6 +114,11 @@ class UsersController extends Controller
 		{
 			if (!empty(trim($_POST['username'])) && !empty(trim($_POST['password'])))
 			{
+				if (!isset($_POST['g-recaptcha-response']))
+				{
+					Helpers::flash('danger', 'Captcha incorrect.');
+					return $this->render('Users#login');
+				}
 				$url = 'https://www.google.com/recaptcha/api/siteverify';
 				$data = array('secret' => '6LcVZrEUAAAAAIDPlBD9cKh_G0lr8cUuYzlEhLHM',
 							'response' => $_POST['g-recaptcha-response'],
