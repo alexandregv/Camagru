@@ -82,12 +82,13 @@ $post = $this->post;
 
 <?php if (isset($_SESSION['id'])): ?>
 <script>
+  let csrf = '<?= (isset($_SESSION['csrf']) ? $_SESSION['csrf'] : '') ?>';
   function comment(id) {
 	textarea = document.querySelector('#comment-content');
 
 	const formData = new FormData();
     formData.append('comment', textarea.value);
-    formData.append('csrf', '<?= $_SESSION['csrf'] ?>');
+    formData.append('csrf', csrf);
 	textarea.value = "";
 
 	fetch('/posts/' + id + '/comment', {

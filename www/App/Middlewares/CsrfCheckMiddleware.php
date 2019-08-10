@@ -12,7 +12,7 @@ class CsrfCheckMiddleware extends Middleware
 			Helpers::flash('danger', 'Ça joue les hackers ?');
 			return $this->router->redirect('Pages#home');
 		}
-		else $_SESSION['csrf'] = bin2hex(openssl_random_pseudo_bytes(24));
+		//else $_SESSION['csrf'] = bin2hex(openssl_random_pseudo_bytes(24));
 	}
 }
 
