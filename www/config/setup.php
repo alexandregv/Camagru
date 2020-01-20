@@ -49,7 +49,7 @@ try {
 //SQL
 //);
 
-$sql = file_get_contents('docker.sql');
+$sql = file_get_contents('setup.sql');
 $qr = $db->exec($sql);
 
 echo 'Database is now ready !', PHP_EOL;

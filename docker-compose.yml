@@ -22,7 +22,8 @@ services:
     restart: 'always'
     ports:
       - "${HOST_MACHINE_MYSQL_PORT}:3306"
-    volumes: 
+    volumes:
+      - "${DOCUMENT_ROOT-./www}/config/setup.sql:/docker-entrypoint-initdb.d/setup.sql:rw"
       - "${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql:rw"
       - "${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql:rw"
     environment:
