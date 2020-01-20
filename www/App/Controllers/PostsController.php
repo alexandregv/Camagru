@@ -252,9 +252,9 @@ class PostsController extends Controller
 			if (isset($_SESSION['id']) && $post->getCreator_id() == $_SESSION['id'])
 			{
 				$username = User::get($post->getCreator_id())->getUsername();
-				Database::getInstance()->query("DELETE FROM posts WHERE id = :id", ['id' => $id], 0);
 				Database::getInstance()->query("DELETE FROM likes WHERE post_id = :post_id", ['post_id' => $id], 0);
 				Database::getInstance()->query("DELETE FROM comments WHERE post_id = :post_id", ['post_id' => $id], 0);
+				Database::getInstance()->query("DELETE FROM posts WHERE id = :id", ['id' => $id], 0);
 				Helpers::flash('success', 'La publication a bien été supprimée.');
 				return $this->router->redirect('Posts#user', ['user' => $username]);
 			}
