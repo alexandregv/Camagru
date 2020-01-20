@@ -46,10 +46,10 @@ $router->post('/posts/:id/delete', 'Posts#delete')->with('id', '[0-9]+');
 # ----------
 # Global middlwwares (CSRF)
 foreach ($router->getRoutes()['GET'] as $route)
-	if ($route->getAction() != 'Users#register' && $route->getAction() != 'Users#login')
+	if ($route->getAction() != 'Users#register' && $route->getAction() != 'Users#login' && $route->getAction() != 'Users#sendReset')
 		$route->middleware('CsrfDom', 'after');
 foreach ($router->getRoutes()['POST'] as $route)
-	if ($route->getAction() != 'Users#register' && $route->getAction() != 'Users#login')
+	if ($route->getAction() != 'Users#register' && $route->getAction() != 'Users#login' && $route->getAction() != 'Users#sendReset')
 		$route->middleware('CsrfCheck', 'before')->middleware('CsrfDom', 'after');
 
 # ----------
