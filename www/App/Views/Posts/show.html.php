@@ -75,7 +75,6 @@ $post = $this->post;
 
 <?php if (isset($_SESSION['id'])): ?>
 <script>
-  let csrf = '<?= (isset($_SESSION['csrf']) ? $_SESSION['csrf'] : '') ?>';
   function comment(id) {
 	textarea = document.querySelector('#comment-content');
 
