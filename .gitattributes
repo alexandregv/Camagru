@@ -1,7 +1,13 @@
 www/public/assets/bulma-0.7.4/css/**/* linguist-vendored
 www/public/assets/bulma-0.7.4/css/* linguist-vendored
+
 www/public/assets/bulma-0.7.4/sass/* linguist-vendored
 www/public/assets/bulma-0.7.4/sass/**/* linguist-vendored
-*.sass linguist-vendored
+
+www/public/assets/css/* linguist-vendored
+www/public/assets/css/style.css linguist-vendored
+
 bulma.css linguist-vendored
 bulma.min.css linguist-vendored
+bulma.sass linguist-vendored
+bulma.min.sass linguist-vendored
