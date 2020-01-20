@@ -207,7 +207,7 @@ class UsersController extends Controller
 				if (trim($_POST['password']) == trim($_POST['password_confirm']))
 				{
 					$pass = trim($_POST['password']);
-					if (preg_match('#[0-9]+#', $pass) && preg_match('#[A-Z]+#', $pass) && preg_match('#[a-z]+#', $pass) && preg_match('/[!@#$%^&*\(\){}\[\]:;<,>.?\/\\~`]+/', $pass))
+					if (preg_match('#[0-9]+#', $pass) && preg_match('#[A-Z]+#', $pass) && preg_match('#[a-z]+#', $pass) && preg_match('/[!@#-_$%^&*\(\){}\[\]:;<,>.?\/\\~`]+/', $pass))
 					{
 						$hash = hash('whirlpool', 'grumaca' . $pass);
 						$db   = Database::getInstance();
