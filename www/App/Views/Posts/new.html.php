@@ -60,8 +60,8 @@ Helpers::partial('navbar');
         </div>
       </div>
       <div class="tile is-parent">
-        <article class="tile is-child box" id="camera--container">
-          <img src="//:0" alt="" id="camera--output-0">
+        <article class="tile is-child box">
+          <img src="//:0" alt="" id="camera--output">
         </article>
       </div>
       </div>
@@ -74,6 +74,7 @@ Helpers::partial('navbar');
 	var constraints = { video: { facingMode: "user" }, audio: false };
 	
 	const cameraView  = document.querySelector("#camera--view"),
+	    cameraOutput  = document.querySelector("#camera--output"),
 	    cameraSensor  = document.querySelector("#camera--sensor"),
 	    cameraTrigger = document.querySelector("#camera--trigger")
 	
@@ -88,13 +89,8 @@ Helpers::partial('navbar');
 	        console.error("Oops. Something is broken.", error);
 	    });
 	}
-
+	
 	cameraTrigger.onclick = function() {
-		const cameraOutput = document.createElement('img');
-		cameraOutput.src = '//:0';
-		cameraOutput.id = 'camera--output-' + (parseInt(document.querySelector("#camera--container").lastElementChild.id.split('-')[3]) + 1);
-	    document.querySelector("#camera--container").appendChild(cameraOutput);
-
 	    cameraSensor.width = cameraView.videoWidth;
 	    cameraSensor.height = cameraView.videoHeight;
 	    cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
@@ -122,7 +118,7 @@ Helpers::partial('navbar');
 	function readURL(input) {
 	    if (input.files && input.files[0]) {
 	        var reader = new FileReader();
-
+	
 	        reader.onload = function (e) {
 				document.querySelector('#camera--output').classList.add("taken");
 	            document.querySelector('#camera--output').setAttribute('src', e.target.result);
