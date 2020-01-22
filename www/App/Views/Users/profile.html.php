@@ -16,7 +16,7 @@ Helpers::partial('navbar');
 							<figure class="image is-128x128 container content">
 							<img class="is-rounded" src="<?= $this->user->getProfilePicture() ?>">
 							</figure>
-							<a class="button is-info is-outlined">Changer ma photo</a>
+							<a class="button is-info is-outlined" disabled>Changer ma photo</a>
 							<hr>
 							<input type="checkbox" id="likeNotifications" name="likeNotifications" value="1" <?php if ($this->user->getLikeNotifications() == 1) echo 'checked'; ?>>
 							<label for="likeNotifications">Notifier mes likes par mail</label>
