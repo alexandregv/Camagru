@@ -202,6 +202,17 @@ class UsersController extends Controller
 
 			if (!empty(trim($_POST['email']) && !empty(trim($_POST['username'])) && !empty(trim($_POST['password'])) && !empty(trim($_POST['password_confirm'])) && !empty(trim($_POST['firstname'])) && !empty(trim($_POST['lastname']))))
 			{
+				if (Query::select('id')->from('users')->where(['username' => $_POST['username']])->limit(1)->fetch() != false)
+				{
+					$this->errors[] = 'busy_username';
+					return $this->render('Users#register');
+				}
+				if (Query::select('id')->from('users')->where(['email' => $_POST['email']])->limit(1)->fetch() != false)
+				{
+					$this->errors[] = 'busy_email';
+					return $this->render('Users#register');
+				}
+
 				if (trim($_POST['password']) == trim($_POST['password_confirm']))
 				{
 					$pass = trim($_POST['password']);
