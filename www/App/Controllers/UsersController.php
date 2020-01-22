@@ -35,8 +35,6 @@ class UsersController extends Controller
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			if (false == $this->validate([
-				//'old_password' => 'required|min:5',
-				//'new_password' => 'min:5',
 				'username' => 'min:3',
 				'email' => 'mail',
 			])) return $this->render('Users#profile');
@@ -121,9 +119,9 @@ class UsersController extends Controller
 				}
 				$url = 'https://www.google.com/recaptcha/api/siteverify';
 				$data = array('secret' => '6LcVZrEUAAAAAIDPlBD9cKh_G0lr8cUuYzlEhLHM',
-							'response' => $_POST['g-recaptcha-response'],
-							'remoteip' => $_SERVER['REMOTE_ADDR'],
-						);
+					'response' => $_POST['g-recaptcha-response'],
+					'remoteip' => $_SERVER['REMOTE_ADDR'],
+				);
 				
 				$options = array(
 				    'http' => array(
@@ -294,7 +292,7 @@ class UsersController extends Controller
 			{
 				$token = (string) (uniqid() . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
 				Query::update('users')->set(['resetToken' => $token])->where(['email' => $_POST['email']])->exec(0);
-				$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
+				$headers  = "From: \"Camagru\"<no-reply@camagru.fr>\n";
 				$headers .= "Reply-To: no-repy@camagru.fr\n";
 				$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
 				mail($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: <a href=\"http://localhost:8080/reset/$token\">cliquez ici</a>", $headers);

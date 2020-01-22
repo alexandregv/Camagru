@@ -138,7 +138,7 @@ class PostsController extends Controller
 			$creator = $post->getCreator();
 			if ($creator->getLikeNotifications() == 1)
 			{
-				$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
+				$headers  = "From: \"Camagru\"<no-reply@camagru.fr>\n";
 				$headers .= "Reply-To: no-repy@camagru.fr\n";
 				$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
 				mail($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://localhost:8080". Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient d'aimer une de vos <a href=\"http://localhost:8080". Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !", $headers);
@@ -159,7 +159,7 @@ class PostsController extends Controller
 		$creator = $post->getCreator();
 		if ($creator->getLikeNotifications() == 1)
 		{
-			$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
+			$headers  = "From: \"Camagru\"<no-reply@camagru.fr>\n";
 			$headers .= "Reply-To: no-repy@camagru.fr\n";
 			$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
 			mail($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://localhost:8080". Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient de commenter une de vos <a href=\"http://localhost:8080". Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !", $headers);
