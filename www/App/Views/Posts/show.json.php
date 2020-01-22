@@ -3,6 +3,7 @@ $data['id']			 = $this->post->getId();
 $data['creator_id']  = $this->post->getCreator_id();
 $data['description'] = $this->post->getDescription();
 $data['createdAt']   = $this->post->getCreatedAt();
+$data['image']       = $this->post->getImage();
 
 $resp = [
 	"data" => $data,

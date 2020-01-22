@@ -2,11 +2,12 @@
 $data = [];
 foreach ($this->posts as $posts)
 {
-	$post = [];
-	$post['id'] = $posts->getId();
-	$post['creator_id'] = $posts->getCreator_id();
+	$post                = [];
+	$post['id']          = $posts->getId();
+	$post['creator_id']  = $posts->getCreator_id();
 	$post['description'] = $posts->getDescription();
-	$post['createdAt'] = $posts->getCreatedAt();
+	$post['createdAt']   = $posts->getCreatedAt();
+	$post['image']       = $posts->getImage();
 	$data[] = $post;
 }
 
