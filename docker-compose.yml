@@ -2,6 +2,7 @@ version: "3"
 
 services:
   webserver:
+    image: alexandregv/camagru-webserver:latest
     build: ./webserver
     restart: 'always'
     ports:
