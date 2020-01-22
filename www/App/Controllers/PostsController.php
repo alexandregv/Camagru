@@ -174,8 +174,12 @@ class PostsController extends Controller
 	{
 		if ($_SERVER['REQUEST_METHOD'] == 'GET')
 		{
-			$dir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/img/borders';
-			$this->borders = array_values(array_diff(scandir($dir), array('..', '.')));
+			$this->bordersDir = '/public/assets/img/borders/';
+			$this->borders = array_values(array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $this->bordersDir), array('..', '.')));
+			$datas = Query::select('*')->from('posts')->where(['creator_id' => $_SESSION['id']])->orderBy('createdAt', 'DESC')->fetchAll();
+			$this->posts = [];
+			foreach ($datas as $data)
+				$this->posts[] = new Post(array_map('htmlspecialchars', $data));
 			return $this->render('Posts#new');
 		}
 		else if ($_SERVER['REQUEST_METHOD'] == 'POST')

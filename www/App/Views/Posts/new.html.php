@@ -43,7 +43,7 @@ Helpers::partial('navbar');
                     <div class="tile is-parent">
                       <article class="tile is-child box">
 						<?php foreach($this->borders as $border): ?>
-						<img src="/public/assets/img/borders/<?= $border ?>" class="border-layer" onclick="selectBorder(this, '<?= $border ?>')">
+						  <img src="<?= $this->bordersDir . $border ?>" class="border-layer" onclick="selectBorder(this, '<?= $border ?>')">
 						<?php endforeach; ?>
                       </article>
                     </div>
@@ -61,7 +61,10 @@ Helpers::partial('navbar');
       </div>
       <div class="tile is-parent">
         <article class="tile is-child box">
-          <img src="//:0" alt="" id="camera--output">
+		  <img src="//:0" alt="" id="camera--output">
+		  <?php foreach($this->posts as $post): ?>
+		    <img src="<?= $post->getImage() ?>" class="taken">
+		  <?php endforeach; ?>
         </article>
       </div>
       </div>
