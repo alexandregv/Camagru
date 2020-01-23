@@ -41,7 +41,11 @@
         	body: formData
 		})
 		.then(response => response.text())
-		.then(text => csrf = text);
+		.then(text => {
+			csrf = text;
+			console.log(csrf);
+			document.getElementsByName('csrf').forEach(elem => elem.value = csrf);
+		});
 
       }
 	</script>

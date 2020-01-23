@@ -167,7 +167,11 @@ class PostsController extends Controller
 
 		$comment = Query::select('id')->from('comments')->where(['post_id' => $id])->where(['author_id' => $_SESSION['id']])->orderBy('createdAt', 'desc')->limit(1)->fetch();
 		$comment = Comment::get($comment['id']);
-		return $this->render('Posts#_comment', ['comment' => $comment]);
+		$json = [
+			'html' => $this->render('Posts#_comment', ['comment' => $comment]),
+			'csrf' => $_SESSION['csrf'],
+		];
+		return json_encode($json);
 	}
 	
 	public function new()

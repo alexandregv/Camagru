@@ -14,7 +14,7 @@ use \App\Helpers;
     <link rel="icon" href="<?= Helpers::image('favicon.ico'); ?>" />
   </head>
 
-	<body class="has-navbar-fixed-top">
+	<body class="has-navbar-fixed-top" id="body">
 		<?php if (Helpers::flash()): ?>
 		  <div class="container">
 		  	<div class="notification is-<?= Helpers::flash('type') ?>">

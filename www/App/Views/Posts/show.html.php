@@ -91,9 +91,30 @@ $post = $this->post;
 	  return response.text();
 	})
 	.then(function(text) {
+		let json = null;
+
+		try {
+			json = JSON.parse(text);
+		}
+		catch(error) {
+			if (error instanceof SyntaxError) {
+				alert("Ça joue les hackers ?");
+				const flash = document.createElement('div');
+				flash.classList.add('container');
+				flash.innerHTML = '<div class="notification is-danger ?>"><button class="delete"></button>Ça joue les hackers ?</div>'
+				document.querySelector('#body').insertAdjacentElement('afterbegin', flash);
+
+				return;
+			}
+			else console.error(error);
+		}
+
 		var d = document.createElement("div");
-		d.innerHTML = text;
+		d.innerHTML = json.html;
 		document.querySelector('#comments').appendChild(d);
+
+		csrf = json.csrf;
+		document.getElementsByName('csrf').forEach(elem => elem.value = csrf);
     });
   }
 
