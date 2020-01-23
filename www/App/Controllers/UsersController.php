@@ -231,7 +231,7 @@ class UsersController extends Controller
 								$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
 								$headers .= "Reply-To: no-repy@camagru.fr\n";
 								$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
-								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: <a href=\"http://localhost:8080/confirm/$token\">cliquez ici</a>", $headers);
+								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: <a href=\"" . $_SERVER['HTTP_HOST'] . "/confirm/$token\">cliquez ici</a>", $headers);
 								Helpers::flash('success', 'Inscription réussie ! Merci de confirmer votre email avec le lien recu.');
 								return $this->router->redirect('Pages#home');
 							}
@@ -306,7 +306,7 @@ class UsersController extends Controller
 				$headers  = "From: \"Camagru\"<no-reply@camagru.fr>\n";
 				$headers .= "Reply-To: no-repy@camagru.fr\n";
 				$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
-				mail($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: <a href=\"http://localhost:8080/reset/$token\">cliquez ici</a>", $headers);
+				mail($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/reset/$token\">cliquez ici</a>", $headers);
 				Helpers::flash('success', 'Un mail de reinitialisation vous sera envoye si un mail correspond.');
 			}
 		}
