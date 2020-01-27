@@ -198,6 +198,7 @@ class UsersController extends Controller
 				'email' => 'required|mail',
 				'password' => 'required|min:5',
 				'password_confirm' => 'required|min:5',
+				'terms' => 'required',
 			])) return $this->render('Users#register');
 
 			if (!empty(trim($_POST['email']) && !empty(trim($_POST['username'])) && !empty(trim($_POST['password'])) && !empty(trim($_POST['password_confirm'])) && !empty(trim($_POST['firstname'])) && !empty(trim($_POST['lastname']))))
@@ -268,6 +269,7 @@ class UsersController extends Controller
 				if (empty(trim($_POST['firstname']))) 		  $this->errors[] = 'invalid_firstname';
 				if (empty(trim($_POST['lastname'])))  		  $this->errors[] = 'invalid_lastname';
 				if (empty(trim($_POST['password_confirm'])))  $this->errors[] = 'invalid_password';
+				if (empty(trim($_POST['terms'])))             $this->errors[] = 'invalid_terms';
 				return $this->render('Users#register');
 			}
 
