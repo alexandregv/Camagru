@@ -21,7 +21,7 @@ $liked 		 = (isset($_SESSION['id']) && Query::select('*')->from('likes')->where(
 			</div>
 			<div class="media-content">
 			    <p class="title is-4"><?= $post->getCreator()->getFirstname(), ' ', $post->getCreator()->getLastname() ?></p>
-				<p class="subtitle is-6"><?= '@', $post->getCreator()->getUsername() ?></p>
+				<p class="subtitle is-6"><a href="<?= Helpers::route('Posts#user', ['user' => $post->getCreator()->getUsername()]) ?>"><?= '@', $post->getCreator()->getUsername() ?></a></p>
 			</div>
 			<div>
 			    <span id="likecount-<?= $post->getId() ?>" class="icon is-small"><?= $likes_count ?></span>
