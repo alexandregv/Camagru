@@ -19,7 +19,7 @@
 	  });
 
 
-	  let csrf = '<?= $_SESSION['csrf'] ?>';
+	  let csrf = '<?= @$_SESSION['csrf'] ?>';
       function like(id) {
         icon  = document.querySelector('#likeicon-' + id);
         count = document.querySelector('#likecount-' + id);
@@ -43,7 +43,7 @@
 		.then(response => response.text())
 		.then(text => {
 			csrf = text;
-			console.log(csrf);
+			//console.log(csrf);
 			document.getElementsByName('csrf').forEach(elem => elem.value = csrf);
 		});
 

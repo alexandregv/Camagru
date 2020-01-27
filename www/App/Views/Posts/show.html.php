@@ -26,12 +26,17 @@ $post = $this->post;
 		  </div>
 		  <nav class="level is-mobile">
 			<div class="level-left">
-			  <a class="level-item" href="https://twitter.com/intent/tweet?text=<?= $post->getDescription() ?>%20%23Camagru"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
-				<?php if (isset($_SESSION['id'])): ?>
-				  <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon-<?= $post->getId() ?>" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
-				<?php else: ?>
-				  <a href="/login" class="level-item"><span class="icon is-small"><i id="likeicon-<?= $post->getId() ?>" class="far fa-heart"></i></span></a>
-				<?php endif; ?>
+			  <?php if (isset($_SESSION['id'])): ?>
+			    <a class="level-item" href="https://twitter.com/intent/tweet?text=<?= $post->getDescription() ?>%20%23Camagru"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
+			  <?php else: ?>
+			    <a class="level-item" href="/login"><span class="icon is-small"><i class="fas fa-retweet"></i></span></a>
+			  <?php endif; ?>
+
+			  <?php if (isset($_SESSION['id'])): ?>
+			    <a onclick="like(<?= $post->getId() ?>);" class="level-item"><span class="icon is-small"><i id="likeicon-<?= $post->getId() ?>" class="fa<?= $this->liked ? 's' : 'r' ?> fa-heart"></i></span></a>
+			  <?php else: ?>
+			    <a href="/login" class="level-item"><span class="icon is-small"><i id="likeicon-<?= $post->getId() ?>" class="far fa-heart"></i></span></a>
+			  <?php endif; ?>
 			  <div class="level-item"><span id="likecount-<?= $post->getId() ?>" class="icon is-small"><?= $this->likes_count ?></span></div>
 			</div>
 		  </nav>
