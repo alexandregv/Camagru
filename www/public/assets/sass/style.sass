@@ -55,8 +55,6 @@ main
 //  filter: FlipH
 
 .taken, .border-layer
-  height: 200px !important
-  width: 200px !important
   transition: all 0.5s ease-in
   border: solid 3px white
   box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2)
@@ -70,3 +68,20 @@ main
 
 .border-active
   border: solid 3px red !important
+
+@media (max-width: 981px)
+  .flex
+    width: 100%
+    display: flex
+    flex-direction: column
+  .block-left
+    height: 50%
+
+@media (min-width: 981px)
+  .flex
+    width: 100%
+    display: flex
+    margin: 0 auto
+  .block-left
+    width: 70%
+

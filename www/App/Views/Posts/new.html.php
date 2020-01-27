@@ -63,7 +63,7 @@ Helpers::partial('navbar');
         <article class="tile is-child box">
 		  <img src="//:0" alt="" id="camera--output">
 		  <?php foreach($this->posts as $post): ?>
-		    <img src="<?= $post->getImage() ?>" class="taken">
+		    <img src="<?= $post->getImage() ?>" class="taken" style="width: 100%; height: auto;">
 		  <?php endforeach; ?>
         </article>
       </div>
