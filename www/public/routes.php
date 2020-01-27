@@ -29,6 +29,7 @@ $router->get('/404', 'Errors#_404');
 
 //$router->get('/admin', 'Pages#admin')->middleware('Admin');
 $router->get('/', 'Pages#home');
+$router->get('/terms', 'Pages#terms');
 
 # ----------
 # POST

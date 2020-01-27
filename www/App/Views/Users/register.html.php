@@ -89,7 +89,7 @@ Helpers::partial('navbar');
 
 				<div class="field">
 				  <div class="control">
-						<label class="checkbox"><input type="checkbox" name="terms" rrequired> J'accepte les <a href="#">termes et conditions</a>.</label>
+						<label class="checkbox"><input type="checkbox" name="terms" required> J'accepte les <a href="/terms">termes et conditions</a>.</label>
 					    <?php if (array_search('invalid_terms', $this->errors) !== false) { ?>
                           <p class="help is-danger">Merci d'accepter les termes et conditions.</p>
 					    <?php } ?>
