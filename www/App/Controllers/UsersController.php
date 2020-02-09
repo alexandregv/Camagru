@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use \App\Helpers;
-use \App\Facades\Query;
+use \App\Facades\{Query, Mail};
 use \App\Models\{Post, User, Like, Comment};
 use \App\Router\Router;
 use \App\Database;
@@ -229,10 +229,7 @@ class UsersController extends Controller
 							$user = Query::select('id', 'username')->from('users')->where(['email' => $_POST['email']])->fetch();
 							if ($user != false)
 							{	
-								$headers = "From: \"Camagru\"<no-reply@camagru.fr>\n";
-								$headers .= "Reply-To: no-repy@camagru.fr\n";
-								$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
-								mail($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: <a href=\"" . $_SERVER['HTTP_HOST'] . "/confirm/$token\">cliquez ici</a>", $headers);
+								$mr = Mail::send($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: <a href=\"" . $_SERVER['HTTP_HOST'] . "/confirm/$token\">cliquez ici</a>");
 								Helpers::flash('success', 'Inscription réussie ! Merci de confirmer votre email avec le lien recu.');
 								return $this->router->redirect('Pages#home');
 							}
@@ -305,10 +302,7 @@ class UsersController extends Controller
 			{
 				$token = (string) (uniqid() . (string) random_int(PHP_INT_MIN, PHP_INT_MAX));
 				Query::update('users')->set(['resetToken' => $token])->where(['email' => $_POST['email']])->exec(0);
-				$headers  = "From: \"Camagru\"<no-reply@camagru.fr>\n";
-				$headers .= "Reply-To: no-repy@camagru.fr\n";
-				$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
-				mail($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/reset/$token\">cliquez ici</a>", $headers);
+				Mail::send($_POST['email'], 'Reinitialisez votre mot de passe Camagru', "Cliquez sur ce lien pour reinitialiser votre mot de passe Camagru: <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/reset/$token\">cliquez ici</a>");
 				Helpers::flash('success', 'Un mail de reinitialisation vous sera envoye si un mail correspond.');
 			}
 		}

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-use \App\Facades\Query;
+use \App\Facades\{Query, Mail};
 use \App\Models\{Post, User, Like, Comment};
 use \App\{Database, Helpers};
 
@@ -137,12 +137,7 @@ class PostsController extends Controller
 			Database::getInstance()->query("INSERT INTO `likes` (`post_id`, `author_id`) VALUES (:post_id, :author_id)", ['post_id' => $id, 'author_id' => $_SESSION['id']], 0);
 			$creator = $post->getCreator();
 			if ($creator->getLikeNotifications() == 1)
-			{
-				$headers  = "From: \"Camagru\"<no-reply@camagru.fr>\n";
-				$headers .= "Reply-To: no-repy@camagru.fr\n";
-				$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
-				mail($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient d'aimer une de vos <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !", $headers);
-			}
+				Mail::send($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient d'aimer une de vos <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !");
 		}
 		else
 			Database::getInstance()->query("DELETE FROM likes WHERE id = :id", ['id' => $like['id']], 0);
@@ -158,12 +153,7 @@ class PostsController extends Controller
 		Database::getInstance()->query("INSERT INTO `comments` (`post_id`, `author_id`, `content`) VALUES (:post_id, :author_id, :content)", ['post_id' => $id, 'author_id' => $_SESSION['id'], 'content' => $_POST['comment']], 0);
 		$creator = $post->getCreator();
 		if ($creator->getLikeNotifications() == 1)
-		{
-			$headers  = "From: \"Camagru\"<no-reply@camagru.fr>\n";
-			$headers .= "Reply-To: no-repy@camagru.fr\n";
-			$headers .= "Content-Type: text/html; charset=\"iso-8859-1\"";
-			mail($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient de commenter une de vos <a href=\"" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !", $headers);
-		}
+			Mail::send($creator->getEmail(), "Vous avez un nouveau J'aime.", "Hey, vous avez un fan! <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#user', ['user' => $liker]) . "\">@$liker</a> vient de commenter une de vos <a href=\"" . $_SERVER['HTTP_HOST'] . "/" . Helpers::route('Posts#show', ['id' => $id]) . "\">publications</a> !");
 
 		$comment = Query::select('id')->from('comments')->where(['post_id' => $id])->where(['author_id' => $_SESSION['id']])->orderBy('createdAt', 'desc')->limit(1)->fetch();
 		$comment = Comment::get($comment['id']);
