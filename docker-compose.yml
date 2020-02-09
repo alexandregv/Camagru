@@ -82,6 +82,15 @@ services:
       #HTTP
       traefik.http.routers.camagrugq-pma.entrypoints: "http"
       traefik.http.routers.camagrugq-pma.rule: "Host(`pma.camagru.gq`)"
+      traefik.http.middlewares.redirect-https.redirectscheme.scheme: "https"
+      traefik.http.routers.camagrugq-pma.middlewares: "redirect-https"
+      # HTTPS
+      traefik.http.routers.camagrugq-pma-secure.entrypoints: "https"
+      traefik.http.routers.camagrugq-pma-secure.rule: "Host(`pma.camagru.gq`)"
+      traefik.http.routers.camagrugq-pma-secure.tls: "true"
+      # TLS
+      traefik.http.routers.camagrugq-pma-secure.tls.certresolver: "le-camagru"
+      traefik.http.routers.camagrugq-pma-secure.tls.domains[0].main: "pma.camagru.gq"
 
   maildev:
     image: djfarrelly/maildev
