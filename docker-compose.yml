@@ -92,14 +92,14 @@ services:
       traefik.http.routers.camagrugq-pma-secure.tls.certresolver: "le-camagru"
       traefik.http.routers.camagrugq-pma-secure.tls.domains[0].main: "pma.camagru.gq"
 
-  maildev:
-    image: djfarrelly/maildev
-    ports:
-      - "1080:80"
-    networks:
-      - default
-    labels:
-      traefik.enable: false
+#  maildev:
+#    image: djfarrelly/maildev
+#    ports:
+#      - "1080:80"
+#    networks:
+#      - default
+#    labels:
+#      traefik.enable: false
 
   compass:
     image: antonienko/compass-watch
