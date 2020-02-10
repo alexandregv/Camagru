@@ -50,7 +50,7 @@ $post = $this->post;
 
 				<article class="media">
 				  <figure class="media-left">
-				  	<p class="image is-64x64"><img src="<?= $post->getCreator()->getProfilePicture() ?>"></p>
+				  	<p class="image is-64x64"><img src="<?= $this->loggedin_user->getProfilePicture() ?>"></p>
 				  </figure>
 				  <div class="media-content">
 					  <div class="field">

@@ -43,9 +43,9 @@ class PostsController extends Controller
 		$this->loggedin_mail = '';
 		if (isset($_SESSION['id']))
 		{
-			$loggedin_user = User::get($_SESSION['id']);
-			if ($loggedin_user != false)
-				$this->loggedin_mail = $loggedin_user->getEmail();
+			$this->loggedin_user = User::get($_SESSION['id']);
+			if ($this->loggedin_user != false)
+				$this->loggedin_mail = $this->loggedin_user->getEmail();
 		}
 		return $this->render('Posts#show');
 	}
