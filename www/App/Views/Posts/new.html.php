@@ -25,15 +25,15 @@ Helpers::partial('navbar');
          	      <form method="POST" action="<?= Helpers::route('Posts#new') ?>" enctype="multipart/form-data">
       	            <label for="picture">Image</label>
                     <div class="file">
-                      <label class="file-label">
-                        <input class="file-input" type="file" id="picture" accept="image/png, image/jpeg" onchange="readURL(this);">
+					  <label class="file-label">
+						<input class="file-input" type="file" id="picture" accept="image/png, image/jpeg" onchange="readURL(this);">
                         <span class="file-cta">
                           <span class="file-icon"><i class="fas fa-upload"></i></span>
                           <span class="file-label">Choisir un fichier</span>
                         </span>
       		          </label>
       		          <span style="margin: 5px 5px;"> OU </span>
-          	          <button id="camera--trigger" class="button is-light" type="button">Prendre une photo</button>
+          	          <button id="camera--trigger" class="button is-light" type="button" disabled>Prendre une photo</button>
       		      	  <input id="img" name="img" type="text" hidden="hidden">
       		      	  <input id="border" name="border" type="text" hidden="hidden">
       		        </div>
@@ -113,6 +113,7 @@ Helpers::partial('navbar');
 		elems.forEach(function(el) { el.classList.remove("border-active"); });
 		elem.classList.add('border-active');
 		document.querySelector('#submit').disabled = false;
+		document.querySelector('#camera--trigger').disabled = false;
 	}
 
 // ----------
