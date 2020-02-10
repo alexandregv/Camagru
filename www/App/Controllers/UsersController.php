@@ -229,7 +229,7 @@ class UsersController extends Controller
 							$user = Query::select('id', 'username')->from('users')->where(['email' => $_POST['email']])->fetch();
 							if ($user != false)
 							{	
-								$mr = Mail::send($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: <a href=\"" . $_SERVER['HTTP_HOST'] . "/confirm/$token\">cliquez ici</a>");
+								$mr = Mail::send($_POST['email'], 'Confirmez votre compte Camagru', "Cliquez sur ce lien pour confirmer votre compte Camagru: <a href=\"http://" . $_SERVER['HTTP_HOST'] . "/confirm/$token\">cliquez ici</a>");
 								Helpers::flash('success', 'Inscription réussie ! Merci de confirmer votre email avec le lien recu.');
 								return $this->router->redirect('Pages#home');
 							}
